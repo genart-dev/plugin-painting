@@ -6,6 +6,7 @@ import { oilAcrylicLayerType } from "./oil-acrylic.js";
 import { gouacheLayerType } from "./gouache.js";
 import { pastelLayerType } from "./pastel.js";
 import { strokeLayerType } from "./stroke-layer.js";
+import { fillLayerType } from "./fill-layer.js";
 import { paintingMcpTools } from "./painting-tools.js";
 
 const paintingPlugin: DesignPlugin = {
@@ -14,7 +15,7 @@ const paintingPlugin: DesignPlugin = {
   version: "0.1.0",
   tier: "pro",
   description:
-    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke.",
+    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke, fill.",
 
   layerTypes: [
     watercolorLayerType,
@@ -24,6 +25,7 @@ const paintingPlugin: DesignPlugin = {
     gouacheLayerType,
     pastelLayerType,
     strokeLayerType,
+    fillLayerType,
   ],
   tools: [],
   exportHandlers: [],
@@ -41,7 +43,15 @@ export { oilAcrylicLayerType } from "./oil-acrylic.js";
 export { gouacheLayerType } from "./gouache.js";
 export { pastelLayerType } from "./pastel.js";
 export { strokeLayerType } from "./stroke-layer.js";
+export { fillLayerType } from "./fill-layer.js";
 export { paintingMcpTools } from "./painting-tools.js";
+export {
+  type FillRegion,
+  type FillStrategy,
+  type ShadingFunction,
+  type ShadingAffect,
+} from "./fill/types.js";
+export { FILL_PRESETS, getFillPreset } from "./fill/presets.js";
 export {
   type BrushDefinition,
   type BrushStroke,

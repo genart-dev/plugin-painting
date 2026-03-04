@@ -13,10 +13,13 @@ import { oilAcrylicLayerType } from "./oil-acrylic.js";
 import { gouacheLayerType } from "./gouache.js";
 import { pastelLayerType } from "./pastel.js";
 import { strokeLayerType } from "./stroke-layer.js";
+import { fillLayerType } from "./fill-layer.js";
 import { parseField } from "./vector-field.js";
 import type { VectorField, VectorSample } from "./vector-field.js";
 import { BRUSH_PRESETS, getBrushPreset } from "./brush/presets.js";
 import type { BrushDefinition, BrushStroke, StrokePoint } from "./brush/types.js";
+import { FILL_PRESETS, resolveStrategy } from "./fill/presets.js";
+import type { FillRegion, FillStrategy, ShadingFunction } from "./fill/types.js";
 
 function textResult(text: string): McpToolResult {
   return { content: [{ type: "text", text }] };
@@ -981,6 +984,318 @@ export const eraseStrokesTool: McpToolDefinition = {
 };
 
 // ---------------------------------------------------------------------------
+// fill_region — create a painting:fill layer
+// ---------------------------------------------------------------------------
+
+export const fillRegionTool: McpToolDefinition = {
+  name: "fill_region",
+  description:
+    "Create a painting:fill layer that procedurally generates marks (hatch, crosshatch, stipple, scumble, or contour) within a bounded region, with optional spatial shading. " +
+    "Use preset names as shorthand: hatch-light, hatch-medium, hatch-dense, crosshatch-light, crosshatch-dense, stipple-light, stipple-dense, scumble, contour.",
+  inputSchema: {
+    type: "object",
+    required: ["strategy"],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "Update an existing painting:fill layer. If omitted, creates a new one.",
+      },
+      layerName: {
+        type: "string",
+        description: "Name for the new layer (default: 'Fill').",
+      },
+      brushId: {
+        type: "string",
+        description: 'Brush preset ID (default: "ink-pen").',
+      },
+      brush: {
+        type: "object",
+        description: "Inline custom BrushDefinition (overrides brushId). Must include 'id' and 'name'.",
+      },
+      color: {
+        type: "string",
+        description: 'Stroke color as hex (default: "#000000").',
+      },
+      size: {
+        type: "number",
+        description: "Brush size override in pixels (default: 4).",
+      },
+      region: {
+        type: "object",
+        description:
+          'Region to fill. Types: {"type":"bounds"} (default, fills layer bounds), ' +
+          '{"type":"rect","x":N,"y":N,"width":N,"height":N}, ' +
+          '{"type":"ellipse","cx":N,"cy":N,"rx":N,"ry":N}, ' +
+          '{"type":"polygon","points":[{"x":N,"y":N},...]}.',
+      },
+      strategy: {
+        description:
+          "Fill strategy object or preset name. " +
+          "Preset names: hatch-light, hatch-medium, hatch-dense, crosshatch-light, crosshatch-dense, stipple-light, stipple-dense, scumble, contour. " +
+          'Objects: {"type":"hatch","angle":45,"spacing":8}, ' +
+          '{"type":"crosshatch","angles":[45,135],"spacing":8,"passDecay":0.7}, ' +
+          '{"type":"stipple","density":40,"distribution":"poisson"}, ' +
+          '{"type":"scumble","density":15,"strokeLength":20,"curvature":0.5}, ' +
+          '{"type":"contour","spacing":8,"smoothing":0.3}.',
+      },
+      shading: {
+        type: "object",
+        description:
+          'Shading function (default: {"type":"uniform"}). ' +
+          'Types: {"type":"linear","angle":0,"range":[0.2,1.0]}, ' +
+          '{"type":"radial","cx":0.5,"cy":0.5,"range":[0.0,1.0]}, ' +
+          '{"type":"noise","seed":0,"scale":1,"range":[0.3,1.0]}. ' +
+          "cx/cy are normalised [0,1] in region space.",
+      },
+      shadingAffects: {
+        type: "array",
+        items: { type: "string", enum: ["density", "weight", "opacity"] },
+        description: 'Which properties shading modulates (default: ["density"]).',
+      },
+      opacity: {
+        type: "number",
+        description: "Layer opacity 0–1 (default: 1.0).",
+      },
+      seed: {
+        type: "number",
+        description: "PRNG seed for deterministic generation (default: 42).",
+      },
+      x: { type: "number", description: "Layer x position on canvas." },
+      y: { type: "number", description: "Layer y position on canvas." },
+      width: { type: "number", description: "Layer width on canvas." },
+      height: { type: "number", description: "Layer height on canvas." },
+      index: {
+        type: "number",
+        description: "Layer stack position (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    // Resolve strategy (preset name or object)
+    const rawStrategy = input.strategy as FillStrategy | string | undefined;
+    if (!rawStrategy) return errorResult("strategy is required.");
+
+    const resolved = resolveStrategy(rawStrategy);
+    if (!resolved) {
+      const presetNames = Object.keys(FILL_PRESETS).join(", ");
+      return errorResult(
+        `Unknown fill preset "${rawStrategy as string}". Valid presets: ${presetNames}.`,
+      );
+    }
+
+    const strategyJson = JSON.stringify(resolved.strategy);
+
+    const layerId = input.layerId as string | undefined;
+
+    if (layerId) {
+      // Update existing layer
+      const layer = context.layers.get(layerId);
+      if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+      if (layer.type !== "painting:fill") {
+        return errorResult(`Layer "${layerId}" is not a painting:fill layer (is ${layer.type}).`);
+      }
+
+      const updates: Record<string, unknown> = { strategy: strategyJson };
+      if (input.brushId !== undefined) updates.brushId = input.brushId;
+      if (input.brush !== undefined) updates.brush = JSON.stringify(input.brush);
+      if (input.color !== undefined) updates.color = input.color;
+      if (input.size !== undefined) updates.size = input.size;
+      if (input.region !== undefined) updates.region = JSON.stringify(input.region);
+      if (input.shading !== undefined) updates.shading = JSON.stringify(input.shading);
+      if (input.shadingAffects !== undefined) updates.shadingAffects = JSON.stringify(input.shadingAffects);
+      if (input.opacity !== undefined) updates.opacity = input.opacity;
+      if (input.seed !== undefined) updates.seed = input.seed;
+
+      context.layers.updateProperties(layerId, updates as Record<string, string | number | boolean | null>);
+      context.emitChange("layer-updated");
+
+      return textResult(`Updated painting:fill layer "${layerId}".`);
+    }
+
+    // Create new layer
+    const defaults = fillLayerType.createDefault();
+
+    // Apply resolved preset defaults first
+    if (resolved.brushId) defaults.brushId = resolved.brushId;
+    if (resolved.size !== undefined) defaults.size = resolved.size;
+
+    defaults.strategy = strategyJson;
+
+    // Apply explicit overrides
+    if (input.brushId !== undefined) defaults.brushId = input.brushId as string;
+    if (input.brush !== undefined) defaults.brush = JSON.stringify(input.brush);
+    if (input.color !== undefined) defaults.color = input.color as string;
+    if (input.size !== undefined) defaults.size = input.size as number;
+    if (input.region !== undefined) defaults.region = JSON.stringify(input.region);
+    if (input.shading !== undefined) defaults.shading = JSON.stringify(input.shading);
+    if (input.shadingAffects !== undefined) defaults.shadingAffects = JSON.stringify(input.shadingAffects);
+    if (input.seed !== undefined) defaults.seed = input.seed as number;
+
+    const opacity = typeof input.opacity === "number" ? input.opacity : 1;
+
+    const transform: LayerTransform =
+      typeof input.x === "number" || typeof input.width === "number"
+        ? {
+            x: (input.x as number | undefined) ?? 0,
+            y: (input.y as number | undefined) ?? 0,
+            width: (input.width as number | undefined) ?? context.canvasWidth,
+            height: (input.height as number | undefined) ?? context.canvasHeight,
+            rotation: 0,
+            scaleX: 1,
+            scaleY: 1,
+            anchorX: 0,
+            anchorY: 0,
+          }
+        : fullCanvasTransform(context);
+
+    const newLayer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:fill",
+      name: (input.layerName as string | undefined) ?? "Fill",
+      visible: true,
+      locked: false,
+      opacity,
+      blendMode: "normal",
+      transform,
+      properties: defaults as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(newLayer, idx);
+    context.emitChange("layer-added");
+
+    const strategyType = resolved.strategy.type;
+    return textResult(
+      `Created painting:fill layer "${newLayer.id}" (strategy: ${strategyType}).`,
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
+// update_fill — modify individual properties on an existing fill layer
+// ---------------------------------------------------------------------------
+
+export const updateFillTool: McpToolDefinition = {
+  name: "update_fill",
+  description:
+    "Modify individual properties on an existing painting:fill layer without replacing everything. " +
+    "Partial strategy updates are merged with the existing strategy.",
+  inputSchema: {
+    type: "object",
+    required: ["layerId"],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "ID of the painting:fill layer to update.",
+      },
+      strategy: {
+        type: "object",
+        description: "Partial strategy object — merged with the existing strategy.",
+      },
+      shading: {
+        type: "object",
+        description: "New shading function (replaces existing).",
+      },
+      shadingAffects: {
+        type: "array",
+        items: { type: "string", enum: ["density", "weight", "opacity"] },
+        description: "New shadingAffects array (replaces existing).",
+      },
+      color: {
+        type: "string",
+        description: "New stroke color.",
+      },
+      size: {
+        type: "number",
+        description: "New brush size in pixels.",
+      },
+      brushId: {
+        type: "string",
+        description: "New brush preset ID.",
+      },
+      seed: {
+        type: "number",
+        description: "New PRNG seed.",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const layerId = input.layerId as string;
+    if (!layerId) return errorResult("layerId is required.");
+
+    const layer = context.layers.get(layerId);
+    if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+    if (layer.type !== "painting:fill") {
+      return errorResult(`Layer "${layerId}" is not a painting:fill layer (is ${layer.type}).`);
+    }
+
+    const updates: Record<string, unknown> = {};
+
+    // Partial strategy merge
+    if (input.strategy !== undefined && typeof input.strategy === "object") {
+      let existing: Record<string, unknown> = {};
+      try {
+        existing = JSON.parse((layer.properties.strategy as string) ?? "{}") as Record<string, unknown>;
+      } catch { /* keep empty */ }
+      const merged = { ...existing, ...(input.strategy as Record<string, unknown>) };
+      updates.strategy = JSON.stringify(merged);
+    }
+
+    if (input.shading !== undefined) updates.shading = JSON.stringify(input.shading);
+    if (input.shadingAffects !== undefined) updates.shadingAffects = JSON.stringify(input.shadingAffects);
+    if (input.color !== undefined) updates.color = input.color;
+    if (input.size !== undefined) updates.size = input.size;
+    if (input.brushId !== undefined) updates.brushId = input.brushId;
+    if (input.seed !== undefined) updates.seed = input.seed;
+
+    if (Object.keys(updates).length === 0) {
+      return textResult("No changes specified.");
+    }
+
+    context.layers.updateProperties(layerId, updates as Record<string, string | number | boolean | null>);
+    context.emitChange("layer-updated");
+
+    const changed = Object.keys(updates).join(", ");
+    return textResult(`Updated painting:fill layer "${layerId}": ${changed}.`);
+  },
+};
+
+// ---------------------------------------------------------------------------
+// list_fill_presets — list available fill presets
+// ---------------------------------------------------------------------------
+
+export const listFillPresetsTool: McpToolDefinition = {
+  name: "list_fill_presets",
+  description: "List all built-in fill presets with their strategy parameters.",
+  inputSchema: {
+    type: "object",
+    required: [],
+    properties: {},
+  } satisfies JsonSchema,
+
+  async handler(
+    _input: Record<string, unknown>,
+    _context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const result = Object.entries(FILL_PRESETS).map(([name, preset]) => ({
+      name,
+      strategy: preset.strategy,
+      brushId: preset.brushId,
+      size: preset.size,
+    }));
+    return textResult(JSON.stringify(result, null, 2));
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
@@ -993,4 +1308,7 @@ export const paintingMcpTools: McpToolDefinition[] = [
   listBrushesTool,
   createBrushTool,
   eraseStrokesTool,
+  fillRegionTool,
+  updateFillTool,
+  listFillPresetsTool,
 ];
