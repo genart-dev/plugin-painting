@@ -178,13 +178,15 @@ const curl = curlAt(field, 0.5, 0.5);        // rotation strength
 applyVerticalMask(field, { centerY: 0.5, spread: 0.3 });
 ```
 
-## Test Renders
+## Examples
+
+![Medium comparison](images/deliverable-6-medium-comparison.png)
 
 <table>
 <tr>
-<td><img src="test-renders/solo-oil.png" width="220" /><br><em>Oil / Acrylic</em></td>
-<td><img src="test-renders/solo-gouache.png" width="220" /><br><em>Gouache</em></td>
-<td><img src="test-renders/solo-pastel.png" width="220" /><br><em>Pastel</em></td>
+<td><img src="images/solo-oil.png" width="220" /><br><em>Oil / Acrylic</em></td>
+<td><img src="images/solo-gouache.png" width="220" /><br><em>Gouache</em></td>
+<td><img src="images/solo-pastel.png" width="220" /><br><em>Pastel</em></td>
 </tr>
 </table>
 
