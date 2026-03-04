@@ -5,6 +5,7 @@ import { charcoalLayerType } from "./charcoal.js";
 import { oilAcrylicLayerType } from "./oil-acrylic.js";
 import { gouacheLayerType } from "./gouache.js";
 import { pastelLayerType } from "./pastel.js";
+import { strokeLayerType } from "./stroke-layer.js";
 import { paintingMcpTools } from "./painting-tools.js";
 
 const paintingPlugin: DesignPlugin = {
@@ -13,7 +14,7 @@ const paintingPlugin: DesignPlugin = {
   version: "0.1.0",
   tier: "pro",
   description:
-    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal.",
+    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke.",
 
   layerTypes: [
     watercolorLayerType,
@@ -22,6 +23,7 @@ const paintingPlugin: DesignPlugin = {
     oilAcrylicLayerType,
     gouacheLayerType,
     pastelLayerType,
+    strokeLayerType,
   ],
   tools: [],
   exportHandlers: [],
@@ -38,7 +40,21 @@ export { charcoalLayerType } from "./charcoal.js";
 export { oilAcrylicLayerType } from "./oil-acrylic.js";
 export { gouacheLayerType } from "./gouache.js";
 export { pastelLayerType } from "./pastel.js";
+export { strokeLayerType } from "./stroke-layer.js";
 export { paintingMcpTools } from "./painting-tools.js";
+export {
+  type BrushDefinition,
+  type BrushStroke,
+  type StrokePoint,
+} from "./brush/types.js";
+export { BRUSH_PRESETS, getBrushPreset } from "./brush/presets.js";
+export {
+  generateRoundTip,
+  generateTextureTip,
+  preloadTextureTip,
+  isTextureTipCached,
+  clearTipCache,
+} from "./brush/tip-generator.js";
 export {
   type VectorField,
   type VectorSample,
