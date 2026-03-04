@@ -1,0 +1,62 @@
+{
+  "name": "@genart-dev/plugin-painting",
+  "version": "0.1.0",
+  "description": "Vector-field-driven painting layer plugins for genart.dev",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "genart.dev",
+    "email": "support@genart.dev",
+    "url": "https://genart.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/genart-dev/plugin-painting.git"
+  },
+  "homepage": "https://genart.dev",
+  "keywords": [
+    "genart",
+    "generative-art",
+    "design-plugin",
+    "painting",
+    "watercolor",
+    "vector-field"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@genart-dev/core": "^0.3.0",
+    "canvas": "^3.2.1"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
