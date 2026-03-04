@@ -12,8 +12,11 @@ import { charcoalLayerType } from "./charcoal.js";
 import { oilAcrylicLayerType } from "./oil-acrylic.js";
 import { gouacheLayerType } from "./gouache.js";
 import { pastelLayerType } from "./pastel.js";
+import { strokeLayerType } from "./stroke-layer.js";
 import { parseField } from "./vector-field.js";
 import type { VectorField, VectorSample } from "./vector-field.js";
+import { BRUSH_PRESETS, getBrushPreset } from "./brush/presets.js";
+import type { BrushDefinition, BrushStroke, StrokePoint } from "./brush/types.js";
 
 function textResult(text: string): McpToolResult {
   return { content: [{ type: "text", text }] };
@@ -545,6 +548,439 @@ export const generateFieldFromPointsTool: McpToolDefinition = {
 };
 
 // ---------------------------------------------------------------------------
+// brush_stroke — create or append brush strokes on a painting:stroke layer
+// ---------------------------------------------------------------------------
+
+export const brushStrokeTool: McpToolDefinition = {
+  name: "brush_stroke",
+  description:
+    "Create brush strokes on a painting:stroke layer. If layerId is provided, appends strokes to that layer; " +
+    "otherwise creates a new painting:stroke layer. Supports all 11 built-in brush presets or inline custom brushes.",
+  inputSchema: {
+    type: "object",
+    required: ["brushId", "color", "points"],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "Existing painting:stroke layer ID to append to. Omit to create a new layer.",
+      },
+      brushId: {
+        type: "string",
+        description:
+          'Brush preset ID (e.g. "round-hard", "ink-pen", "watercolor-round") or a custom brush ID defined on the layer.',
+      },
+      color: {
+        type: "string",
+        description: 'Stroke color as hex string, e.g. "#ff0000".',
+      },
+      points: {
+        type: "array",
+        description: "Array of stroke points [{x, y, pressure?}, ...].",
+        items: {
+          type: "object",
+          required: ["x", "y"],
+          properties: {
+            x: { type: "number", description: "X position in canvas pixels." },
+            y: { type: "number", description: "Y position in canvas pixels." },
+            pressure: { type: "number", description: "Pen pressure 0–1 (default: 1.0)." },
+          },
+        },
+        minItems: 2,
+      },
+      size: {
+        type: "number",
+        description: "Override brush size in pixels.",
+      },
+      opacity: {
+        type: "number",
+        description: "Override stroke opacity 0–1.",
+      },
+      seed: {
+        type: "number",
+        description: "PRNG seed for scatter/jitter.",
+      },
+      brush: {
+        type: "object",
+        description:
+          "Inline custom brush definition (overrides brushId for this stroke). Must include at least 'id' and 'name'.",
+      },
+      index: {
+        type: "number",
+        description: "Layer stack position when creating a new layer (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const brushId = input.brushId as string;
+    const color = input.color as string;
+    const rawPoints = input.points as Array<Record<string, unknown>>;
+
+    if (!brushId) return errorResult("brushId is required.");
+    if (!color) return errorResult("color is required.");
+    if (!Array.isArray(rawPoints) || rawPoints.length < 2) {
+      return errorResult("points must be an array of at least 2 points.");
+    }
+
+    // Validate color is hex-like
+    if (!/^#[0-9a-fA-F]{3,8}$/.test(color)) {
+      return errorResult(`Invalid hex color: "${color}".`);
+    }
+
+    // Parse points
+    const points: StrokePoint[] = rawPoints.map((p) => ({
+      x: typeof p.x === "number" ? p.x : 0,
+      y: typeof p.y === "number" ? p.y : 0,
+      pressure: typeof p.pressure === "number" ? p.pressure : undefined,
+    }));
+
+    // Build the stroke
+    const stroke: BrushStroke = {
+      brushId,
+      color,
+      points,
+      size: typeof input.size === "number" ? input.size : undefined,
+      opacity: typeof input.opacity === "number" ? input.opacity : undefined,
+      seed: typeof input.seed === "number" ? input.seed : undefined,
+    };
+
+    const layerId = input.layerId as string | undefined;
+
+    if (layerId) {
+      // Append to existing layer
+      const layer = context.layers.get(layerId);
+      if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+      if (layer.type !== "painting:stroke") {
+        return errorResult(`Layer "${layerId}" is not a painting:stroke layer (is ${layer.type}).`);
+      }
+
+      // Parse existing strokes
+      let existingStrokes: BrushStroke[] = [];
+      try {
+        existingStrokes = JSON.parse((layer.properties.strokes as string) ?? "[]") as BrushStroke[];
+      } catch {
+        existingStrokes = [];
+      }
+
+      // Handle inline brush override
+      if (input.brush && typeof input.brush === "object") {
+        const inlineBrush = input.brush as Record<string, unknown>;
+        let existingBrushes: BrushDefinition[] = [];
+        try {
+          existingBrushes = JSON.parse((layer.properties.brushes as string) ?? "[]") as BrushDefinition[];
+        } catch {
+          existingBrushes = [];
+        }
+
+        // Add or replace the inline brush
+        const idx = existingBrushes.findIndex((b) => b.id === inlineBrush.id);
+        if (idx >= 0) {
+          existingBrushes[idx] = inlineBrush as unknown as BrushDefinition;
+        } else {
+          existingBrushes.push(inlineBrush as unknown as BrushDefinition);
+        }
+
+        context.layers.updateProperties(layerId, {
+          brushes: JSON.stringify(existingBrushes),
+        });
+      }
+
+      existingStrokes.push(stroke);
+      context.layers.updateProperties(layerId, {
+        strokes: JSON.stringify(existingStrokes),
+      });
+      context.emitChange("layer-updated");
+
+      return textResult(
+        `Appended stroke #${existingStrokes.length} (brush: ${brushId}) to layer "${layerId}".`,
+      );
+    }
+
+    // Create new layer
+    const defaults = strokeLayerType.createDefault();
+
+    // Handle inline brush
+    if (input.brush && typeof input.brush === "object") {
+      defaults.brushes = JSON.stringify([input.brush]);
+    }
+
+    defaults.strokes = JSON.stringify([stroke]);
+
+    const newLayer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:stroke",
+      name: "Brush Stroke",
+      visible: true,
+      locked: false,
+      opacity: typeof input.opacity === "number" ? input.opacity : 1,
+      blendMode: "normal",
+      transform: fullCanvasTransform(context),
+      properties: defaults as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(newLayer, idx);
+    context.emitChange("layer-added");
+
+    return textResult(
+      `Created painting:stroke layer "${newLayer.id}" with 1 stroke (brush: ${brushId}).`,
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
+// list_brushes — list all available brushes (presets + custom on a layer)
+// ---------------------------------------------------------------------------
+
+export const listBrushesTool: McpToolDefinition = {
+  name: "list_brushes",
+  description:
+    "List all available brush presets and any custom brushes defined on a specific painting:stroke layer.",
+  inputSchema: {
+    type: "object",
+    required: [],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "Optional painting:stroke layer ID to include its custom brushes.",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const result: Array<{ id: string; name: string; tipType: string; source: "preset" | "custom" }> = [];
+
+    // Add all presets
+    for (const [id, brush] of Object.entries(BRUSH_PRESETS)) {
+      result.push({ id, name: brush.name, tipType: brush.tipType, source: "preset" });
+    }
+
+    // Add custom brushes from layer if specified
+    const layerId = input.layerId as string | undefined;
+    if (layerId) {
+      const layer = context.layers.get(layerId);
+      if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+      if (layer.type !== "painting:stroke") {
+        return errorResult(`Layer "${layerId}" is not a painting:stroke layer.`);
+      }
+
+      try {
+        const customBrushes = JSON.parse(
+          (layer.properties.brushes as string) ?? "[]",
+        ) as BrushDefinition[];
+        for (const b of customBrushes) {
+          result.push({ id: b.id, name: b.name, tipType: b.tipType ?? "round", source: "custom" });
+        }
+      } catch {
+        // Ignore invalid JSON
+      }
+    }
+
+    return textResult(JSON.stringify(result, null, 2));
+  },
+};
+
+// ---------------------------------------------------------------------------
+// create_brush — add a custom BrushDefinition to a layer
+// ---------------------------------------------------------------------------
+
+export const createBrushTool: McpToolDefinition = {
+  name: "create_brush",
+  description:
+    "Add a custom brush definition to a painting:stroke layer's brushes array. " +
+    "The brush can then be referenced by its id in brush_stroke calls.",
+  inputSchema: {
+    type: "object",
+    required: ["layerId", "brush"],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "ID of the painting:stroke layer.",
+      },
+      brush: {
+        type: "object",
+        description:
+          "BrushDefinition object. Required fields: id, name. " +
+          "Optional: tipType, tipTexture, hardness, roundness, angle, size, sizeMin, opacity, flow, " +
+          "spacing, scatter, scatterAlongPath, dynamics, taperStart, taperEnd, " +
+          "grainScale, grainDepth, grainMode, blendMode, renderMode, smoothing. " +
+          "For texture tips, set tipType to 'texture' and provide tipTexture as a base64-encoded PNG.",
+        required: ["id", "name"],
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          tipType: { type: "string", enum: ["round", "texture"] },
+          tipTexture: { type: "string", description: "Base64-encoded PNG texture for tipType 'texture'." },
+          hardness: { type: "number" },
+          roundness: { type: "number" },
+          angle: { type: "number" },
+          size: { type: "number" },
+          sizeMin: { type: "number" },
+          opacity: { type: "number" },
+          flow: { type: "number" },
+          spacing: { type: "number" },
+          scatter: { type: "number" },
+          scatterAlongPath: { type: "number" },
+          dynamics: { type: "object" },
+          taperStart: { type: "number" },
+          taperEnd: { type: "number" },
+          grainScale: { type: "number" },
+          grainDepth: { type: "number" },
+          grainMode: { type: "string", enum: ["moving", "static"] },
+          blendMode: { type: "string" },
+          renderMode: { type: "string", enum: ["wash", "buildup"] },
+          smoothing: { type: "number" },
+        },
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const layerId = input.layerId as string;
+    const brushInput = input.brush as Record<string, unknown>;
+
+    if (!layerId) return errorResult("layerId is required.");
+    if (!brushInput || !brushInput.id || !brushInput.name) {
+      return errorResult("brush must have 'id' and 'name' fields.");
+    }
+
+    const layer = context.layers.get(layerId);
+    if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+    if (layer.type !== "painting:stroke") {
+      return errorResult(`Layer "${layerId}" is not a painting:stroke layer.`);
+    }
+
+    // Check for conflict with presets
+    if (getBrushPreset(brushInput.id as string)) {
+      return errorResult(
+        `Brush id "${brushInput.id}" conflicts with a built-in preset. Choose a different id.`,
+      );
+    }
+
+    // Parse existing custom brushes
+    let brushes: BrushDefinition[] = [];
+    try {
+      brushes = JSON.parse((layer.properties.brushes as string) ?? "[]") as BrushDefinition[];
+    } catch {
+      brushes = [];
+    }
+
+    // Build brush with defaults from round-hard preset
+    const base = BRUSH_PRESETS["round-hard"]!;
+    const newBrush: BrushDefinition = {
+      ...base,
+      ...brushInput,
+      id: brushInput.id as string,
+      name: brushInput.name as string,
+    } as BrushDefinition;
+
+    // Replace if already exists, otherwise append
+    const existingIdx = brushes.findIndex((b) => b.id === newBrush.id);
+    if (existingIdx >= 0) {
+      brushes[existingIdx] = newBrush;
+    } else {
+      brushes.push(newBrush);
+    }
+
+    context.layers.updateProperties(layerId, {
+      brushes: JSON.stringify(brushes),
+    });
+    context.emitChange("layer-updated");
+
+    return textResult(
+      `${existingIdx >= 0 ? "Updated" : "Added"} custom brush "${newBrush.id}" on layer "${layerId}" (${brushes.length} custom brush${brushes.length === 1 ? "" : "es"} total).`,
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
+// erase_strokes — remove strokes by index range from a layer
+// ---------------------------------------------------------------------------
+
+export const eraseStrokesTool: McpToolDefinition = {
+  name: "erase_strokes",
+  description:
+    "Remove strokes from a painting:stroke layer by index range. " +
+    "Indices are 0-based. If 'end' is omitted, removes only the stroke at 'start'.",
+  inputSchema: {
+    type: "object",
+    required: ["layerId", "start"],
+    properties: {
+      layerId: {
+        type: "string",
+        description: "ID of the painting:stroke layer.",
+      },
+      start: {
+        type: "number",
+        description: "Start index (inclusive, 0-based).",
+      },
+      end: {
+        type: "number",
+        description: "End index (inclusive, 0-based). Omit to remove only 'start'.",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const layerId = input.layerId as string;
+    const start = input.start as number;
+    const end = typeof input.end === "number" ? input.end : start;
+
+    if (!layerId) return errorResult("layerId is required.");
+    if (typeof start !== "number" || start < 0) {
+      return errorResult("start must be a non-negative number.");
+    }
+    if (end < start) {
+      return errorResult("end must be >= start.");
+    }
+
+    const layer = context.layers.get(layerId);
+    if (!layer) return errorResult(`Layer "${layerId}" not found.`);
+    if (layer.type !== "painting:stroke") {
+      return errorResult(`Layer "${layerId}" is not a painting:stroke layer.`);
+    }
+
+    let strokes: BrushStroke[] = [];
+    try {
+      strokes = JSON.parse((layer.properties.strokes as string) ?? "[]") as BrushStroke[];
+    } catch {
+      return errorResult("Could not parse existing strokes.");
+    }
+
+    if (start >= strokes.length) {
+      return errorResult(
+        `Start index ${start} is out of range (${strokes.length} strokes).`,
+      );
+    }
+
+    const clampedEnd = Math.min(end, strokes.length - 1);
+    const removeCount = clampedEnd - start + 1;
+    strokes.splice(start, removeCount);
+
+    context.layers.updateProperties(layerId, {
+      strokes: JSON.stringify(strokes),
+    });
+    context.emitChange("layer-updated");
+
+    return textResult(
+      `Removed ${removeCount} stroke${removeCount === 1 ? "" : "s"} (indices ${start}–${clampedEnd}) from layer "${layerId}". ${strokes.length} stroke${strokes.length === 1 ? "" : "s"} remaining.`,
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
@@ -553,4 +989,8 @@ export const paintingMcpTools: McpToolDefinition[] = [
   getPaintFieldTool,
   updatePaintFieldTool,
   generateFieldFromPointsTool,
+  brushStrokeTool,
+  listBrushesTool,
+  createBrushTool,
+  eraseStrokesTool,
 ];
