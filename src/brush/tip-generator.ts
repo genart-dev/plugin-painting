@@ -117,17 +117,22 @@ export function generateRoundTip(
       // Normalized distance (0 = center, 1 = edge)
       const nd = dist / radius;
 
+      // Anti-alias band width in pixels
+      const aaBand = 1.5;
+      const edgeDist = (1 - nd) * radius; // px from edge (negative = outside)
+
       let alpha: number;
       if (nd > 1) {
-        alpha = 0;
+        // Outside radius — AA falloff over 1.5px
+        const overshoot = -edgeDist;
+        alpha = overshoot < aaBand ? Math.round((1 - overshoot / aaBand) * 255) : 0;
       } else if (hardness >= 1) {
-        // Hard edge: binary
-        alpha = 255;
+        // Hard edge with sub-pixel AA at boundary
+        alpha = edgeDist >= aaBand ? 255 : Math.round((edgeDist / aaBand) * 255);
       } else {
         // Smooth falloff: blend between Gaussian (hardness=0) and hard (hardness=1)
-        // Gaussian: exp(-nd² * k) where k controls falloff width
         const gaussian = Math.exp(-nd * nd * 4.5);
-        const hard = nd <= 1 ? 1 : 0;
+        const hard = edgeDist >= aaBand ? 1 : edgeDist / aaBand;
         alpha = Math.round(lerp(gaussian, hard, hardness) * 255);
       }
 

@@ -10,7 +10,7 @@ import { BRUSH_PRESETS } from "./brush/presets.js";
 import { preloadTextureTip } from "./brush/tip-generator.js";
 import { renderStrokes } from "./brush/stamp-renderer.js";
 import type { BrushDefinition, BrushStroke } from "./brush/types.js";
-import type { FillRegion, FillStrategy, ShadingFunction, ShadingAffect } from "./fill/types.js";
+import type { FillRegion, FillStrategy, ShadingFunction, ShadingAffect, GeneratedPath } from "./fill/types.js";
 import { generateFillPaths } from "./fill/generators.js";
 import { applyRegionClip } from "./fill/region-utils.js";
 
@@ -104,15 +104,13 @@ const FILL_PROPERTIES: LayerPropertySchema[] = [
 // Simple cache keyed by stringified properties
 // ---------------------------------------------------------------------------
 
-interface CacheEntry {
+interface PathCacheEntry {
   key: string;
-  strokes: BrushStroke[];
+  paths: GeneratedPath[];
 }
 
-// Per-layer cache: layerId → last cached result
-// Note: We use WeakMap-style via a plain Map since we have no layer object reference here.
-// The key is a full property hash string.
-const _renderCache = new Map<string, CacheEntry>();
+// Per-layer cache: property hash → generated paths.
+const _pathCache = new Map<string, PathCacheEntry>();
 
 function makeCacheKey(properties: LayerProperties, bounds: LayerBounds): string {
   return JSON.stringify([
@@ -128,6 +126,74 @@ function makeCacheKey(properties: LayerProperties, bounds: LayerBounds): string 
     bounds.x, bounds.y, bounds.width, bounds.height,
     properties.opacity,
   ]);
+}
+
+// ---------------------------------------------------------------------------
+// Native Canvas2D path rendering (anti-aliased lines for geometric fills)
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns true if the brush is simple enough for native Canvas2D line rendering.
+ * Simple = round tip, high hardness, near-circular, no scatter/grain/texture.
+ */
+function isSimpleBrush(brush: BrushDefinition): boolean {
+  if (brush.tipType === "texture") return false;
+  if (brush.scatter > 0.01 || brush.scatterAlongPath > 0.01) return false;
+  if (brush.grainTexture) return false;
+  if (brush.roundness < 0.8) return false;
+  return true;
+}
+
+/**
+ * Render generated paths using native Canvas2D stroke() for anti-aliased output.
+ * Used for geometric fills (hatch, crosshatch, contour, stipple) with simple brushes.
+ */
+function renderNativePaths(
+  paths: GeneratedPath[],
+  brush: BrushDefinition,
+  color: string,
+  size: number,
+  ctx: CanvasRenderingContext2D,
+): void {
+  // Generated paths use absolute canvas coordinates.
+  // Native rendering draws directly to the main ctx (not offscreen), so no offset needed.
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  for (const gp of paths) {
+    const effectiveSize = size * gp.sizeScale;
+    const effectiveOpacity = gp.opacityScale * brush.opacity * brush.flow;
+
+    if (gp.points.length === 2) {
+      const p0 = gp.points[0]!;
+      const p1 = gp.points[1]!;
+      const dx = p1.x - p0.x;
+      const dy = p1.y - p0.y;
+
+      // Single-point stipple dot: distance < 1px
+      if (dx * dx + dy * dy < 1) {
+        ctx.globalAlpha = effectiveOpacity;
+        ctx.beginPath();
+        ctx.arc(p0.x, p0.y, effectiveSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        continue;
+      }
+    }
+
+    // Multi-point path: use native stroke
+    ctx.globalAlpha = effectiveOpacity;
+    ctx.lineWidth = effectiveSize;
+    ctx.beginPath();
+    const first = gp.points[0]!;
+    ctx.moveTo(first.x, first.y);
+    for (let i = 1; i < gp.points.length; i++) {
+      const pt = gp.points[i]!;
+      ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.stroke();
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -200,32 +266,52 @@ export const fillLayerType: LayerTypeDefinition = {
       brushMap[customBrush.id] = customBrush;
     }
 
-    // Preload texture tips
-    for (const b of Object.values(brushMap)) {
-      if (b.tipType === "texture" && b.tipTexture) {
-        preloadTextureTip(b.tipTexture);
+    // Resolve effective brush for rendering mode decision
+    const effectiveBrushId = customBrush?.id ?? brushId;
+    const effectiveBrush = brushMap[effectiveBrushId] ?? brushMap["ink-pen"]!;
+    const useNative = isSimpleBrush(effectiveBrush);
+
+    // Preload texture tips (only needed for stamp pipeline)
+    if (!useNative) {
+      for (const b of Object.values(brushMap)) {
+        if (b.tipType === "texture" && b.tipTexture) {
+          preloadTextureTip(b.tipTexture);
+        }
       }
     }
 
-    // Check cache
+    // Generate paths (cached)
     const cacheKey = makeCacheKey(properties, bounds);
-    let strokes: BrushStroke[];
+    let generatedPaths: GeneratedPath[];
 
-    const cached = _renderCache.get(cacheKey);
-    if (cached) {
-      strokes = cached.strokes;
+    const cachedPaths = _pathCache.get(cacheKey);
+    if (cachedPaths) {
+      generatedPaths = cachedPaths.paths;
     } else {
-      // Generate paths
-      const generatedPaths = generateFillPaths(strategy, region, shading, shadingAffects, bounds, seed);
+      generatedPaths = generateFillPaths(strategy, region, shading, shadingAffects, bounds, seed);
 
-      // Convert GeneratedPath → BrushStroke
-      // Generated paths are in absolute canvas coordinates; the stamp renderer adds
-      // bounds.x/bounds.y, so we convert to layer-local coordinates by subtracting.
-      const effectiveBrushId = customBrush?.id ?? brushId;
+      if (_pathCache.size > 50) {
+        const firstKey = _pathCache.keys().next().value;
+        if (firstKey !== undefined) _pathCache.delete(firstKey);
+      }
+      _pathCache.set(cacheKey, { key: cacheKey, paths: generatedPaths });
+    }
+
+    if (generatedPaths.length === 0) return;
+
+    // Render with clipping
+    ctx.save();
+    ctx.globalAlpha = layerOpacity;
+    applyRegionClip(region, bounds, ctx);
+
+    if (useNative) {
+      // Native Canvas2D paths — anti-aliased lines/arcs (absolute coordinates)
+      renderNativePaths(generatedPaths, effectiveBrush, color, sizeOverride, ctx);
+    } else {
+      // Stamp pipeline — needed for texture tips, scatter, grain, etc.
       const ox = bounds.x;
       const oy = bounds.y;
-
-      strokes = generatedPaths.map((gp, i) => ({
+      const strokes: BrushStroke[] = generatedPaths.map((gp, i) => ({
         brushId: effectiveBrushId,
         color,
         points: gp.points.map((pt) => ({ x: pt.x - ox, y: pt.y - oy })),
@@ -233,25 +319,8 @@ export const fillLayerType: LayerTypeDefinition = {
         opacity: gp.opacityScale,
         seed: seed + i,
       }));
-
-      // Cache result (bounded to avoid unbounded growth)
-      if (_renderCache.size > 50) {
-        const firstKey = _renderCache.keys().next().value;
-        if (firstKey !== undefined) _renderCache.delete(firstKey);
-      }
-      _renderCache.set(cacheKey, { key: cacheKey, strokes });
+      renderStrokes(strokes, brushMap, ctx, bounds, seed);
     }
-
-    if (strokes.length === 0) return;
-
-    // Render with clipping
-    ctx.save();
-    ctx.globalAlpha = layerOpacity;
-
-    // Apply region clip so strokes don't bleed outside
-    applyRegionClip(region, bounds, ctx);
-
-    renderStrokes(strokes, brushMap, ctx, bounds, seed);
 
     ctx.restore();
   },

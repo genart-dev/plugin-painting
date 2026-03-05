@@ -72,12 +72,16 @@ describe("generateRoundTip", () => {
   });
 
   describe("hardness = 1 (hard edge)", () => {
-    it("produces binary circle — full opacity inside, 0 outside", () => {
-      const size = 11;
+    it("produces hard circle with anti-aliased edge", () => {
+      const size = 21;
       const tip = generateRoundTip(size, 1, 1.0, 0);
-      const cx = 5;
-      const cy = 5;
+      const cx = (size - 1) / 2;
+      const cy = (size - 1) / 2;
       const radius = size / 2;
+
+      let hasFullOpaque = false;
+      let hasFullTransparent = false;
+      let hasIntermediate = false;
 
       for (let py = 0; py < size; py++) {
         for (let px = 0; px < size; px++) {
@@ -86,34 +90,47 @@ describe("generateRoundTip", () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
           const alpha = tip.data[(py * size + px) * 4 + 3]!;
 
-          if (dist <= radius) {
+          // Well inside the circle (> 1.5px from edge): fully opaque
+          if (dist < radius - 2) {
             expect(alpha).toBe(255);
-          } else {
+            hasFullOpaque = true;
+          }
+          // Well outside the circle (> 1.5px outside edge): fully transparent
+          if (dist > radius + 2) {
             expect(alpha).toBe(0);
+            hasFullTransparent = true;
+          }
+          // Near the edge: intermediate alpha (AA band)
+          if (alpha > 0 && alpha < 255) {
+            hasIntermediate = true;
           }
         }
       }
+
+      expect(hasFullOpaque).toBe(true);
+      expect(hasFullTransparent).toBe(true);
+      expect(hasIntermediate).toBe(true);
     });
   });
 
   describe("roundness squash", () => {
     it("squashes circle into ellipse along y-axis", () => {
-      const size = 21;
+      const size = 31;
       const circle = generateRoundTip(size, 1, 1.0, 0);
       clearTipCache();
       const squashed = generateRoundTip(size, 1, 0.3, 0);
 
       const cx = Math.floor(size / 2);
 
-      // At the top edge (y=0, x=center), the circle is opaque but the ellipse should be transparent
-      // because squashing y means pixels far from center vertically get pushed outside
-      const topCircle = circle.data[(0 * size + cx) * 4 + 3]!;
-      const topSquashed = squashed.data[(0 * size + cx) * 4 + 3]!;
+      // At y=3 (well inside circle but outside squashed ellipse)
+      const nearTopCircle = circle.data[(3 * size + cx) * 4 + 3]!;
+      const nearTopSquashed = squashed.data[(3 * size + cx) * 4 + 3]!;
 
-      // Hard circle: top center should be inside (alpha 255)
-      expect(topCircle).toBe(255);
-      // Squashed: top center is outside the squashed ellipse
-      expect(topSquashed).toBe(0);
+      // Circle: y=3 is well inside radius of 15.5, so fully opaque
+      expect(nearTopCircle).toBe(255);
+      // Squashed (roundness 0.3): effective y distance is multiplied by 1/0.3 ≈ 3.3x,
+      // so y=3 maps to effective dist ≈ 40 which is well outside the radius
+      expect(nearTopSquashed).toBe(0);
     });
 
     it("keeps full width at the horizontal center", () => {
@@ -169,8 +186,9 @@ describe("generateRoundTip", () => {
       const tip = generateRoundTip(1, 1, 1.0, 0);
       expect(tip.width).toBe(1);
       expect(tip.height).toBe(1);
-      // Single pixel should be opaque
-      expect(tip.data[3]).toBe(255);
+      // Single pixel: center at (0,0), radius=0.5, edgeDist=0.5 < AA band (1.5px)
+      // Alpha is attenuated but non-zero
+      expect(tip.data[3]).toBeGreaterThan(0);
     });
 
     it("handles angle rotation", () => {
