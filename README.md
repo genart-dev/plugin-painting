@@ -192,22 +192,26 @@ applyVerticalMask(field, { centerY: 0.5, spread: 0.3 });
 
 ### Brush Stroke System
 
-![Brush stroke gallery](test-renders/brush-stroke-gallery.png)
+![Brush stroke gallery](images/brush-stroke-gallery.png)
 
 <table>
 <tr>
-<td><img src="test-renders/01-preset-catalog.png" width="280" /><br><em>Preset Catalog</em></td>
-<td><img src="test-renders/02-pressure-dynamics.png" width="280" /><br><em>Pressure Dynamics</em></td>
+<td><img src="images/01-preset-catalog.png" width="280" /><br><em>Preset Catalog</em></td>
+<td><img src="images/02-pressure-dynamics.png" width="280" /><br><em>Pressure Dynamics</em></td>
 </tr>
 <tr>
-<td><img src="test-renders/03-calligraphy.png" width="280" /><br><em>Calligraphy</em></td>
-<td><img src="test-renders/04-splatter-abstract.png" width="280" /><br><em>Splatter Abstract</em></td>
+<td><img src="images/03-calligraphy.png" width="280" /><br><em>Calligraphy</em></td>
+<td><img src="images/04-splatter-abstract.png" width="280" /><br><em>Splatter Abstract</em></td>
 </tr>
 <tr>
-<td><img src="test-renders/05-field-influence.png" width="280" /><br><em>Field Influence</em></td>
-<td><img src="test-renders/06-texture-tips.png" width="280" /><br><em>Texture Tips</em></td>
+<td><img src="images/05-field-influence.png" width="280" /><br><em>Field Influence</em></td>
+<td><img src="images/06-texture-tips.png" width="280" /><br><em>Texture Tips</em></td>
 </tr>
 </table>
+
+### Fill Styles
+
+![Fill styles](images/deliverable-8-fill-styles.png)
 
 ## Related Packages
 
