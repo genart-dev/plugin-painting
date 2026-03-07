@@ -1,0 +1,75 @@
+{
+  "genart": "1.3",
+  "id": "algorithm-bridge-accumulative-layered",
+  "title": "ADR 062: Accumulative + Design Layers — Mixed Media with Ink & Fill Overlay",
+  "created": "2026-03-07T00:00:00Z",
+  "modified": "2026-03-07T00:00:00Z",
+  "renderer": {
+    "type": "p5",
+    "version": "1.x"
+  },
+  "canvas": {
+    "width": 800,
+    "height": 800
+  },
+  "parameters": [
+    { "key": "washCount", "label": "Wash Particles", "min": 5, "max": 60, "step": 5, "default": 20 },
+    { "key": "inkCount", "label": "Ink Particles", "min": 50, "max": 800, "step": 50, "default": 250 },
+    { "key": "dotCount", "label": "Stipple Dots", "min": 20, "max": 400, "step": 20, "default": 120 }
+  ],
+  "colors": [],
+  "state": {
+    "seed": 4419,
+    "params": {
+      "washCount": 20,
+      "inkCount": 250,
+      "dotCount": 120
+    },
+    "colorPalette": []
+  },
+  "dataChannels": [
+    { "name": "flowField", "type": "vector", "cols": 60, "rows": 60 },
+    { "name": "valueMap", "type": "scalar", "cols": 60, "rows": 60 }
+  ],
+  "algorithm": "function sketch(p, state) {\n  var W = state.WIDTH || 800;\n  var H = state.HEIGHT || 800;\n  var SEED = state.SEED || 4419;\n  var PP = state.PARAMS || {};\n  var cols = 60, rows = 60;\n  var washes = [], inks = [], dots = [];\n  var flowField, valueMap;\n\n  function mulberry32(a) {\n    return function() {\n      a |= 0; a = a + 0x6D2B79F5 | 0;\n      var t = Math.imul(a ^ a >>> 15, 1 | a);\n      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;\n      return ((t ^ t >>> 14) >>> 0) / 4294967296;\n    };\n  }\n\n  var rng = mulberry32(SEED);\n  var perm = new Float64Array(256);\n  for (var i = 0; i < 256; i++) perm[i] = rng();\n  function hash(x, y) {\n    return perm[((x * 374761393 + y * 668265263) & 0x7fffffff) % 256];\n  }\n  function vnoise(x, y) {\n    var ix = Math.floor(x), iy = Math.floor(y);\n    var fx = x - ix, fy = y - iy;\n    fx = fx * fx * (3 - 2 * fx);\n    fy = fy * fy * (3 - 2 * fy);\n    var a = hash(ix, iy), b = hash(ix + 1, iy);\n    var c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1);\n    return a + fx * (b - a) + fy * (c - a) + fx * fy * (a - b - c + d);\n  }\n  function fbm(x, y) {\n    var v = 0, amp = 1, freq = 1, mx = 0;\n    for (var o = 0; o < 5; o++) {\n      v += amp * vnoise(x * freq, y * freq);\n      mx += amp; amp *= 0.5; freq *= 2;\n    }\n    return v / mx;\n  }\n\n  function computeFields() {\n    flowField = new Float32Array(cols * rows * 3);\n    valueMap = new Float32Array(cols * rows);\n    var scale = 3.0;\n    var eps = 0.08;\n    for (var row = 0; row < rows; row++) {\n      for (var col = 0; col < cols; col++) {\n        var nx = col / (cols - 1);\n        var ny = row / (rows - 1);\n        var sx = nx * scale;\n        var sy = ny * scale;\n        var warp = Math.sin(ny * Math.PI * 4) * 0.3;\n        var px = sx + warp;\n        var py = sy;\n        var dndx = (fbm(px + eps, py) - fbm(px - eps, py)) / (2 * eps);\n        var dndy = (fbm(px, py + eps) - fbm(px, py - eps)) / (2 * eps);\n        var dx = dndy + 0.3;\n        var dy = -dndx;\n        var mag = Math.sqrt(dx * dx + dy * dy);\n        var idx = (row * cols + col) * 3;\n        flowField[idx]     = mag > 0.001 ? dx / mag : 1;\n        flowField[idx + 1] = mag > 0.001 ? dy / mag : 0;\n        flowField[idx + 2] = Math.min(1, mag * 1.8);\n        var waveWarp = fbm(sx * 0.7, sy * 0.5) * 2.0;\n        var wave = Math.sin(ny * 5 + nx * 1.2 + waveWarp);\n        var sharp = Math.pow(Math.abs(wave), 0.5) * (wave > 0 ? 1 : -1);\n        var val = (sharp + 1) * 0.5;\n        val = Math.pow(val, 1.5);\n        val = val * (0.5 + 0.5 * (1 - ny * 0.5));\n        valueMap[row * cols + col] = Math.max(0, Math.min(1, val));\n      }\n    }\n    if (typeof window !== 'undefined' && window.__genart_data) {\n      window.__genart_data.flowField = flowField;\n      window.__genart_data.valueMap = valueMap;\n      window.__genart_data.cols = cols;\n      window.__genart_data.rows = rows;\n    }\n  }\n\n  function sampleFlow(x, y) {\n    var gx = (x / W) * (cols - 1);\n    var gy = (y / H) * (rows - 1);\n    var c0 = Math.max(0, Math.min(cols - 2, Math.floor(gx)));\n    var r0 = Math.max(0, Math.min(rows - 2, Math.floor(gy)));\n    var fx = gx - c0, fy = gy - r0;\n    var i00 = (r0 * cols + c0) * 3, i10 = i00 + 3;\n    var i01 = ((r0 + 1) * cols + c0) * 3, i11 = i01 + 3;\n    return {\n      dx: flowField[i00]*(1-fx)*(1-fy) + flowField[i10]*fx*(1-fy) + flowField[i01]*(1-fx)*fy + flowField[i11]*fx*fy,\n      dy: flowField[i00+1]*(1-fx)*(1-fy) + flowField[i10+1]*fx*(1-fy) + flowField[i01+1]*(1-fx)*fy + flowField[i11+1]*fx*fy,\n      mag: flowField[i00+2]*(1-fx)*(1-fy) + flowField[i10+2]*fx*(1-fy) + flowField[i01+2]*(1-fx)*fy + flowField[i11+2]*fx*fy\n    };\n  }\n\n  function sampleValue(x, y) {\n    var gx = (x / W) * (cols - 1);\n    var gy = (y / H) * (rows - 1);\n    var c0 = Math.max(0, Math.min(cols - 2, Math.floor(gx)));\n    var r0 = Math.max(0, Math.min(rows - 2, Math.floor(gy)));\n    var fx = gx - c0, fy = gy - r0;\n    return valueMap[r0*cols+c0]*(1-fx)*(1-fy) + valueMap[r0*cols+c0+1]*fx*(1-fy) + valueMap[(r0+1)*cols+c0]*(1-fx)*fy + valueMap[(r0+1)*cols+c0+1]*fx*fy;\n  }\n\n  // Oceanic palette: deep navy + teal + sand + rust + cream highlights\n  var palette = [\n    { h: 215, s: 65, b: 25 },\n    { h: 195, s: 55, b: 40 },\n    { h: 175, s: 40, b: 55 },\n    { h: 35, s: 50, b: 70 },\n    { h: 15, s: 60, b: 45 },\n    { h: 50, s: 20, b: 85 }\n  ];\n\n  function initParticles() {\n    var r2 = mulberry32(SEED + 77);\n    var blends = [p.MULTIPLY, p.SCREEN, p.OVERLAY, p.SOFT_LIGHT, p.HARD_LIGHT];\n\n    washes = [];\n    var nw = PP.washCount || 20;\n    for (var i = 0; i < nw; i++) {\n      var pc = palette[Math.floor(r2() * palette.length)];\n      washes.push({\n        x: r2() * W, y: r2() * H,\n        size: 40 + r2() * 100,\n        ratio: 0.4 + r2() * 0.8,\n        rot: r2() * Math.PI * 2,\n        hue: pc.h + (r2() - 0.5) * 15,\n        sat: pc.s, bri: pc.b,\n        alpha: 0.006 + r2() * 0.012,\n        blend: blends[Math.floor(r2() * blends.length)],\n        life: Math.floor(r2() * 500) + 200,\n        age: 0\n      });\n    }\n\n    inks = [];\n    var ni = PP.inkCount || 250;\n    for (var j = 0; j < ni; j++) {\n      var ic = palette[Math.floor(r2() * palette.length)];\n      inks.push({\n        x: r2() * W, y: r2() * H, prevX: 0, prevY: 0,\n        weight: 0.4 + r2() * 2.5,\n        hue: ic.h + (r2() - 0.5) * 10,\n        sat: ic.s, bri: ic.b * (0.4 + r2() * 0.6),\n        alpha: 0.015 + r2() * 0.05,\n        blend: r2() > 0.5 ? p.MULTIPLY : p.DARKEST,\n        life: Math.floor(r2() * 350) + 50,\n        age: 0, speed: 1.2 + r2() * 2.0\n      });\n      inks[j].prevX = inks[j].x;\n      inks[j].prevY = inks[j].y;\n    }\n\n    dots = [];\n    var nd = PP.dotCount || 120;\n    for (var k = 0; k < nd; k++) {\n      var dc = palette[Math.floor(r2() * palette.length)];\n      dots.push({\n        x: r2() * W, y: r2() * H,\n        size: 2 + r2() * 10,\n        hue: dc.h, sat: dc.s * 0.6, bri: dc.b * 0.4,\n        alpha: 0.025 + r2() * 0.06,\n        blend: r2() > 0.6 ? p.MULTIPLY : p.SCREEN,\n        interval: Math.floor(r2() * 6) + 2\n      });\n    }\n  }\n\n  p.setup = function() {\n    p.createCanvas(W, H);\n    p.colorMode(p.HSB, 360, 100, 100, 1);\n    p.background(30, 8, 92);\n    computeFields();\n    initParticles();\n  };\n\n  p.draw = function() {\n    var frame = p.frameCount;\n    var r3 = mulberry32(SEED + frame);\n\n    for (var i = 0; i < washes.length; i++) {\n      var w = washes[i];\n      if (w.age >= w.life) {\n        var rr = mulberry32(SEED + frame * 100 + i);\n        var pc = palette[Math.floor(rr() * palette.length)];\n        w.x = rr() * W; w.y = rr() * H;\n        w.size = 40 + rr() * 100;\n        w.ratio = 0.4 + rr() * 0.8;\n        w.rot = rr() * Math.PI * 2;\n        w.hue = pc.h + (rr() - 0.5) * 15;\n        w.sat = pc.s; w.bri = pc.b;\n        w.alpha = 0.006 + rr() * 0.012;\n        w.age = 0; w.life = Math.floor(rr() * 500) + 200;\n        continue;\n      }\n      var flow = sampleFlow(w.x, w.y);\n      var val = sampleValue(w.x, w.y);\n      w.x += flow.dx * 0.6;\n      w.y += flow.dy * 0.6;\n      w.rot += 0.002;\n      w.age++;\n      var env = w.age < 40 ? w.age / 40 : w.age > w.life - 50 ? (w.life - w.age) / 50 : 1;\n      var sz = w.size * (0.6 + val * 0.8);\n      p.push();\n      p.blendMode(w.blend);\n      p.noStroke();\n      p.fill(w.hue, w.sat, w.bri, w.alpha * env);\n      p.translate(w.x, w.y);\n      p.rotate(w.rot);\n      p.ellipse(0, 0, sz, sz * w.ratio);\n      p.pop();\n    }\n\n    for (var j = 0; j < inks.length; j++) {\n      var ink = inks[j];\n      if (ink.age >= ink.life) {\n        var ri = mulberry32(SEED + frame * 200 + j);\n        var ic = palette[Math.floor(ri() * palette.length)];\n        ink.x = ri() * W; ink.y = ri() * H;\n        ink.prevX = ink.x; ink.prevY = ink.y;\n        ink.weight = 0.4 + ri() * 2.5;\n        ink.hue = ic.h; ink.bri = ic.b * (0.4 + ri() * 0.6);\n        ink.age = 0; ink.life = Math.floor(ri() * 350) + 50;\n        continue;\n      }\n      ink.prevX = ink.x; ink.prevY = ink.y;\n      var iflow = sampleFlow(ink.x, ink.y);\n      var ival = sampleValue(ink.x, ink.y);\n      ink.x += iflow.dx * ink.speed * (0.4 + iflow.mag);\n      ink.y += iflow.dy * ink.speed * (0.4 + iflow.mag);\n      ink.age++;\n      var ienv = ink.age < 8 ? ink.age / 8 : ink.age > ink.life - 15 ? (ink.life - ink.age) / 15 : 1;\n      var iw = ink.weight * (0.2 + ival * 1.8);\n      p.push();\n      p.blendMode(ink.blend);\n      p.strokeWeight(iw);\n      p.stroke(ink.hue, ink.sat, ink.bri, ink.alpha * ienv);\n      p.line(ink.prevX, ink.prevY, ink.x, ink.y);\n      p.pop();\n      if (ink.x < 0 || ink.x > W || ink.y < 0 || ink.y > H) ink.age = ink.life;\n    }\n\n    for (var k = 0; k < dots.length; k++) {\n      var d = dots[k];\n      if (frame % d.interval !== 0) continue;\n      var dval = sampleValue(d.x, d.y);\n      if (r3() > dval * 0.7 + 0.15) continue;\n      var dflow = sampleFlow(d.x, d.y);\n      d.x += (r3() - 0.5) * 5 + dflow.dx * 0.4;\n      d.y += (r3() - 0.5) * 5 + dflow.dy * 0.4;\n      if (d.x < 0) d.x = W; if (d.x > W) d.x = 0;\n      if (d.y < 0) d.y = H; if (d.y > H) d.y = 0;\n      var dsz = d.size * (0.3 + dval);\n      p.push();\n      p.blendMode(d.blend);\n      p.noStroke();\n      p.fill(d.hue, d.sat, d.bri, d.alpha);\n      p.ellipse(d.x, d.y, dsz, dsz);\n      p.pop();\n    }\n  };\n}\n",
+  "layers": [
+    {
+      "id": "ink-currents",
+      "type": "painting:ink",
+      "name": "Ink strokes following ocean flow",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.55,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "field": "algorithm:flowField",
+        "fieldCols": 60,
+        "fieldRows": 60,
+        "colors": "[\"#1a2a3a\",\"#2d3d4d\",\"#0a1520\"]",
+        "weight": 1.8,
+        "taper": "both",
+        "style": "fluid",
+        "seed": 42
+      }
+    },
+    {
+      "id": "stipple-depth",
+      "type": "painting:fill",
+      "name": "Stipple tonal depth from wave value map",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.45,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":45,\"distribution\":\"poisson\"}",
+        "shading": "{\"type\":\"algorithm\",\"channel\":\"valueMap\",\"range\":[0.0,1.0]}",
+        "shadingAffects": "[\"density\",\"weight\"]",
+        "color": "#0a1a2a",
+        "size": 2.2,
+        "seed": 99
+      }
+    }
+  ]
+}

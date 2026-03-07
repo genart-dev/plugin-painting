@@ -31,4 +31,10 @@ $CLI render "$DIR/algorithm-bridge-shading.genart" -o "$DIR/algorithm-bridge-sha
 echo "Rendering algorithm-bridge-combined..."
 $CLI render "$DIR/algorithm-bridge-combined.genart" -o "$DIR/algorithm-bridge-combined.png" --wait 2s
 
+echo "Rendering algorithm-bridge-accumulative (p5, ~15s accumulation)..."
+$CLI render "$DIR/algorithm-bridge-accumulative.genart" -o "$DIR/algorithm-bridge-accumulative.png" --wait 15s
+
+echo "Rendering algorithm-bridge-accumulative-layered (p5 + design layers, ~15s)..."
+$CLI render "$DIR/algorithm-bridge-accumulative-layered.genart" -o "$DIR/algorithm-bridge-accumulative-layered.png" --wait 15s
+
 echo "Done. Output in $DIR/"
