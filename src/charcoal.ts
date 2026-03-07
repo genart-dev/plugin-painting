@@ -16,6 +16,15 @@ const CHARCOAL_PROPERTIES: LayerPropertySchema[] = [
   { key: "fieldCols",  label: "Field Columns", type: "number",  default: 20, min: 4, max: 40, step: 1, group: "field" },
   { key: "fieldRows",  label: "Field Rows",    type: "number",  default: 20, min: 4, max: 40, step: 1, group: "field" },
   { key: "colors",     label: "Colors",        type: "string",  default: '["#2a2a2a"]', group: "paint" },
+  {
+    key: "paintMode", label: "Paint Mode", type: "select", default: "multiply",
+    options: [
+      { value: "multiply", label: "Multiply (darken)" },
+      { value: "normal",   label: "Normal (opaque)" },
+      { value: "screen",   label: "Screen (lighten)" },
+    ],
+    group: "paint",
+  },
   { key: "density",    label: "Density",       type: "number",  default: 0.5, min: 0, max: 1, step: 0.01, group: "paint" },
   { key: "smear",      label: "Smear",         type: "boolean", default: false, group: "paint" },
   { key: "grain",      label: "Grain",         type: "number",  default: 0.5, min: 0, max: 1, step: 0.01, group: "paint" },
@@ -54,6 +63,7 @@ export const charcoalLayerType: LayerTypeDefinition = {
     const cols        = (properties.fieldCols as number) ?? 20;
     const rows        = (properties.fieldRows as number) ?? 20;
     const colorsStr   = (properties.colors as string)   ?? '["#2a2a2a"]';
+    const paintMode   = (properties.paintMode as string) ?? "multiply";
     const density     = (properties.density as number)  ?? 0.5;
     const smear       = (properties.smear as boolean)   ?? false;
     const grain       = (properties.grain as number)    ?? 0.5;
@@ -73,26 +83,15 @@ export const charcoalLayerType: LayerTypeDefinition = {
     const rand      = mulberry32(seed);
     const grainNoise= createFractalNoise(seed + 500, 3);
 
-    let darkColor = "#2a2a2a";
+    let colorList: [number, number, number][];
     try {
       const parsed = JSON.parse(colorsStr) as string[];
-      if (parsed.length > 0) darkColor = parsed[0]!;
-    } catch { /* use default */ }
-
-    // Parse color to RGB for pixel work
-    const clean = darkColor.replace("#", "");
-    const cn    = parseInt(clean, 16);
-    const cr    = (cn >> 16) & 0xff;
-    const cg    = (cn >> 8)  & 0xff;
-    const cb    = cn & 0xff;
+      colorList = parsed.map(hexToRgb);
+    } catch { colorList = []; }
+    if (colorList.length === 0) colorList = [[42, 42, 42]];
 
     const imageData = ctx.getImageData(bounds.x, bounds.y, w, h);
     const data      = imageData.data;
-
-    // Short directional marks: at each pixel, sample field to get direction,
-    // then draw a short smeared stroke in that direction.
-    // density controls how many pixels get a mark.
-    // grain modulates local coverage using fractal noise.
 
     const strokeLen = smear ? 8 : 4;
 
@@ -102,31 +101,36 @@ export const charcoalLayerType: LayerTypeDefinition = {
         const ny = h > 1 ? py / (h - 1) : 0;
         const sample = sampleField(field, nx, ny);
 
-        // Vertical Gaussian mask (maskCenterY=-1 means disabled)
         const vMask = maskCenterY >= 0
           ? Math.exp(-((ny - maskCenterY) ** 2) / (2 * maskSpread * maskSpread))
           : 1;
         if (vMask < 0.02) continue;
 
-        // Local coverage: density × magnitude × grain noise
         const g       = grainNoise(px / 12, py / 12);
         const coverage= density * sample.magnitude * vMask * lerp(0.3, 1.0, g);
 
         if (rand() > coverage) continue;
 
-        // Draw a short stroke along the field direction
+        // Pick color from palette based on flow direction
+        const dirT = clamp((sample.dx + 1) * 0.5, 0, 1) * (colorList.length - 1);
+        const ci = Math.floor(dirT);
+        const tf = dirT - ci;
+        const ca = colorList[Math.min(ci, colorList.length - 1)]!;
+        const cb_ = colorList[Math.min(ci + 1, colorList.length - 1)]!;
+        const cr = lerp(ca[0], cb_[0], tf);
+        const cg_ = lerp(ca[1], cb_[1], tf);
+        const cb2 = lerp(ca[2], cb_[2], tf);
+
         const len   = strokeLen * (0.5 + rand() * 0.5);
         const angle = Math.atan2(sample.dy, sample.dx);
         const alpha = layerOpacity * vMask * lerp(0.15, 0.55, rand()) * sample.magnitude;
 
-        // Accumulate pixels along the stroke
         for (let s = 0; s <= len; s++) {
           const t  = s / len;
           const sx = Math.round(px + Math.cos(angle) * s);
           const sy = Math.round(py + Math.sin(angle) * s);
           if (sx < 0 || sx >= w || sy < 0 || sy >= h) continue;
 
-          // Taper at ends if smear is false; smear = blend broadly
           const tapFactor = smear ? 1.0 : 1 - Math.abs(t * 2 - 1) * 0.5;
           const a = alpha * tapFactor;
 
@@ -135,28 +139,50 @@ export const charcoalLayerType: LayerTypeDefinition = {
           const dg = data[i + 1]!;
           const db = data[i + 2]!;
 
-          // Multiply blend with the charcoal color, blended by alpha
-          data[i]     = Math.round(lerp(dr, (dr * cr) / 255, a));
-          data[i + 1] = Math.round(lerp(dg, (dg * cg) / 255, a));
-          data[i + 2] = Math.round(lerp(db, (db * cb) / 255, a));
+          if (paintMode === "screen") {
+            // Screen: 255 - (255-dst)*(255-src)/255
+            data[i]     = Math.round(lerp(dr, 255 - ((255 - dr) * (255 - cr)) / 255, a));
+            data[i + 1] = Math.round(lerp(dg, 255 - ((255 - dg) * (255 - cg_)) / 255, a));
+            data[i + 2] = Math.round(lerp(db, 255 - ((255 - db) * (255 - cb2)) / 255, a));
+          } else if (paintMode === "normal") {
+            data[i]     = Math.round(lerp(dr, cr, a));
+            data[i + 1] = Math.round(lerp(dg, cg_, a));
+            data[i + 2] = Math.round(lerp(db, cb2, a));
+          } else {
+            // Multiply
+            data[i]     = Math.round(lerp(dr, (dr * cr) / 255, a));
+            data[i + 1] = Math.round(lerp(dg, (dg * cg_) / 255, a));
+            data[i + 2] = Math.round(lerp(db, (db * cb2) / 255, a));
+          }
         }
       }
     }
 
-    // grain texture: additional fine noise over the mark area
+    // grain texture
     if (grain > 0) {
+      const gc = colorList[0]!;
       for (let py = 0; py < h; py++) {
         for (let px = 0; px < w; px++) {
-          const g = grainNoise(px / 3.5, py / 3.5);
-          if (g > 0.6 && rand() < grain * 0.08) {
+          const g2 = grainNoise(px / 3.5, py / 3.5);
+          if (g2 > 0.6 && rand() < grain * 0.08) {
             const i = (py * w + px) * 4;
             const dr = data[i]!;
             const dg = data[i + 1]!;
             const db = data[i + 2]!;
             const a  = layerOpacity * 0.12;
-            data[i]     = Math.round(lerp(dr, (dr * cr) / 255, a));
-            data[i + 1] = Math.round(lerp(dg, (dg * cg) / 255, a));
-            data[i + 2] = Math.round(lerp(db, (db * cb) / 255, a));
+            if (paintMode === "screen") {
+              data[i]     = Math.round(lerp(dr, 255 - ((255 - dr) * (255 - gc[0])) / 255, a));
+              data[i + 1] = Math.round(lerp(dg, 255 - ((255 - dg) * (255 - gc[1])) / 255, a));
+              data[i + 2] = Math.round(lerp(db, 255 - ((255 - db) * (255 - gc[2])) / 255, a));
+            } else if (paintMode === "normal") {
+              data[i]     = Math.round(lerp(dr, gc[0], a));
+              data[i + 1] = Math.round(lerp(dg, gc[1], a));
+              data[i + 2] = Math.round(lerp(db, gc[2], a));
+            } else {
+              data[i]     = Math.round(lerp(dr, (dr * gc[0]) / 255, a));
+              data[i + 1] = Math.round(lerp(dg, (dg * gc[1]) / 255, a));
+              data[i + 2] = Math.round(lerp(db, (db * gc[2]) / 255, a));
+            }
           }
         }
       }
@@ -176,4 +202,14 @@ export const charcoalLayerType: LayerTypeDefinition = {
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.max(lo, Math.min(hi, v));
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const clean = hex.replace("#", "");
+  const n = parseInt(clean, 16);
+  return [(n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff];
 }

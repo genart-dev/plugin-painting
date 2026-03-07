@@ -17,6 +17,15 @@ const INK_PROPERTIES: LayerPropertySchema[] = [
   { key: "colors",     label: "Colors",        type: "string",  default: '["#1a1a1a"]', group: "paint" },
   { key: "weight",     label: "Stroke Weight", type: "number",  default: 2, min: 0.5, max: 50, step: 0.5, group: "paint" },
   {
+    key: "paintMode", label: "Paint Mode", type: "select", default: "multiply",
+    options: [
+      { value: "multiply", label: "Multiply (darken)" },
+      { value: "normal",   label: "Normal (opaque)" },
+      { value: "screen",   label: "Screen (lighten)" },
+    ],
+    group: "paint",
+  },
+  {
     key: "taper", label: "Taper", type: "select", default: "none",
     options: [
       { value: "none",  label: "None" },
@@ -71,6 +80,7 @@ export const inkLayerType: LayerTypeDefinition = {
     const rows        = (properties.fieldRows as number) ?? 20;
     const colorsStr   = (properties.colors as string)  ?? '["#1a1a1a"]';
     const weight      = (properties.weight as number)  ?? 2;
+    const paintMode   = (properties.paintMode as string) ?? "multiply";
     const taper       = (properties.taper as string)   ?? "none";
     const style       = (properties.style as string)   ?? "fluid";
     const layerOpacity= (properties.opacity as number) ?? 1;
@@ -88,23 +98,32 @@ export const inkLayerType: LayerTypeDefinition = {
     const field = parseField(fieldStr, cols, rows);
     const rand  = mulberry32(seed);
 
-    let inkColor = "#1a1a1a";
+    let colorList: string[];
     try {
-      const parsed = JSON.parse(colorsStr) as string[];
-      if (parsed.length > 0) inkColor = parsed[0]!;
-    } catch { /* use default */ }
+      colorList = JSON.parse(colorsStr) as string[];
+    } catch { colorList = []; }
+    if (colorList.length === 0) colorList = ["#1a1a1a"];
 
     // Integrate streamlines: seed points on a grid, follow field vectors
     const streamSpacing = Math.max(4, Math.round(Math.min(w, h) / 40));
     const stepLen       = streamSpacing * 0.6;
     const maxSteps      = Math.round(Math.min(w, h) / stepLen * 0.4);
 
+    // For normal/screen paint modes, use canvas composite operations directly
     ctx.save();
-    ctx.strokeStyle = inkColor;
     ctx.lineCap  = "round";
     ctx.lineJoin = "round";
 
+    if (paintMode === "screen") {
+      ctx.globalCompositeOperation = "screen";
+    } else if (paintMode === "normal") {
+      ctx.globalCompositeOperation = "source-over";
+    } else {
+      ctx.globalCompositeOperation = "multiply";
+    }
+
     const scratchyGap = style === "scratchy" ? 0.35 : 0;
+    let streamIndex = 0;
 
     for (let gy = streamSpacing / 2; gy < h; gy += streamSpacing) {
       // Vertical mask: skip seed rows outside the Gaussian zone
@@ -113,7 +132,6 @@ export const inkLayerType: LayerTypeDefinition = {
         ? Math.exp(-((ny_seed - maskCenterY) ** 2) / (2 * maskSpread * maskSpread))
         : 1;
       if (vMask < 0.05) continue;
-      ctx.globalAlpha = layerOpacity * vMask;
 
       for (let gx = streamSpacing / 2; gx < w; gx += streamSpacing) {
         // Skip some seeds for scratchy style
@@ -140,7 +158,11 @@ export const inkLayerType: LayerTypeDefinition = {
 
         if (points.length < 2) continue;
 
-        // Draw stroke with optional taper
+        // Pick a base color for this streamline — cycle through palette
+        const baseColorIdx = streamIndex % colorList.length;
+        streamIndex++;
+
+        // Draw stroke with optional taper, interpolating color along streamline
         ctx.beginPath();
         ctx.moveTo(points[0]![0], points[0]![1]);
 
@@ -165,6 +187,19 @@ export const inkLayerType: LayerTypeDefinition = {
             w_local *= 0.7 + rand() * 0.6;
           }
 
+          // Interpolate color along streamline when multiple colors
+          let strokeColor: string;
+          if (colorList.length === 1) {
+            strokeColor = colorList[0]!;
+          } else {
+            // Blend from base color toward next color along the stroke
+            const ct = t * (colorList.length - 1);
+            const ci = Math.floor(ct + baseColorIdx) % colorList.length;
+            strokeColor = colorList[ci]!;
+          }
+
+          ctx.strokeStyle = strokeColor;
+          ctx.globalAlpha = layerOpacity * vMask;
           ctx.lineWidth = Math.max(0.3, w_local);
           ctx.lineTo(points[p]![0], points[p]![1]);
           ctx.stroke();

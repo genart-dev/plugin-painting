@@ -72,6 +72,18 @@ const WATERCOLOR_PROPERTIES: LayerPropertySchema[] = [
     group: "paint",
   },
   {
+    key: "paintMode",
+    label: "Paint Mode",
+    type: "select",
+    default: "multiply",
+    options: [
+      { value: "multiply", label: "Multiply (darken)" },
+      { value: "normal",   label: "Normal (opaque)" },
+      { value: "screen",   label: "Screen (lighten)" },
+    ],
+    group: "paint",
+  },
+  {
     key: "edgeStyle",
     label: "Edge Style",
     type: "select",
@@ -202,6 +214,7 @@ export const watercolorLayerType: LayerTypeDefinition = {
     const debugMode = ((properties.debugMode as string) ?? "all") as DebugMode;
 
     const granulation = (properties.granulation as number) ?? 0.3;
+    const paintMode = (properties.paintMode as string) ?? "multiply";
     const edgeStyle = (properties.edgeStyle as string) ?? "soft";
     const seed = (properties.seed as number) ?? 0;
     const layerOpacity = (properties.opacity as number) ?? 1;
@@ -305,12 +318,22 @@ export const watercolorLayerType: LayerTypeDefinition = {
           const dg = data[i + 1]!;
           const db = data[i + 2]!;
 
-          // Multiply blend: dst * paint / 255, then blend by finalAlpha
-          // Result = lerp(dst, dst * paint/255, finalAlpha)
-          data[i]     = Math.round(lerp(dr, (dr * pr) / 255, finalAlpha));
-          data[i + 1] = Math.round(lerp(dg, (dg * pg) / 255, finalAlpha));
-          data[i + 2] = Math.round(lerp(db, (db * pb) / 255, finalAlpha));
-          // alpha stays 255 — multiply only affects RGB
+          if (paintMode === "screen") {
+            // Screen: 255 - (255-dst)*(255-src)/255
+            data[i]     = Math.round(lerp(dr, 255 - ((255 - dr) * (255 - pr)) / 255, finalAlpha));
+            data[i + 1] = Math.round(lerp(dg, 255 - ((255 - dg) * (255 - pg)) / 255, finalAlpha));
+            data[i + 2] = Math.round(lerp(db, 255 - ((255 - db) * (255 - pb)) / 255, finalAlpha));
+          } else if (paintMode === "normal") {
+            // Normal: straight alpha blend toward paint color
+            data[i]     = Math.round(lerp(dr, pr, finalAlpha));
+            data[i + 1] = Math.round(lerp(dg, pg, finalAlpha));
+            data[i + 2] = Math.round(lerp(db, pb, finalAlpha));
+          } else {
+            // Multiply: dst * paint / 255
+            data[i]     = Math.round(lerp(dr, (dr * pr) / 255, finalAlpha));
+            data[i + 1] = Math.round(lerp(dg, (dg * pg) / 255, finalAlpha));
+            data[i + 2] = Math.round(lerp(db, (db * pb) / 255, finalAlpha));
+          }
         }
       }
 
