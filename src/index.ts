@@ -72,6 +72,7 @@ export {
   linearField,
   radialField,
   vortexField,
+  convertAlgorithmData,
   parseField,
   sampleField,
   divergenceAt,

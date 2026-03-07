@@ -70,7 +70,7 @@ export const paintLayerTool: McpToolDefinition = {
       field: {
         type: "string",
         description:
-          'Vector field shorthand or JSON. Shorthands: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", "radial:cx:cy:diverge|converge", "vortex:cx:cy:radius". Defaults to "noise:0:0.1:3".',
+          'Vector field shorthand or JSON. Shorthands: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", "radial:cx:cy:diverge|converge", "vortex:cx:cy:radius", "algorithm:channelName" (reads from algorithm data bridge). Defaults to "noise:0:0.1:3".',
       },
       fieldCols: {
         type: "number",
@@ -199,10 +199,13 @@ export const paintLayerTool: McpToolDefinition = {
     const cols = Math.round((input.fieldCols as number | undefined) ?? 20);
     const rows = Math.round((input.fieldRows as number | undefined) ?? 20);
 
-    try {
-      parseField(fieldStr, cols, rows);
-    } catch {
-      return errorResult(`Invalid field specification: "${fieldStr}"`);
+    // Algorithm fields are validated at runtime when data is available
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, cols, rows);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
     }
 
     const rawColors = input.colors as string[] | undefined;
@@ -336,7 +339,16 @@ export const getPaintFieldTool: McpToolDefinition = {
     const rows = (layer.properties.fieldRows as number | undefined) ?? 20;
 
     let fieldJson: string;
-    if (fieldStr.startsWith("{")) {
+    if (fieldStr.startsWith("algorithm:")) {
+      const channelName = fieldStr.slice("algorithm:".length);
+      fieldJson = JSON.stringify({
+        source: "algorithm",
+        channel: channelName,
+        cols,
+        rows,
+        note: "Data is provided at runtime by the algorithm via window.__genart_data",
+      });
+    } else if (fieldStr.startsWith("{")) {
       fieldJson = fieldStr;
     } else {
       const field = parseField(fieldStr, cols, rows);
@@ -354,7 +366,7 @@ export const getPaintFieldTool: McpToolDefinition = {
 export const updatePaintFieldTool: McpToolDefinition = {
   name: "update_paint_field",
   description:
-    "Replace the vector field on an existing painting layer. Accepts shorthand strings or VectorField JSON.",
+    "Replace the vector field on an existing painting layer. Accepts shorthand strings, VectorField JSON, or \"algorithm:channelName\" to read from the algorithm data bridge.",
   inputSchema: {
     type: "object",
     required: ["layerId", "field"],
@@ -385,10 +397,13 @@ export const updatePaintFieldTool: McpToolDefinition = {
     const cols = (layer.properties.fieldCols as number | undefined) ?? 20;
     const rows = (layer.properties.fieldRows as number | undefined) ?? 20;
 
-    try {
-      parseField(fieldStr, cols, rows);
-    } catch {
-      return errorResult(`Invalid field specification: "${fieldStr}"`);
+    // Algorithm fields are validated at runtime when data is available
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, cols, rows);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
     }
 
     context.layers.updateProperties(layerId, { field: fieldStr });

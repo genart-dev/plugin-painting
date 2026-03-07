@@ -60,6 +60,59 @@ export function buildShadingEvaluator(
         return lo + (hi - lo) * raw;
       };
     }
+
+    case "algorithm": {
+      const [lo, hi] = shading.range;
+      const algData = typeof globalThis !== "undefined"
+        ? (globalThis as any).__genart_data
+        : undefined;
+      const channel: Float32Array | undefined =
+        algData && algData[shading.channel] instanceof Float32Array
+          ? algData[shading.channel]
+          : undefined;
+
+      if (!channel) {
+        // No data available — return uniform lo value
+        return () => lo;
+      }
+
+      const cols: number = algData.cols ?? 1;
+      const rows: number = algData.rows ?? 1;
+
+      return (x, y) => {
+        // Normalise pixel coords to [0,1] within the region
+        const nx = regionW > 0 ? (x - regionX) / regionW : 0;
+        const ny = regionH > 0 ? (y - regionY) / regionH : 0;
+
+        // Bilinear sample from the scalar grid
+        const gx = Math.max(0, Math.min(cols - 1, nx * (cols - 1)));
+        const gy = Math.max(0, Math.min(rows - 1, ny * (rows - 1)));
+        const x0 = Math.min(cols - 2, Math.floor(gx));
+        const y0 = Math.min(rows - 2, Math.floor(gy));
+        const x1 = x0 + 1;
+        const y1 = y0 + 1;
+        const tx = gx - x0;
+        const ty = gy - y0;
+
+        // Scalar channel: single values. Vector channel: take every 3rd (magnitude).
+        const isVector = channel.length === cols * rows * 3;
+        const stride = isVector ? 3 : 1;
+        const offset = isVector ? 2 : 0; // magnitude is 3rd element in vector triples
+
+        const v00 = channel[y0 * cols * stride + x0 * stride + offset] ?? 0;
+        const v10 = channel[y0 * cols * stride + x1 * stride + offset] ?? 0;
+        const v01 = channel[y1 * cols * stride + x0 * stride + offset] ?? 0;
+        const v11 = channel[y1 * cols * stride + x1 * stride + offset] ?? 0;
+
+        const raw = (v00 * (1 - tx) + v10 * tx) * (1 - ty) +
+                    (v01 * (1 - tx) + v11 * tx) * ty;
+
+        return lo + (hi - lo) * Math.max(0, Math.min(1, raw));
+      };
+    }
+
+    default:
+      return () => 1;
   }
 }
 

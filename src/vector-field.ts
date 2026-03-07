@@ -280,6 +280,49 @@ export function applyVerticalMask(
 }
 
 // ---------------------------------------------------------------------------
+// Algorithm data bridge (ADR 062)
+// ---------------------------------------------------------------------------
+
+/** A zero-magnitude field (fallback when algorithm data is unavailable). */
+function zeroField(cols: number, rows: number): VectorField {
+  const count = cols * rows;
+  const samples: VectorSample[] = new Array(count);
+  for (let i = 0; i < count; i++) {
+    samples[i] = { dx: 0, dy: 0, magnitude: 0 };
+  }
+  return { cols, rows, samples };
+}
+
+/**
+ * Convert a Float32Array from window.__genart_data to a VectorField.
+ *
+ * - Vector channels: Float32Array of [dx, dy, magnitude] triples (length = cols * rows * 3)
+ * - Scalar channels: Float32Array of single values (length = cols * rows), mapped to magnitude
+ */
+export function convertAlgorithmData(
+  data: Float32Array,
+  cols: number,
+  rows: number,
+): VectorField {
+  const count = cols * rows;
+  const samples: VectorSample[] = new Array(count);
+  const isVector = data.length === count * 3;
+
+  if (isVector) {
+    for (let i = 0; i < count; i++) {
+      const o = i * 3;
+      samples[i] = { dx: data[o]!, dy: data[o + 1]!, magnitude: data[o + 2]! };
+    }
+  } else {
+    for (let i = 0; i < count; i++) {
+      samples[i] = { dx: 0, dy: 0, magnitude: data[i] ?? 0 };
+    }
+  }
+
+  return { cols, rows, samples };
+}
+
+// ---------------------------------------------------------------------------
 // Shorthand parser (for stored property strings per ADR 031)
 // ---------------------------------------------------------------------------
 
@@ -290,12 +333,31 @@ export function applyVerticalMask(
  *   "linear:45:0.8"          → linearField(45, 0.8)
  *   "radial:0.5:0.5:diverge" → radialField(0.5, 0.5, "diverge")
  *   "vortex:0.5:0.5:0.3"     → vortexField(0.5, 0.5, 0.3)
+ *   "algorithm:channelName"  → reads from window.__genart_data (ADR 062)
  */
 export function parseField(
   fieldStr: string,
   cols: number = 20,
   rows: number = 20,
 ): VectorField {
+  // ADR 062: Algorithm data bridge
+  if (fieldStr.startsWith("algorithm:")) {
+    const channelName = fieldStr.slice("algorithm:".length);
+    const algData = typeof globalThis !== "undefined"
+      ? (globalThis as any).__genart_data
+      : undefined;
+
+    if (algData && algData[channelName] instanceof Float32Array) {
+      return convertAlgorithmData(
+        algData[channelName],
+        algData.cols ?? cols,
+        algData.rows ?? rows,
+      );
+    }
+    // No data available — return silent zero field
+    return zeroField(cols, rows);
+  }
+
   if (fieldStr.startsWith("{")) {
     return JSON.parse(fieldStr) as VectorField;
   }

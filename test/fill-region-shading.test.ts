@@ -233,6 +233,85 @@ describe("buildShadingEvaluator", () => {
     const vals2 = [e2(100, 100), e2(200, 200), e2(50, 250)];
     expect(vals1).not.toEqual(vals2);
   });
+
+  // -- Algorithm shading (ADR 062) --
+
+  it("algorithm: returns lo when __genart_data is missing", () => {
+    delete (globalThis as any).__genart_data;
+    const eval_ = buildShadingEvaluator(
+      { type: "algorithm", channel: "valueMap", range: [0.2, 0.9] },
+      rx, ry, rw, rh,
+    );
+    expect(eval_(0, 0)).toBe(0.2);
+    expect(eval_(200, 150)).toBe(0.2);
+  });
+
+  it("algorithm: returns lo when channel is absent", () => {
+    (globalThis as any).__genart_data = { cols: 2, rows: 2 };
+    const eval_ = buildShadingEvaluator(
+      { type: "algorithm", channel: "missing", range: [0.3, 1.0] },
+      rx, ry, rw, rh,
+    );
+    expect(eval_(100, 100)).toBe(0.3);
+    delete (globalThis as any).__genart_data;
+  });
+
+  it("algorithm: bilinear interpolates scalar data with range remap", () => {
+    // 2x2 scalar grid: top-left=0, top-right=1, bottom-left=0, bottom-right=1
+    (globalThis as any).__genart_data = {
+      valueMap: new Float32Array([0, 1, 0, 1]),
+      cols: 2,
+      rows: 2,
+    };
+    const eval_ = buildShadingEvaluator(
+      { type: "algorithm", channel: "valueMap", range: [0, 1] },
+      rx, ry, rw, rh,
+    );
+    // Center of region (200, 150) → nx=0.5, ny=0.5 → bilinear avg = 0.5
+    expect(eval_(200, 150)).toBeCloseTo(0.5, 2);
+    // Left edge (0, 150) → nx=0, ny=0.5 → avg of [0, 0] = 0
+    expect(eval_(0, 150)).toBeCloseTo(0, 2);
+    // Right edge (400, 150) → nx=1, ny=0.5 → avg of [1, 1] = 1
+    expect(eval_(400, 150)).toBeCloseTo(1, 2);
+    delete (globalThis as any).__genart_data;
+  });
+
+  it("algorithm: applies range remap correctly", () => {
+    // Uniform scalar grid with value 0.5
+    (globalThis as any).__genart_data = {
+      valueMap: new Float32Array([0.5, 0.5, 0.5, 0.5]),
+      cols: 2,
+      rows: 2,
+    };
+    const eval_ = buildShadingEvaluator(
+      { type: "algorithm", channel: "valueMap", range: [0.2, 0.8] },
+      rx, ry, rw, rh,
+    );
+    // raw=0.5, remapped: 0.2 + (0.8-0.2)*0.5 = 0.5
+    expect(eval_(200, 150)).toBeCloseTo(0.5, 2);
+    delete (globalThis as any).__genart_data;
+  });
+
+  it("algorithm: handles vector channel (reads magnitude)", () => {
+    // 2x2 vector grid: [dx, dy, mag] triples. mag values: 0.2, 0.4, 0.6, 0.8
+    (globalThis as any).__genart_data = {
+      flowField: new Float32Array([
+        1, 0, 0.2,
+        0, 1, 0.4,
+        -1, 0, 0.6,
+        0, -1, 0.8,
+      ]),
+      cols: 2,
+      rows: 2,
+    };
+    const eval_ = buildShadingEvaluator(
+      { type: "algorithm", channel: "flowField", range: [0, 1] },
+      rx, ry, rw, rh,
+    );
+    // Center → bilinear of [0.2, 0.4, 0.6, 0.8] = 0.5
+    expect(eval_(200, 150)).toBeCloseTo(0.5, 2);
+    delete (globalThis as any).__genart_data;
+  });
 });
 
 // ---------------------------------------------------------------------------

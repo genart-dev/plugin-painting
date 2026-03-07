@@ -91,7 +91,8 @@ export type ShadingFunction =
   | { type: "uniform" }
   | { type: "linear"; angle: number; range: [number, number] }
   | { type: "radial"; cx: number; cy: number; range: [number, number] }
-  | { type: "noise"; seed: number; scale: number; range: [number, number] };
+  | { type: "noise"; seed: number; scale: number; range: [number, number] }
+  | { type: "algorithm"; channel: string; range: [number, number] };
 
 export type ShadingAffect = "density" | "weight" | "opacity";
 
