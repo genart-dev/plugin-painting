@@ -1,0 +1,1387 @@
+{
+  "genart": "1.2",
+  "id": "fill-styles",
+  "title": "Fill Styles & Shading",
+  "created": "2026-03-06T00:00:00Z",
+  "modified": "2026-03-06T00:00:00Z",
+  "renderer": {
+    "type": "canvas2d"
+  },
+  "canvas": {
+    "width": 784,
+    "height": 644
+  },
+  "parameters": [],
+  "colors": [],
+  "state": {
+    "seed": 1,
+    "params": {},
+    "colorPalette": []
+  },
+  "algorithm": "function sketch(ctx){ctx.fillStyle=\"#ded9d2\";ctx.fillRect(0,0,784,644);ctx.fillStyle=\"#f8f5f0\";ctx.fillRect(8,38,380,280);ctx.fillStyle=\"#f8f5f0\";ctx.fillRect(396,38,380,280);ctx.fillStyle=\"#f8f5f0\";ctx.fillRect(8,356,380,280);ctx.fillStyle=\"#f8f5f0\";ctx.fillRect(396,356,380,280);ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(8,93);ctx.lineTo(388,93);ctx.stroke();ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(8,149);ctx.lineTo(388,149);ctx.stroke();ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(8,205);ctx.lineTo(388,205);ctx.stroke();ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(8,261);ctx.lineTo(388,261);ctx.stroke();ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(521,38);ctx.lineTo(521,318);ctx.stroke();ctx.strokeStyle=\"#e0ddd9\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(647,38);ctx.lineTo(647,318);ctx.stroke();ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,356+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(134+0.5,356+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(260+0.5,356+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,449+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(134+0.5,449+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(260+0.5,449+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,542+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(134+0.5,542+0.5,124,91);ctx.strokeStyle=\"#d8d4ce\";ctx.lineWidth=0.5;ctx.strokeRect(260+0.5,542+0.5,124,91);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,38+0.5,380-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(396+0.5,38+0.5,380-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,356+0.5,380-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(396+0.5,356+0.5,380-1,280-1);return{};}",
+  "layers": [
+    {
+      "id": "l1",
+      "type": "typography:text",
+      "name": "Title: strategies",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 11,
+        "width": 368,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "painting:fill — 5 strategies",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l2",
+      "type": "typography:text",
+      "name": "Sub: strategies",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 25,
+        "width": 368,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch · crosshatch · stipple · scumble · contour",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l3",
+      "type": "painting:fill",
+      "name": "Fill: hatch",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 38,
+        "width": 380,
+        "height": 54,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":45,\"spacing\":10}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 100,
+        "region": "{\"type\":\"bounds\"}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l4",
+      "type": "typography:text",
+      "name": "Label: hatch",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 39,
+        "width": 372,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch (45°, spacing 10)",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l5",
+      "type": "painting:fill",
+      "name": "Fill: crosshatch",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 94,
+        "width": 380,
+        "height": 54,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"crosshatch\",\"angles\":[30,120],\"spacing\":8,\"passDecay\":0.7}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 101,
+        "region": "{\"type\":\"bounds\"}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l6",
+      "type": "typography:text",
+      "name": "Label: crosshatch",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 95,
+        "width": 372,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "crosshatch ([30°,120°], spacing 8, decay 0.7)",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l7",
+      "type": "painting:fill",
+      "name": "Fill: stipple",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 150,
+        "width": 380,
+        "height": 54,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":35,\"distribution\":\"poisson\"}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 102,
+        "region": "{\"type\":\"bounds\"}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l8",
+      "type": "typography:text",
+      "name": "Label: stipple",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 151,
+        "width": 372,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "stipple (density 35, poisson)",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l9",
+      "type": "painting:fill",
+      "name": "Fill: scumble",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 206,
+        "width": 380,
+        "height": 54,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"scumble\",\"density\":20,\"strokeLength\":25,\"curvature\":0.5}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 103,
+        "region": "{\"type\":\"bounds\"}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l10",
+      "type": "typography:text",
+      "name": "Label: scumble",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 207,
+        "width": 372,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "scumble (density 20, len 25, curve 0.5)",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l11",
+      "type": "painting:fill",
+      "name": "Fill: contour",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 262,
+        "width": 380,
+        "height": 54,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"contour\",\"spacing\":8,\"smoothing\":0.3}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 104,
+        "region": "{\"type\":\"bounds\"}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l12",
+      "type": "typography:text",
+      "name": "Label: contour",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 263,
+        "width": 372,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "contour (spacing 8, smoothing 0.3)",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l13",
+      "type": "typography:text",
+      "name": "Title: shading",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 402,
+        "y": 11,
+        "width": 368,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "painting:fill — shading functions",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l14",
+      "type": "typography:text",
+      "name": "Sub: shading",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 402,
+        "y": 25,
+        "width": 368,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "linear · radial · noise (all affect: density)",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l15",
+      "type": "painting:fill",
+      "name": "Shading: linear",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 396,
+        "y": 38,
+        "width": 124,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":50,\"spacing\":8}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 200,
+        "shading": "{\"type\":\"linear\",\"angle\":0,\"range\":[0.1,1]}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l16",
+      "type": "typography:text",
+      "name": "Label: linear",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 400,
+        "y": 39,
+        "width": 118,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "linear 0°, [0.1, 1.0]",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l17",
+      "type": "painting:fill",
+      "name": "Shading: radial",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 522,
+        "y": 38,
+        "width": 124,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":50,\"spacing\":8}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 201,
+        "shading": "{\"type\":\"radial\",\"cx\":0.5,\"cy\":0.5,\"range\":[0,0.95]}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l18",
+      "type": "typography:text",
+      "name": "Label: radial",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 526,
+        "y": 39,
+        "width": 118,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "radial cx0.5, [0.0, 0.95]",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l19",
+      "type": "painting:fill",
+      "name": "Shading: noise",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 648,
+        "y": 38,
+        "width": 124,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":50,\"spacing\":8}",
+        "color": "#1a1a1a",
+        "size": 2,
+        "brushId": "ink-pen",
+        "seed": 202,
+        "shading": "{\"type\":\"noise\",\"seed\":7,\"scale\":1,\"range\":[0.2,1]}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l20",
+      "type": "typography:text",
+      "name": "Label: noise",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 652,
+        "y": 39,
+        "width": 118,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "noise seed7, [0.2, 1.0]",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.55)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l21",
+      "type": "typography:text",
+      "name": "Title: presets",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 329,
+        "width": 368,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "painting:fill — 9 built-in presets",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l22",
+      "type": "typography:text",
+      "name": "Sub: presets",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 343,
+        "width": 368,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch · crosshatch · stipple · scumble · contour",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l23",
+      "type": "painting:fill",
+      "name": "Preset: hatch-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 356,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":45,\"spacing\":12}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 300,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l24",
+      "type": "typography:text",
+      "name": "Label: hatch-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 11,
+        "y": 357,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch-light",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l25",
+      "type": "painting:fill",
+      "name": "Preset: hatch-medium",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 134,
+        "y": 356,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":45,\"spacing\":8}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 301,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l26",
+      "type": "typography:text",
+      "name": "Label: hatch-medium",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 137,
+        "y": 357,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch-medium",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l27",
+      "type": "painting:fill",
+      "name": "Preset: hatch-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 260,
+        "y": 356,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":45,\"spacing\":4}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 302,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l28",
+      "type": "typography:text",
+      "name": "Label: hatch-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 263,
+        "y": 357,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "hatch-dense",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l29",
+      "type": "painting:fill",
+      "name": "Preset: crosshatch-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 449,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"crosshatch\",\"angles\":[45,135],\"spacing\":12,\"passDecay\":0.7}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 303,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l30",
+      "type": "typography:text",
+      "name": "Label: crosshatch-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 11,
+        "y": 450,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "crosshatch-light",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l31",
+      "type": "painting:fill",
+      "name": "Preset: crosshatch-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 134,
+        "y": 449,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"crosshatch\",\"angles\":[45,135],\"spacing\":5,\"passDecay\":0.8}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 304,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l32",
+      "type": "typography:text",
+      "name": "Label: crosshatch-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 137,
+        "y": 450,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "crosshatch-dense",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l33",
+      "type": "painting:fill",
+      "name": "Preset: stipple-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 260,
+        "y": 449,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":15,\"distribution\":\"poisson\"}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 305,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l34",
+      "type": "typography:text",
+      "name": "Label: stipple-light",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 263,
+        "y": 450,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "stipple-light",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l35",
+      "type": "painting:fill",
+      "name": "Preset: stipple-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 542,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":60,\"distribution\":\"poisson\"}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 306,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l36",
+      "type": "typography:text",
+      "name": "Label: stipple-dense",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 11,
+        "y": 543,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "stipple-dense",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l37",
+      "type": "painting:fill",
+      "name": "Preset: scumble",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 134,
+        "y": 542,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"scumble\",\"density\":12,\"strokeLength\":25,\"curvature\":0.5}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 307,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l38",
+      "type": "typography:text",
+      "name": "Label: scumble",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 137,
+        "y": 543,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "scumble",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l39",
+      "type": "painting:fill",
+      "name": "Preset: contour",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 260,
+        "y": 542,
+        "width": 125,
+        "height": 92,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"contour\",\"spacing\":6,\"smoothing\":0.3}",
+        "color": "#1a1a1a",
+        "size": 1.5,
+        "brushId": "ink-pen",
+        "seed": 308,
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l40",
+      "type": "typography:text",
+      "name": "Label: contour",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 263,
+        "y": 543,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "contour",
+        "fontFamily": "monospace",
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.6)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l41",
+      "type": "typography:text",
+      "name": "Title: sphere",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 402,
+        "y": 329,
+        "width": 368,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "painting:fill — shaded sphere",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l42",
+      "type": "typography:text",
+      "name": "Sub: sphere",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 402,
+        "y": 343,
+        "width": 368,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "contour outline + hatch shadow + crosshatch deep shadow",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l43",
+      "type": "painting:fill",
+      "name": "Fill: contour outline",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 396,
+        "y": 356,
+        "width": 380,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"contour\",\"spacing\":9999,\"smoothing\":0.2}",
+        "color": "#1a1a1a",
+        "size": 3,
+        "brushId": "ink-pen",
+        "seed": 400,
+        "region": "{\"type\":\"ellipse\",\"cx\":586,\"cy\":496,\"rx\":117.6,\"ry\":117.6}",
+        "shading": "{\"type\":\"uniform\"}",
+        "shadingAffects": "[\"density\"]"
+      }
+    },
+    {
+      "id": "l44",
+      "type": "painting:fill",
+      "name": "Fill: hatch shadow",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 396,
+        "y": 356,
+        "width": 380,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"hatch\",\"angle\":60,\"spacing\":7}",
+        "color": "#2a2a2a",
+        "size": 2,
+        "brushId": "pencil",
+        "seed": 401,
+        "region": "{\"type\":\"ellipse\",\"cx\":586,\"cy\":496,\"rx\":117.6,\"ry\":117.6}",
+        "shading": "{\"type\":\"radial\",\"cx\":0.35,\"cy\":0.35,\"range\":[0,0.9]}",
+        "shadingAffects": "[\"density\",\"weight\"]"
+      }
+    },
+    {
+      "id": "l45",
+      "type": "painting:fill",
+      "name": "Fill: crosshatch shadow",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 396,
+        "y": 356,
+        "width": 380,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strategy": "{\"type\":\"crosshatch\",\"angles\":[60,150],\"spacing\":5,\"passDecay\":0.75}",
+        "color": "#2a2a2a",
+        "size": 1.5,
+        "brushId": "pencil",
+        "seed": 402,
+        "region": "{\"type\":\"ellipse\",\"cx\":586,\"cy\":496,\"rx\":117.6,\"ry\":117.6}",
+        "shading": "{\"type\":\"radial\",\"cx\":0.35,\"cy\":0.35,\"range\":[0,0.65]}",
+        "shadingAffects": "[\"density\"]"
+      }
+    }
+  ]
+}

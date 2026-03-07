@@ -1,0 +1,1194 @@
+{
+  "genart": "1.2",
+  "id": "stroke-demos",
+  "title": "Brush Stroke System — Visual Demos",
+  "created": "2026-03-06T00:00:00Z",
+  "modified": "2026-03-06T00:00:00Z",
+  "renderer": {
+    "type": "canvas2d"
+  },
+  "canvas": {
+    "width": 1292,
+    "height": 644
+  },
+  "parameters": [],
+  "colors": [],
+  "state": {
+    "seed": 1,
+    "params": {},
+    "colorPalette": []
+  },
+  "algorithm": "function sketch(ctx){ctx.fillStyle=\"#f0ede6\";ctx.fillRect(0,0,1292,644);ctx.fillStyle=\"#faf8f4\";ctx.fillRect(8,38,420,280);ctx.fillStyle=\"#faf8f4\";ctx.fillRect(436,38,420,280);ctx.fillStyle=\"#f0e8d8\";ctx.fillRect(864,38,420,280);ctx.fillStyle=\"#0d0d14\";ctx.fillRect(8,356,420,280);ctx.fillStyle=\"#faf8f4\";ctx.fillRect(436,356,420,280);ctx.fillStyle=\"#f0e6d4\";ctx.fillRect(864,356,420,280);ctx.strokeStyle=\"#cccccc\";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(646,361);ctx.lineTo(646,631);ctx.stroke();ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,38+0.5,420-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(436+0.5,38+0.5,420-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(864+0.5,38+0.5,420-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(8+0.5,356+0.5,420-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(436+0.5,356+0.5,420-1,280-1);ctx.strokeStyle=\"#bbbbbb\";ctx.lineWidth=0.5;ctx.strokeRect(864+0.5,356+0.5,420-1,280-1);return{};}",
+  "layers": [
+    {
+      "id": "l1",
+      "type": "typography:text",
+      "name": "Title: presets",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 11,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Preset Catalog",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l2",
+      "type": "typography:text",
+      "name": "Sub: presets",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 25,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "11 brush presets — S-curve strokes",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l3",
+      "type": "painting:stroke",
+      "name": "Strokes: catalog",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 38,
+        "width": 420,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"round-hard\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":20,\"y\":42,\"pressure\":0.3},{\"x\":23,\"y\":42,\"pressure\":0.373},{\"x\":27,\"y\":42,\"pressure\":0.446},{\"x\":30,\"y\":42,\"pressure\":0.516},{\"x\":33,\"y\":42,\"pressure\":0.585},{\"x\":37,\"y\":42,\"pressure\":0.65},{\"x\":40,\"y\":42,\"pressure\":0.711},{\"x\":43,\"y\":42,\"pressure\":0.768},{\"x\":47,\"y\":42,\"pressure\":0.82},{\"x\":50,\"y\":42,\"pressure\":0.866},{\"x\":53,\"y\":42,\"pressure\":0.906},{\"x\":57,\"y\":42,\"pressure\":0.939},{\"x\":60,\"y\":42,\"pressure\":0.966},{\"x\":63,\"y\":42,\"pressure\":0.985},{\"x\":67,\"y\":42,\"pressure\":0.996},{\"x\":70,\"y\":42,\"pressure\":1},{\"x\":73,\"y\":42,\"pressure\":0.996},{\"x\":77,\"y\":42,\"pressure\":0.985},{\"x\":80,\"y\":42,\"pressure\":0.966},{\"x\":83,\"y\":42,\"pressure\":0.939},{\"x\":87,\"y\":42,\"pressure\":0.906},{\"x\":90,\"y\":42,\"pressure\":0.866},{\"x\":93,\"y\":42,\"pressure\":0.82},{\"x\":97,\"y\":42,\"pressure\":0.768},{\"x\":100,\"y\":42,\"pressure\":0.711},{\"x\":103,\"y\":42,\"pressure\":0.65},{\"x\":107,\"y\":42,\"pressure\":0.585},{\"x\":110,\"y\":42,\"pressure\":0.516},{\"x\":113,\"y\":42,\"pressure\":0.446},{\"x\":117,\"y\":42,\"pressure\":0.373},{\"x\":120,\"y\":42,\"pressure\":0.3}],\"size\":14,\"seed\":0},{\"brushId\":\"round-soft\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":160,\"y\":42,\"pressure\":0.3},{\"x\":163,\"y\":42,\"pressure\":0.373},{\"x\":167,\"y\":42,\"pressure\":0.446},{\"x\":170,\"y\":42,\"pressure\":0.516},{\"x\":173,\"y\":42,\"pressure\":0.585},{\"x\":177,\"y\":42,\"pressure\":0.65},{\"x\":180,\"y\":42,\"pressure\":0.711},{\"x\":183,\"y\":42,\"pressure\":0.768},{\"x\":187,\"y\":42,\"pressure\":0.82},{\"x\":190,\"y\":42,\"pressure\":0.866},{\"x\":193,\"y\":42,\"pressure\":0.906},{\"x\":197,\"y\":42,\"pressure\":0.939},{\"x\":200,\"y\":42,\"pressure\":0.966},{\"x\":203,\"y\":42,\"pressure\":0.985},{\"x\":207,\"y\":42,\"pressure\":0.996},{\"x\":210,\"y\":42,\"pressure\":1},{\"x\":213,\"y\":42,\"pressure\":0.996},{\"x\":217,\"y\":42,\"pressure\":0.985},{\"x\":220,\"y\":42,\"pressure\":0.966},{\"x\":223,\"y\":42,\"pressure\":0.939},{\"x\":227,\"y\":42,\"pressure\":0.906},{\"x\":230,\"y\":42,\"pressure\":0.866},{\"x\":233,\"y\":42,\"pressure\":0.82},{\"x\":237,\"y\":42,\"pressure\":0.768},{\"x\":240,\"y\":42,\"pressure\":0.711},{\"x\":243,\"y\":42,\"pressure\":0.65},{\"x\":247,\"y\":42,\"pressure\":0.585},{\"x\":250,\"y\":42,\"pressure\":0.516},{\"x\":253,\"y\":42,\"pressure\":0.446},{\"x\":257,\"y\":42,\"pressure\":0.373},{\"x\":260,\"y\":42,\"pressure\":0.3}],\"size\":14,\"seed\":77},{\"brushId\":\"flat\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":300,\"y\":42,\"pressure\":0.3},{\"x\":303,\"y\":42,\"pressure\":0.373},{\"x\":307,\"y\":42,\"pressure\":0.446},{\"x\":310,\"y\":42,\"pressure\":0.516},{\"x\":313,\"y\":42,\"pressure\":0.585},{\"x\":317,\"y\":42,\"pressure\":0.65},{\"x\":320,\"y\":42,\"pressure\":0.711},{\"x\":323,\"y\":42,\"pressure\":0.768},{\"x\":327,\"y\":42,\"pressure\":0.82},{\"x\":330,\"y\":42,\"pressure\":0.866},{\"x\":333,\"y\":42,\"pressure\":0.906},{\"x\":337,\"y\":42,\"pressure\":0.939},{\"x\":340,\"y\":42,\"pressure\":0.966},{\"x\":343,\"y\":42,\"pressure\":0.985},{\"x\":347,\"y\":42,\"pressure\":0.996},{\"x\":350,\"y\":42,\"pressure\":1},{\"x\":353,\"y\":42,\"pressure\":0.996},{\"x\":357,\"y\":42,\"pressure\":0.985},{\"x\":360,\"y\":42,\"pressure\":0.966},{\"x\":363,\"y\":42,\"pressure\":0.939},{\"x\":367,\"y\":42,\"pressure\":0.906},{\"x\":370,\"y\":42,\"pressure\":0.866},{\"x\":373,\"y\":42,\"pressure\":0.82},{\"x\":377,\"y\":42,\"pressure\":0.768},{\"x\":380,\"y\":42,\"pressure\":0.711},{\"x\":383,\"y\":42,\"pressure\":0.65},{\"x\":387,\"y\":42,\"pressure\":0.585},{\"x\":390,\"y\":42,\"pressure\":0.516},{\"x\":393,\"y\":42,\"pressure\":0.446},{\"x\":397,\"y\":42,\"pressure\":0.373},{\"x\":400,\"y\":42,\"pressure\":0.3}],\"size\":14,\"seed\":154},{\"brushId\":\"pencil\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":20,\"y\":112,\"pressure\":0.3},{\"x\":23,\"y\":112,\"pressure\":0.373},{\"x\":27,\"y\":112,\"pressure\":0.446},{\"x\":30,\"y\":112,\"pressure\":0.516},{\"x\":33,\"y\":112,\"pressure\":0.585},{\"x\":37,\"y\":112,\"pressure\":0.65},{\"x\":40,\"y\":112,\"pressure\":0.711},{\"x\":43,\"y\":112,\"pressure\":0.768},{\"x\":47,\"y\":112,\"pressure\":0.82},{\"x\":50,\"y\":112,\"pressure\":0.866},{\"x\":53,\"y\":112,\"pressure\":0.906},{\"x\":57,\"y\":112,\"pressure\":0.939},{\"x\":60,\"y\":112,\"pressure\":0.966},{\"x\":63,\"y\":112,\"pressure\":0.985},{\"x\":67,\"y\":112,\"pressure\":0.996},{\"x\":70,\"y\":112,\"pressure\":1},{\"x\":73,\"y\":112,\"pressure\":0.996},{\"x\":77,\"y\":112,\"pressure\":0.985},{\"x\":80,\"y\":112,\"pressure\":0.966},{\"x\":83,\"y\":112,\"pressure\":0.939},{\"x\":87,\"y\":112,\"pressure\":0.906},{\"x\":90,\"y\":112,\"pressure\":0.866},{\"x\":93,\"y\":112,\"pressure\":0.82},{\"x\":97,\"y\":112,\"pressure\":0.768},{\"x\":100,\"y\":112,\"pressure\":0.711},{\"x\":103,\"y\":112,\"pressure\":0.65},{\"x\":107,\"y\":112,\"pressure\":0.585},{\"x\":110,\"y\":112,\"pressure\":0.516},{\"x\":113,\"y\":112,\"pressure\":0.446},{\"x\":117,\"y\":112,\"pressure\":0.373},{\"x\":120,\"y\":112,\"pressure\":0.3}],\"size\":14,\"seed\":231},{\"brushId\":\"ink-pen\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":160,\"y\":112,\"pressure\":0.3},{\"x\":163,\"y\":112,\"pressure\":0.373},{\"x\":167,\"y\":112,\"pressure\":0.446},{\"x\":170,\"y\":112,\"pressure\":0.516},{\"x\":173,\"y\":112,\"pressure\":0.585},{\"x\":177,\"y\":112,\"pressure\":0.65},{\"x\":180,\"y\":112,\"pressure\":0.711},{\"x\":183,\"y\":112,\"pressure\":0.768},{\"x\":187,\"y\":112,\"pressure\":0.82},{\"x\":190,\"y\":112,\"pressure\":0.866},{\"x\":193,\"y\":112,\"pressure\":0.906},{\"x\":197,\"y\":112,\"pressure\":0.939},{\"x\":200,\"y\":112,\"pressure\":0.966},{\"x\":203,\"y\":112,\"pressure\":0.985},{\"x\":207,\"y\":112,\"pressure\":0.996},{\"x\":210,\"y\":112,\"pressure\":1},{\"x\":213,\"y\":112,\"pressure\":0.996},{\"x\":217,\"y\":112,\"pressure\":0.985},{\"x\":220,\"y\":112,\"pressure\":0.966},{\"x\":223,\"y\":112,\"pressure\":0.939},{\"x\":227,\"y\":112,\"pressure\":0.906},{\"x\":230,\"y\":112,\"pressure\":0.866},{\"x\":233,\"y\":112,\"pressure\":0.82},{\"x\":237,\"y\":112,\"pressure\":0.768},{\"x\":240,\"y\":112,\"pressure\":0.711},{\"x\":243,\"y\":112,\"pressure\":0.65},{\"x\":247,\"y\":112,\"pressure\":0.585},{\"x\":250,\"y\":112,\"pressure\":0.516},{\"x\":253,\"y\":112,\"pressure\":0.446},{\"x\":257,\"y\":112,\"pressure\":0.373},{\"x\":260,\"y\":112,\"pressure\":0.3}],\"size\":14,\"seed\":308},{\"brushId\":\"marker\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":300,\"y\":112,\"pressure\":0.3},{\"x\":303,\"y\":112,\"pressure\":0.373},{\"x\":307,\"y\":112,\"pressure\":0.446},{\"x\":310,\"y\":112,\"pressure\":0.516},{\"x\":313,\"y\":112,\"pressure\":0.585},{\"x\":317,\"y\":112,\"pressure\":0.65},{\"x\":320,\"y\":112,\"pressure\":0.711},{\"x\":323,\"y\":112,\"pressure\":0.768},{\"x\":327,\"y\":112,\"pressure\":0.82},{\"x\":330,\"y\":112,\"pressure\":0.866},{\"x\":333,\"y\":112,\"pressure\":0.906},{\"x\":337,\"y\":112,\"pressure\":0.939},{\"x\":340,\"y\":112,\"pressure\":0.966},{\"x\":343,\"y\":112,\"pressure\":0.985},{\"x\":347,\"y\":112,\"pressure\":0.996},{\"x\":350,\"y\":112,\"pressure\":1},{\"x\":353,\"y\":112,\"pressure\":0.996},{\"x\":357,\"y\":112,\"pressure\":0.985},{\"x\":360,\"y\":112,\"pressure\":0.966},{\"x\":363,\"y\":112,\"pressure\":0.939},{\"x\":367,\"y\":112,\"pressure\":0.906},{\"x\":370,\"y\":112,\"pressure\":0.866},{\"x\":373,\"y\":112,\"pressure\":0.82},{\"x\":377,\"y\":112,\"pressure\":0.768},{\"x\":380,\"y\":112,\"pressure\":0.711},{\"x\":383,\"y\":112,\"pressure\":0.65},{\"x\":387,\"y\":112,\"pressure\":0.585},{\"x\":390,\"y\":112,\"pressure\":0.516},{\"x\":393,\"y\":112,\"pressure\":0.446},{\"x\":397,\"y\":112,\"pressure\":0.373},{\"x\":400,\"y\":112,\"pressure\":0.3}],\"size\":14,\"seed\":385},{\"brushId\":\"watercolor-round\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":20,\"y\":182,\"pressure\":0.3},{\"x\":23,\"y\":182,\"pressure\":0.373},{\"x\":27,\"y\":182,\"pressure\":0.446},{\"x\":30,\"y\":182,\"pressure\":0.516},{\"x\":33,\"y\":182,\"pressure\":0.585},{\"x\":37,\"y\":182,\"pressure\":0.65},{\"x\":40,\"y\":182,\"pressure\":0.711},{\"x\":43,\"y\":182,\"pressure\":0.768},{\"x\":47,\"y\":182,\"pressure\":0.82},{\"x\":50,\"y\":182,\"pressure\":0.866},{\"x\":53,\"y\":182,\"pressure\":0.906},{\"x\":57,\"y\":182,\"pressure\":0.939},{\"x\":60,\"y\":182,\"pressure\":0.966},{\"x\":63,\"y\":182,\"pressure\":0.985},{\"x\":67,\"y\":182,\"pressure\":0.996},{\"x\":70,\"y\":182,\"pressure\":1},{\"x\":73,\"y\":182,\"pressure\":0.996},{\"x\":77,\"y\":182,\"pressure\":0.985},{\"x\":80,\"y\":182,\"pressure\":0.966},{\"x\":83,\"y\":182,\"pressure\":0.939},{\"x\":87,\"y\":182,\"pressure\":0.906},{\"x\":90,\"y\":182,\"pressure\":0.866},{\"x\":93,\"y\":182,\"pressure\":0.82},{\"x\":97,\"y\":182,\"pressure\":0.768},{\"x\":100,\"y\":182,\"pressure\":0.711},{\"x\":103,\"y\":182,\"pressure\":0.65},{\"x\":107,\"y\":182,\"pressure\":0.585},{\"x\":110,\"y\":182,\"pressure\":0.516},{\"x\":113,\"y\":182,\"pressure\":0.446},{\"x\":117,\"y\":182,\"pressure\":0.373},{\"x\":120,\"y\":182,\"pressure\":0.3}],\"size\":14,\"seed\":462},{\"brushId\":\"charcoal-stick\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":160,\"y\":182,\"pressure\":0.3},{\"x\":163,\"y\":182,\"pressure\":0.373},{\"x\":167,\"y\":182,\"pressure\":0.446},{\"x\":170,\"y\":182,\"pressure\":0.516},{\"x\":173,\"y\":182,\"pressure\":0.585},{\"x\":177,\"y\":182,\"pressure\":0.65},{\"x\":180,\"y\":182,\"pressure\":0.711},{\"x\":183,\"y\":182,\"pressure\":0.768},{\"x\":187,\"y\":182,\"pressure\":0.82},{\"x\":190,\"y\":182,\"pressure\":0.866},{\"x\":193,\"y\":182,\"pressure\":0.906},{\"x\":197,\"y\":182,\"pressure\":0.939},{\"x\":200,\"y\":182,\"pressure\":0.966},{\"x\":203,\"y\":182,\"pressure\":0.985},{\"x\":207,\"y\":182,\"pressure\":0.996},{\"x\":210,\"y\":182,\"pressure\":1},{\"x\":213,\"y\":182,\"pressure\":0.996},{\"x\":217,\"y\":182,\"pressure\":0.985},{\"x\":220,\"y\":182,\"pressure\":0.966},{\"x\":223,\"y\":182,\"pressure\":0.939},{\"x\":227,\"y\":182,\"pressure\":0.906},{\"x\":230,\"y\":182,\"pressure\":0.866},{\"x\":233,\"y\":182,\"pressure\":0.82},{\"x\":237,\"y\":182,\"pressure\":0.768},{\"x\":240,\"y\":182,\"pressure\":0.711},{\"x\":243,\"y\":182,\"pressure\":0.65},{\"x\":247,\"y\":182,\"pressure\":0.585},{\"x\":250,\"y\":182,\"pressure\":0.516},{\"x\":253,\"y\":182,\"pressure\":0.446},{\"x\":257,\"y\":182,\"pressure\":0.373},{\"x\":260,\"y\":182,\"pressure\":0.3}],\"size\":14,\"seed\":539},{\"brushId\":\"splatter\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":300,\"y\":182,\"pressure\":0.3},{\"x\":303,\"y\":182,\"pressure\":0.373},{\"x\":307,\"y\":182,\"pressure\":0.446},{\"x\":310,\"y\":182,\"pressure\":0.516},{\"x\":313,\"y\":182,\"pressure\":0.585},{\"x\":317,\"y\":182,\"pressure\":0.65},{\"x\":320,\"y\":182,\"pressure\":0.711},{\"x\":323,\"y\":182,\"pressure\":0.768},{\"x\":327,\"y\":182,\"pressure\":0.82},{\"x\":330,\"y\":182,\"pressure\":0.866},{\"x\":333,\"y\":182,\"pressure\":0.906},{\"x\":337,\"y\":182,\"pressure\":0.939},{\"x\":340,\"y\":182,\"pressure\":0.966},{\"x\":343,\"y\":182,\"pressure\":0.985},{\"x\":347,\"y\":182,\"pressure\":0.996},{\"x\":350,\"y\":182,\"pressure\":1},{\"x\":353,\"y\":182,\"pressure\":0.996},{\"x\":357,\"y\":182,\"pressure\":0.985},{\"x\":360,\"y\":182,\"pressure\":0.966},{\"x\":363,\"y\":182,\"pressure\":0.939},{\"x\":367,\"y\":182,\"pressure\":0.906},{\"x\":370,\"y\":182,\"pressure\":0.866},{\"x\":373,\"y\":182,\"pressure\":0.82},{\"x\":377,\"y\":182,\"pressure\":0.768},{\"x\":380,\"y\":182,\"pressure\":0.711},{\"x\":383,\"y\":182,\"pressure\":0.65},{\"x\":387,\"y\":182,\"pressure\":0.585},{\"x\":390,\"y\":182,\"pressure\":0.516},{\"x\":393,\"y\":182,\"pressure\":0.446},{\"x\":397,\"y\":182,\"pressure\":0.373},{\"x\":400,\"y\":182,\"pressure\":0.3}],\"size\":10,\"seed\":616},{\"brushId\":\"texture-chalk\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":20,\"y\":252,\"pressure\":0.3},{\"x\":23,\"y\":252,\"pressure\":0.373},{\"x\":27,\"y\":252,\"pressure\":0.446},{\"x\":30,\"y\":252,\"pressure\":0.516},{\"x\":33,\"y\":252,\"pressure\":0.585},{\"x\":37,\"y\":252,\"pressure\":0.65},{\"x\":40,\"y\":252,\"pressure\":0.711},{\"x\":43,\"y\":252,\"pressure\":0.768},{\"x\":47,\"y\":252,\"pressure\":0.82},{\"x\":50,\"y\":252,\"pressure\":0.866},{\"x\":53,\"y\":252,\"pressure\":0.906},{\"x\":57,\"y\":252,\"pressure\":0.939},{\"x\":60,\"y\":252,\"pressure\":0.966},{\"x\":63,\"y\":252,\"pressure\":0.985},{\"x\":67,\"y\":252,\"pressure\":0.996},{\"x\":70,\"y\":252,\"pressure\":1},{\"x\":73,\"y\":252,\"pressure\":0.996},{\"x\":77,\"y\":252,\"pressure\":0.985},{\"x\":80,\"y\":252,\"pressure\":0.966},{\"x\":83,\"y\":252,\"pressure\":0.939},{\"x\":87,\"y\":252,\"pressure\":0.906},{\"x\":90,\"y\":252,\"pressure\":0.866},{\"x\":93,\"y\":252,\"pressure\":0.82},{\"x\":97,\"y\":252,\"pressure\":0.768},{\"x\":100,\"y\":252,\"pressure\":0.711},{\"x\":103,\"y\":252,\"pressure\":0.65},{\"x\":107,\"y\":252,\"pressure\":0.585},{\"x\":110,\"y\":252,\"pressure\":0.516},{\"x\":113,\"y\":252,\"pressure\":0.446},{\"x\":117,\"y\":252,\"pressure\":0.373},{\"x\":120,\"y\":252,\"pressure\":0.3}],\"size\":14,\"seed\":693},{\"brushId\":\"texture-sponge\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":160,\"y\":252,\"pressure\":0.3},{\"x\":163,\"y\":252,\"pressure\":0.373},{\"x\":167,\"y\":252,\"pressure\":0.446},{\"x\":170,\"y\":252,\"pressure\":0.516},{\"x\":173,\"y\":252,\"pressure\":0.585},{\"x\":177,\"y\":252,\"pressure\":0.65},{\"x\":180,\"y\":252,\"pressure\":0.711},{\"x\":183,\"y\":252,\"pressure\":0.768},{\"x\":187,\"y\":252,\"pressure\":0.82},{\"x\":190,\"y\":252,\"pressure\":0.866},{\"x\":193,\"y\":252,\"pressure\":0.906},{\"x\":197,\"y\":252,\"pressure\":0.939},{\"x\":200,\"y\":252,\"pressure\":0.966},{\"x\":203,\"y\":252,\"pressure\":0.985},{\"x\":207,\"y\":252,\"pressure\":0.996},{\"x\":210,\"y\":252,\"pressure\":1},{\"x\":213,\"y\":252,\"pressure\":0.996},{\"x\":217,\"y\":252,\"pressure\":0.985},{\"x\":220,\"y\":252,\"pressure\":0.966},{\"x\":223,\"y\":252,\"pressure\":0.939},{\"x\":227,\"y\":252,\"pressure\":0.906},{\"x\":230,\"y\":252,\"pressure\":0.866},{\"x\":233,\"y\":252,\"pressure\":0.82},{\"x\":237,\"y\":252,\"pressure\":0.768},{\"x\":240,\"y\":252,\"pressure\":0.711},{\"x\":243,\"y\":252,\"pressure\":0.65},{\"x\":247,\"y\":252,\"pressure\":0.585},{\"x\":250,\"y\":252,\"pressure\":0.516},{\"x\":253,\"y\":252,\"pressure\":0.446},{\"x\":257,\"y\":252,\"pressure\":0.373},{\"x\":260,\"y\":252,\"pressure\":0.3}],\"size\":14,\"seed\":770},{\"brushId\":\"texture-bristle\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":300,\"y\":252,\"pressure\":0.3},{\"x\":303,\"y\":252,\"pressure\":0.373},{\"x\":307,\"y\":252,\"pressure\":0.446},{\"x\":310,\"y\":252,\"pressure\":0.516},{\"x\":313,\"y\":252,\"pressure\":0.585},{\"x\":317,\"y\":252,\"pressure\":0.65},{\"x\":320,\"y\":252,\"pressure\":0.711},{\"x\":323,\"y\":252,\"pressure\":0.768},{\"x\":327,\"y\":252,\"pressure\":0.82},{\"x\":330,\"y\":252,\"pressure\":0.866},{\"x\":333,\"y\":252,\"pressure\":0.906},{\"x\":337,\"y\":252,\"pressure\":0.939},{\"x\":340,\"y\":252,\"pressure\":0.966},{\"x\":343,\"y\":252,\"pressure\":0.985},{\"x\":347,\"y\":252,\"pressure\":0.996},{\"x\":350,\"y\":252,\"pressure\":1},{\"x\":353,\"y\":252,\"pressure\":0.996},{\"x\":357,\"y\":252,\"pressure\":0.985},{\"x\":360,\"y\":252,\"pressure\":0.966},{\"x\":363,\"y\":252,\"pressure\":0.939},{\"x\":367,\"y\":252,\"pressure\":0.906},{\"x\":370,\"y\":252,\"pressure\":0.866},{\"x\":373,\"y\":252,\"pressure\":0.82},{\"x\":377,\"y\":252,\"pressure\":0.768},{\"x\":380,\"y\":252,\"pressure\":0.711},{\"x\":383,\"y\":252,\"pressure\":0.65},{\"x\":387,\"y\":252,\"pressure\":0.585},{\"x\":390,\"y\":252,\"pressure\":0.516},{\"x\":393,\"y\":252,\"pressure\":0.446},{\"x\":397,\"y\":252,\"pressure\":0.373},{\"x\":400,\"y\":252,\"pressure\":0.3}],\"size\":14,\"seed\":847}]",
+        "brushes": "[]",
+        "seed": 42
+      }
+    },
+    {
+      "id": "l4",
+      "type": "typography:text",
+      "name": "Label: round-hard",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 40,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "round-hard",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l5",
+      "type": "typography:text",
+      "name": "Label: round-soft",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 152,
+        "y": 40,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "round-soft",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l6",
+      "type": "typography:text",
+      "name": "Label: flat",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 292,
+        "y": 40,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "flat",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l7",
+      "type": "typography:text",
+      "name": "Label: pencil",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 110,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "pencil",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l8",
+      "type": "typography:text",
+      "name": "Label: ink-pen",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 152,
+        "y": 110,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "ink-pen",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l9",
+      "type": "typography:text",
+      "name": "Label: marker",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 292,
+        "y": 110,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "marker",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l10",
+      "type": "typography:text",
+      "name": "Label: watercolor-round",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 180,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "watercolor-round",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l11",
+      "type": "typography:text",
+      "name": "Label: charcoal-stick",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 152,
+        "y": 180,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "charcoal-stick",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l12",
+      "type": "typography:text",
+      "name": "Label: splatter",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 292,
+        "y": 180,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "splatter",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l13",
+      "type": "typography:text",
+      "name": "Label: texture-chalk",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 12,
+        "y": 250,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-chalk",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l14",
+      "type": "typography:text",
+      "name": "Label: texture-sponge",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 152,
+        "y": 250,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-sponge",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l15",
+      "type": "typography:text",
+      "name": "Label: texture-bristle",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 292,
+        "y": 250,
+        "width": 132,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-bristle",
+        "fontFamily": "monospace",
+        "fontSize": 8,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "rgba(60,40,20,0.5)",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l16",
+      "type": "typography:text",
+      "name": "Title: pressure",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 442,
+        "y": 11,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Pressure Dynamics",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l17",
+      "type": "typography:text",
+      "name": "Sub: pressure",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 442,
+        "y": 25,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "pressure → size + opacity + taper",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l18",
+      "type": "painting:stroke",
+      "name": "Strokes: pressure",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 436,
+        "y": 38,
+        "width": 420,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"round-hard\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":30,\"y\":30,\"pressure\":0},{\"x\":37,\"y\":30,\"pressure\":0.063},{\"x\":44,\"y\":30,\"pressure\":0.125},{\"x\":52,\"y\":30,\"pressure\":0.187},{\"x\":59,\"y\":30,\"pressure\":0.249},{\"x\":66,\"y\":30,\"pressure\":0.309},{\"x\":73,\"y\":30,\"pressure\":0.368},{\"x\":80,\"y\":30,\"pressure\":0.426},{\"x\":88,\"y\":30,\"pressure\":0.482},{\"x\":95,\"y\":30,\"pressure\":0.536},{\"x\":102,\"y\":30,\"pressure\":0.588},{\"x\":109,\"y\":30,\"pressure\":0.637},{\"x\":116,\"y\":30,\"pressure\":0.685},{\"x\":124,\"y\":30,\"pressure\":0.729},{\"x\":131,\"y\":30,\"pressure\":0.771},{\"x\":138,\"y\":30,\"pressure\":0.809},{\"x\":145,\"y\":30,\"pressure\":0.844},{\"x\":152,\"y\":30,\"pressure\":0.876},{\"x\":160,\"y\":30,\"pressure\":0.905},{\"x\":167,\"y\":30,\"pressure\":0.93},{\"x\":174,\"y\":30,\"pressure\":0.951},{\"x\":181,\"y\":30,\"pressure\":0.969},{\"x\":188,\"y\":30,\"pressure\":0.982},{\"x\":196,\"y\":30,\"pressure\":0.992},{\"x\":203,\"y\":30,\"pressure\":0.998},{\"x\":210,\"y\":30,\"pressure\":1},{\"x\":217,\"y\":30,\"pressure\":0.998},{\"x\":224,\"y\":30,\"pressure\":0.992},{\"x\":232,\"y\":30,\"pressure\":0.982},{\"x\":239,\"y\":30,\"pressure\":0.969},{\"x\":246,\"y\":30,\"pressure\":0.951},{\"x\":253,\"y\":30,\"pressure\":0.93},{\"x\":260,\"y\":30,\"pressure\":0.905},{\"x\":268,\"y\":30,\"pressure\":0.876},{\"x\":275,\"y\":30,\"pressure\":0.844},{\"x\":282,\"y\":30,\"pressure\":0.809},{\"x\":289,\"y\":30,\"pressure\":0.771},{\"x\":296,\"y\":30,\"pressure\":0.729},{\"x\":304,\"y\":30,\"pressure\":0.685},{\"x\":311,\"y\":30,\"pressure\":0.637},{\"x\":318,\"y\":30,\"pressure\":0.588},{\"x\":325,\"y\":30,\"pressure\":0.536},{\"x\":332,\"y\":30,\"pressure\":0.482},{\"x\":340,\"y\":30,\"pressure\":0.426},{\"x\":347,\"y\":30,\"pressure\":0.368},{\"x\":354,\"y\":30,\"pressure\":0.309},{\"x\":361,\"y\":30,\"pressure\":0.249},{\"x\":368,\"y\":30,\"pressure\":0.187},{\"x\":376,\"y\":30,\"pressure\":0.125},{\"x\":383,\"y\":30,\"pressure\":0.063},{\"x\":390,\"y\":30,\"pressure\":0}],\"size\":24,\"seed\":0},{\"brushId\":\"round-soft\",\"color\":\"#335599\",\"points\":[{\"x\":30,\"y\":82,\"pressure\":0},{\"x\":37,\"y\":82,\"pressure\":0.063},{\"x\":44,\"y\":82,\"pressure\":0.125},{\"x\":52,\"y\":82,\"pressure\":0.187},{\"x\":59,\"y\":82,\"pressure\":0.249},{\"x\":66,\"y\":82,\"pressure\":0.309},{\"x\":73,\"y\":82,\"pressure\":0.368},{\"x\":80,\"y\":82,\"pressure\":0.426},{\"x\":88,\"y\":82,\"pressure\":0.482},{\"x\":95,\"y\":82,\"pressure\":0.536},{\"x\":102,\"y\":82,\"pressure\":0.588},{\"x\":109,\"y\":82,\"pressure\":0.637},{\"x\":116,\"y\":82,\"pressure\":0.685},{\"x\":124,\"y\":82,\"pressure\":0.729},{\"x\":131,\"y\":82,\"pressure\":0.771},{\"x\":138,\"y\":82,\"pressure\":0.809},{\"x\":145,\"y\":82,\"pressure\":0.844},{\"x\":152,\"y\":82,\"pressure\":0.876},{\"x\":160,\"y\":82,\"pressure\":0.905},{\"x\":167,\"y\":82,\"pressure\":0.93},{\"x\":174,\"y\":82,\"pressure\":0.951},{\"x\":181,\"y\":82,\"pressure\":0.969},{\"x\":188,\"y\":82,\"pressure\":0.982},{\"x\":196,\"y\":82,\"pressure\":0.992},{\"x\":203,\"y\":82,\"pressure\":0.998},{\"x\":210,\"y\":82,\"pressure\":1},{\"x\":217,\"y\":82,\"pressure\":0.998},{\"x\":224,\"y\":82,\"pressure\":0.992},{\"x\":232,\"y\":82,\"pressure\":0.982},{\"x\":239,\"y\":82,\"pressure\":0.969},{\"x\":246,\"y\":82,\"pressure\":0.951},{\"x\":253,\"y\":82,\"pressure\":0.93},{\"x\":260,\"y\":82,\"pressure\":0.905},{\"x\":268,\"y\":82,\"pressure\":0.876},{\"x\":275,\"y\":82,\"pressure\":0.844},{\"x\":282,\"y\":82,\"pressure\":0.809},{\"x\":289,\"y\":82,\"pressure\":0.771},{\"x\":296,\"y\":82,\"pressure\":0.729},{\"x\":304,\"y\":82,\"pressure\":0.685},{\"x\":311,\"y\":82,\"pressure\":0.637},{\"x\":318,\"y\":82,\"pressure\":0.588},{\"x\":325,\"y\":82,\"pressure\":0.536},{\"x\":332,\"y\":82,\"pressure\":0.482},{\"x\":340,\"y\":82,\"pressure\":0.426},{\"x\":347,\"y\":82,\"pressure\":0.368},{\"x\":354,\"y\":82,\"pressure\":0.309},{\"x\":361,\"y\":82,\"pressure\":0.249},{\"x\":368,\"y\":82,\"pressure\":0.187},{\"x\":376,\"y\":82,\"pressure\":0.125},{\"x\":383,\"y\":82,\"pressure\":0.063},{\"x\":390,\"y\":82,\"pressure\":0}],\"size\":24,\"seed\":99},{\"brushId\":\"pencil\",\"color\":\"#2a2a2a\",\"points\":[{\"x\":30,\"y\":134,\"pressure\":0},{\"x\":37,\"y\":134,\"pressure\":0.063},{\"x\":44,\"y\":134,\"pressure\":0.125},{\"x\":52,\"y\":134,\"pressure\":0.187},{\"x\":59,\"y\":134,\"pressure\":0.249},{\"x\":66,\"y\":134,\"pressure\":0.309},{\"x\":73,\"y\":134,\"pressure\":0.368},{\"x\":80,\"y\":134,\"pressure\":0.426},{\"x\":88,\"y\":134,\"pressure\":0.482},{\"x\":95,\"y\":134,\"pressure\":0.536},{\"x\":102,\"y\":134,\"pressure\":0.588},{\"x\":109,\"y\":134,\"pressure\":0.637},{\"x\":116,\"y\":134,\"pressure\":0.685},{\"x\":124,\"y\":134,\"pressure\":0.729},{\"x\":131,\"y\":134,\"pressure\":0.771},{\"x\":138,\"y\":134,\"pressure\":0.809},{\"x\":145,\"y\":134,\"pressure\":0.844},{\"x\":152,\"y\":134,\"pressure\":0.876},{\"x\":160,\"y\":134,\"pressure\":0.905},{\"x\":167,\"y\":134,\"pressure\":0.93},{\"x\":174,\"y\":134,\"pressure\":0.951},{\"x\":181,\"y\":134,\"pressure\":0.969},{\"x\":188,\"y\":134,\"pressure\":0.982},{\"x\":196,\"y\":134,\"pressure\":0.992},{\"x\":203,\"y\":134,\"pressure\":0.998},{\"x\":210,\"y\":134,\"pressure\":1},{\"x\":217,\"y\":134,\"pressure\":0.998},{\"x\":224,\"y\":134,\"pressure\":0.992},{\"x\":232,\"y\":134,\"pressure\":0.982},{\"x\":239,\"y\":134,\"pressure\":0.969},{\"x\":246,\"y\":134,\"pressure\":0.951},{\"x\":253,\"y\":134,\"pressure\":0.93},{\"x\":260,\"y\":134,\"pressure\":0.905},{\"x\":268,\"y\":134,\"pressure\":0.876},{\"x\":275,\"y\":134,\"pressure\":0.844},{\"x\":282,\"y\":134,\"pressure\":0.809},{\"x\":289,\"y\":134,\"pressure\":0.771},{\"x\":296,\"y\":134,\"pressure\":0.729},{\"x\":304,\"y\":134,\"pressure\":0.685},{\"x\":311,\"y\":134,\"pressure\":0.637},{\"x\":318,\"y\":134,\"pressure\":0.588},{\"x\":325,\"y\":134,\"pressure\":0.536},{\"x\":332,\"y\":134,\"pressure\":0.482},{\"x\":340,\"y\":134,\"pressure\":0.426},{\"x\":347,\"y\":134,\"pressure\":0.368},{\"x\":354,\"y\":134,\"pressure\":0.309},{\"x\":361,\"y\":134,\"pressure\":0.249},{\"x\":368,\"y\":134,\"pressure\":0.187},{\"x\":376,\"y\":134,\"pressure\":0.125},{\"x\":383,\"y\":134,\"pressure\":0.063},{\"x\":390,\"y\":134,\"pressure\":0}],\"size\":24,\"seed\":198},{\"brushId\":\"ink-pen\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":30,\"y\":186,\"pressure\":0},{\"x\":37,\"y\":186,\"pressure\":0.063},{\"x\":44,\"y\":186,\"pressure\":0.125},{\"x\":52,\"y\":186,\"pressure\":0.187},{\"x\":59,\"y\":186,\"pressure\":0.249},{\"x\":66,\"y\":186,\"pressure\":0.309},{\"x\":73,\"y\":186,\"pressure\":0.368},{\"x\":80,\"y\":186,\"pressure\":0.426},{\"x\":88,\"y\":186,\"pressure\":0.482},{\"x\":95,\"y\":186,\"pressure\":0.536},{\"x\":102,\"y\":186,\"pressure\":0.588},{\"x\":109,\"y\":186,\"pressure\":0.637},{\"x\":116,\"y\":186,\"pressure\":0.685},{\"x\":124,\"y\":186,\"pressure\":0.729},{\"x\":131,\"y\":186,\"pressure\":0.771},{\"x\":138,\"y\":186,\"pressure\":0.809},{\"x\":145,\"y\":186,\"pressure\":0.844},{\"x\":152,\"y\":186,\"pressure\":0.876},{\"x\":160,\"y\":186,\"pressure\":0.905},{\"x\":167,\"y\":186,\"pressure\":0.93},{\"x\":174,\"y\":186,\"pressure\":0.951},{\"x\":181,\"y\":186,\"pressure\":0.969},{\"x\":188,\"y\":186,\"pressure\":0.982},{\"x\":196,\"y\":186,\"pressure\":0.992},{\"x\":203,\"y\":186,\"pressure\":0.998},{\"x\":210,\"y\":186,\"pressure\":1},{\"x\":217,\"y\":186,\"pressure\":0.998},{\"x\":224,\"y\":186,\"pressure\":0.992},{\"x\":232,\"y\":186,\"pressure\":0.982},{\"x\":239,\"y\":186,\"pressure\":0.969},{\"x\":246,\"y\":186,\"pressure\":0.951},{\"x\":253,\"y\":186,\"pressure\":0.93},{\"x\":260,\"y\":186,\"pressure\":0.905},{\"x\":268,\"y\":186,\"pressure\":0.876},{\"x\":275,\"y\":186,\"pressure\":0.844},{\"x\":282,\"y\":186,\"pressure\":0.809},{\"x\":289,\"y\":186,\"pressure\":0.771},{\"x\":296,\"y\":186,\"pressure\":0.729},{\"x\":304,\"y\":186,\"pressure\":0.685},{\"x\":311,\"y\":186,\"pressure\":0.637},{\"x\":318,\"y\":186,\"pressure\":0.588},{\"x\":325,\"y\":186,\"pressure\":0.536},{\"x\":332,\"y\":186,\"pressure\":0.482},{\"x\":340,\"y\":186,\"pressure\":0.426},{\"x\":347,\"y\":186,\"pressure\":0.368},{\"x\":354,\"y\":186,\"pressure\":0.309},{\"x\":361,\"y\":186,\"pressure\":0.249},{\"x\":368,\"y\":186,\"pressure\":0.187},{\"x\":376,\"y\":186,\"pressure\":0.125},{\"x\":383,\"y\":186,\"pressure\":0.063},{\"x\":390,\"y\":186,\"pressure\":0}],\"size\":24,\"seed\":297},{\"brushId\":\"flat\",\"color\":\"#884422\",\"points\":[{\"x\":30,\"y\":238,\"pressure\":0},{\"x\":37,\"y\":238,\"pressure\":0.063},{\"x\":44,\"y\":238,\"pressure\":0.125},{\"x\":52,\"y\":238,\"pressure\":0.187},{\"x\":59,\"y\":238,\"pressure\":0.249},{\"x\":66,\"y\":238,\"pressure\":0.309},{\"x\":73,\"y\":238,\"pressure\":0.368},{\"x\":80,\"y\":238,\"pressure\":0.426},{\"x\":88,\"y\":238,\"pressure\":0.482},{\"x\":95,\"y\":238,\"pressure\":0.536},{\"x\":102,\"y\":238,\"pressure\":0.588},{\"x\":109,\"y\":238,\"pressure\":0.637},{\"x\":116,\"y\":238,\"pressure\":0.685},{\"x\":124,\"y\":238,\"pressure\":0.729},{\"x\":131,\"y\":238,\"pressure\":0.771},{\"x\":138,\"y\":238,\"pressure\":0.809},{\"x\":145,\"y\":238,\"pressure\":0.844},{\"x\":152,\"y\":238,\"pressure\":0.876},{\"x\":160,\"y\":238,\"pressure\":0.905},{\"x\":167,\"y\":238,\"pressure\":0.93},{\"x\":174,\"y\":238,\"pressure\":0.951},{\"x\":181,\"y\":238,\"pressure\":0.969},{\"x\":188,\"y\":238,\"pressure\":0.982},{\"x\":196,\"y\":238,\"pressure\":0.992},{\"x\":203,\"y\":238,\"pressure\":0.998},{\"x\":210,\"y\":238,\"pressure\":1},{\"x\":217,\"y\":238,\"pressure\":0.998},{\"x\":224,\"y\":238,\"pressure\":0.992},{\"x\":232,\"y\":238,\"pressure\":0.982},{\"x\":239,\"y\":238,\"pressure\":0.969},{\"x\":246,\"y\":238,\"pressure\":0.951},{\"x\":253,\"y\":238,\"pressure\":0.93},{\"x\":260,\"y\":238,\"pressure\":0.905},{\"x\":268,\"y\":238,\"pressure\":0.876},{\"x\":275,\"y\":238,\"pressure\":0.844},{\"x\":282,\"y\":238,\"pressure\":0.809},{\"x\":289,\"y\":238,\"pressure\":0.771},{\"x\":296,\"y\":238,\"pressure\":0.729},{\"x\":304,\"y\":238,\"pressure\":0.685},{\"x\":311,\"y\":238,\"pressure\":0.637},{\"x\":318,\"y\":238,\"pressure\":0.588},{\"x\":325,\"y\":238,\"pressure\":0.536},{\"x\":332,\"y\":238,\"pressure\":0.482},{\"x\":340,\"y\":238,\"pressure\":0.426},{\"x\":347,\"y\":238,\"pressure\":0.368},{\"x\":354,\"y\":238,\"pressure\":0.309},{\"x\":361,\"y\":238,\"pressure\":0.249},{\"x\":368,\"y\":238,\"pressure\":0.187},{\"x\":376,\"y\":238,\"pressure\":0.125},{\"x\":383,\"y\":238,\"pressure\":0.063},{\"x\":390,\"y\":238,\"pressure\":0}],\"size\":24,\"seed\":396}]",
+        "brushes": "[]",
+        "seed": 7
+      }
+    },
+    {
+      "id": "l19",
+      "type": "typography:text",
+      "name": "Label: round-hard",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 440,
+        "y": 50,
+        "width": 100,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "round-hard",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#666666",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l20",
+      "type": "typography:text",
+      "name": "Label: round-soft",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 440,
+        "y": 102,
+        "width": 100,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "round-soft",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#666666",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l21",
+      "type": "typography:text",
+      "name": "Label: pencil",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 440,
+        "y": 154,
+        "width": 100,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "pencil",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#666666",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l22",
+      "type": "typography:text",
+      "name": "Label: ink-pen",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 440,
+        "y": 206,
+        "width": 100,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "ink-pen",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#666666",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l23",
+      "type": "typography:text",
+      "name": "Label: flat",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 440,
+        "y": 258,
+        "width": 100,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "flat",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#666666",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l24",
+      "type": "typography:text",
+      "name": "Title: calligraphy",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 870,
+        "y": 11,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Calligraphy",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l25",
+      "type": "typography:text",
+      "name": "Sub: calligraphy",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 870,
+        "y": 25,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "ink-pen + marker flourishes",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l26",
+      "type": "painting:stroke",
+      "name": "Strokes: calligraphy",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 864,
+        "y": 38,
+        "width": 420,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"ink-pen\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":153,\"y\":39,\"pressure\":0.5},{\"x\":156,\"y\":35,\"pressure\":0.531},{\"x\":159,\"y\":32,\"pressure\":0.563},{\"x\":162,\"y\":29,\"pressure\":0.594},{\"x\":165,\"y\":26,\"pressure\":0.624},{\"x\":169,\"y\":23,\"pressure\":0.655},{\"x\":172,\"y\":21,\"pressure\":0.684},{\"x\":176,\"y\":19,\"pressure\":0.713},{\"x\":180,\"y\":17,\"pressure\":0.741},{\"x\":184,\"y\":15,\"pressure\":0.768},{\"x\":188,\"y\":13,\"pressure\":0.794},{\"x\":193,\"y\":12,\"pressure\":0.819},{\"x\":197,\"y\":11,\"pressure\":0.842},{\"x\":201,\"y\":11,\"pressure\":0.864},{\"x\":206,\"y\":10,\"pressure\":0.885},{\"x\":210,\"y\":10,\"pressure\":0.905},{\"x\":214,\"y\":10,\"pressure\":0.922},{\"x\":219,\"y\":11,\"pressure\":0.938},{\"x\":223,\"y\":11,\"pressure\":0.952},{\"x\":227,\"y\":12,\"pressure\":0.965},{\"x\":232,\"y\":13,\"pressure\":0.976},{\"x\":236,\"y\":15,\"pressure\":0.984},{\"x\":240,\"y\":17,\"pressure\":0.991},{\"x\":244,\"y\":19,\"pressure\":0.996},{\"x\":248,\"y\":21,\"pressure\":0.999},{\"x\":251,\"y\":23,\"pressure\":1},{\"x\":255,\"y\":26,\"pressure\":0.999},{\"x\":258,\"y\":29,\"pressure\":0.996},{\"x\":261,\"y\":32,\"pressure\":0.991},{\"x\":264,\"y\":35,\"pressure\":0.984},{\"x\":267,\"y\":39,\"pressure\":0.976},{\"x\":269,\"y\":42,\"pressure\":0.965},{\"x\":271,\"y\":46,\"pressure\":0.952},{\"x\":273,\"y\":50,\"pressure\":0.938},{\"x\":275,\"y\":54,\"pressure\":0.922},{\"x\":277,\"y\":58,\"pressure\":0.905},{\"x\":278,\"y\":63,\"pressure\":0.885},{\"x\":279,\"y\":67,\"pressure\":0.864},{\"x\":279,\"y\":71,\"pressure\":0.842},{\"x\":280,\"y\":76,\"pressure\":0.819},{\"x\":280,\"y\":80,\"pressure\":0.794},{\"x\":280,\"y\":84,\"pressure\":0.768},{\"x\":279,\"y\":89,\"pressure\":0.741},{\"x\":279,\"y\":93,\"pressure\":0.713},{\"x\":278,\"y\":97,\"pressure\":0.684},{\"x\":277,\"y\":102,\"pressure\":0.655},{\"x\":275,\"y\":106,\"pressure\":0.624},{\"x\":273,\"y\":110,\"pressure\":0.594},{\"x\":271,\"y\":114,\"pressure\":0.563},{\"x\":269,\"y\":118,\"pressure\":0.531},{\"x\":267,\"y\":121,\"pressure\":0.5}],\"size\":16},{\"brushId\":\"ink-pen\",\"color\":\"#1a1a1a\",\"points\":[{\"x\":210,\"y\":160,\"pressure\":1},{\"x\":221,\"y\":168,\"pressure\":0.989},{\"x\":232,\"y\":175,\"pressure\":0.956},{\"x\":243,\"y\":183,\"pressure\":0.904},{\"x\":253,\"y\":189,\"pressure\":0.835},{\"x\":264,\"y\":195,\"pressure\":0.753},{\"x\":274,\"y\":200,\"pressure\":0.663},{\"x\":283,\"y\":205,\"pressure\":0.569},{\"x\":292,\"y\":208,\"pressure\":0.476},{\"x\":301,\"y\":209,\"pressure\":0.391},{\"x\":309,\"y\":210,\"pressure\":0.317},{\"x\":316,\"y\":209,\"pressure\":0.259},{\"x\":323,\"y\":208,\"pressure\":0.22},{\"x\":329,\"y\":205,\"pressure\":0.201},{\"x\":335,\"y\":200,\"pressure\":0.205},{\"x\":339,\"y\":195,\"pressure\":0.23},{\"x\":343,\"y\":189,\"pressure\":0.276},{\"x\":346,\"y\":183,\"pressure\":0.34},{\"x\":348,\"y\":175,\"pressure\":0.418},{\"x\":350,\"y\":168,\"pressure\":0.507},{\"x\":350,\"y\":160,\"pressure\":0.6},{\"x\":350,\"y\":152,\"pressure\":0.693},{\"x\":348,\"y\":145,\"pressure\":0.782},{\"x\":346,\"y\":137,\"pressure\":0.86},{\"x\":343,\"y\":131,\"pressure\":0.924},{\"x\":339,\"y\":125,\"pressure\":0.97},{\"x\":335,\"y\":120,\"pressure\":0.995},{\"x\":329,\"y\":115,\"pressure\":0.999},{\"x\":323,\"y\":112,\"pressure\":0.98},{\"x\":316,\"y\":111,\"pressure\":0.941},{\"x\":309,\"y\":110,\"pressure\":0.883},{\"x\":301,\"y\":111,\"pressure\":0.809},{\"x\":292,\"y\":112,\"pressure\":0.724},{\"x\":283,\"y\":115,\"pressure\":0.631},{\"x\":274,\"y\":120,\"pressure\":0.537},{\"x\":264,\"y\":125,\"pressure\":0.447},{\"x\":253,\"y\":131,\"pressure\":0.365},{\"x\":243,\"y\":137,\"pressure\":0.296},{\"x\":232,\"y\":145,\"pressure\":0.244},{\"x\":221,\"y\":152,\"pressure\":0.211},{\"x\":210,\"y\":160,\"pressure\":0.2},{\"x\":199,\"y\":168,\"pressure\":0.211},{\"x\":188,\"y\":175,\"pressure\":0.244},{\"x\":177,\"y\":183,\"pressure\":0.296},{\"x\":167,\"y\":189,\"pressure\":0.365},{\"x\":156,\"y\":195,\"pressure\":0.447},{\"x\":146,\"y\":200,\"pressure\":0.537},{\"x\":137,\"y\":205,\"pressure\":0.631},{\"x\":128,\"y\":208,\"pressure\":0.724},{\"x\":119,\"y\":209,\"pressure\":0.809},{\"x\":111,\"y\":210,\"pressure\":0.883},{\"x\":104,\"y\":209,\"pressure\":0.941},{\"x\":97,\"y\":208,\"pressure\":0.98},{\"x\":91,\"y\":205,\"pressure\":0.999},{\"x\":85,\"y\":200,\"pressure\":0.995},{\"x\":81,\"y\":195,\"pressure\":0.97},{\"x\":77,\"y\":189,\"pressure\":0.924},{\"x\":74,\"y\":183,\"pressure\":0.86},{\"x\":72,\"y\":175,\"pressure\":0.782},{\"x\":70,\"y\":168,\"pressure\":0.693},{\"x\":70,\"y\":160,\"pressure\":0.6},{\"x\":70,\"y\":152,\"pressure\":0.507},{\"x\":72,\"y\":145,\"pressure\":0.418},{\"x\":74,\"y\":137,\"pressure\":0.34},{\"x\":77,\"y\":131,\"pressure\":0.276},{\"x\":81,\"y\":125,\"pressure\":0.23},{\"x\":85,\"y\":120,\"pressure\":0.205},{\"x\":91,\"y\":115,\"pressure\":0.201},{\"x\":97,\"y\":112,\"pressure\":0.22},{\"x\":104,\"y\":111,\"pressure\":0.259},{\"x\":111,\"y\":110,\"pressure\":0.317},{\"x\":119,\"y\":111,\"pressure\":0.391},{\"x\":128,\"y\":112,\"pressure\":0.476},{\"x\":137,\"y\":115,\"pressure\":0.569},{\"x\":146,\"y\":120,\"pressure\":0.663},{\"x\":156,\"y\":125,\"pressure\":0.753},{\"x\":167,\"y\":131,\"pressure\":0.835},{\"x\":177,\"y\":137,\"pressure\":0.904},{\"x\":188,\"y\":145,\"pressure\":0.956},{\"x\":199,\"y\":152,\"pressure\":0.989},{\"x\":210,\"y\":160,\"pressure\":1}],\"size\":12},{\"brushId\":\"ink-pen\",\"color\":\"#2a2a2a\",\"points\":[{\"x\":30,\"y\":230,\"pressure\":0.3},{\"x\":39,\"y\":230,\"pressure\":0.355},{\"x\":48,\"y\":230,\"pressure\":0.41},{\"x\":57,\"y\":230,\"pressure\":0.463},{\"x\":66,\"y\":230,\"pressure\":0.516},{\"x\":75,\"y\":230,\"pressure\":0.568},{\"x\":84,\"y\":230,\"pressure\":0.618},{\"x\":93,\"y\":230,\"pressure\":0.666},{\"x\":102,\"y\":230,\"pressure\":0.711},{\"x\":111,\"y\":230,\"pressure\":0.755},{\"x\":120,\"y\":230,\"pressure\":0.795},{\"x\":129,\"y\":230,\"pressure\":0.832},{\"x\":138,\"y\":230,\"pressure\":0.866},{\"x\":147,\"y\":230,\"pressure\":0.897},{\"x\":156,\"y\":230,\"pressure\":0.924},{\"x\":165,\"y\":230,\"pressure\":0.947},{\"x\":174,\"y\":230,\"pressure\":0.966},{\"x\":183,\"y\":230,\"pressure\":0.981},{\"x\":192,\"y\":230,\"pressure\":0.991},{\"x\":201,\"y\":230,\"pressure\":0.998},{\"x\":210,\"y\":230,\"pressure\":1},{\"x\":219,\"y\":230,\"pressure\":0.998},{\"x\":228,\"y\":230,\"pressure\":0.991},{\"x\":237,\"y\":230,\"pressure\":0.981},{\"x\":246,\"y\":230,\"pressure\":0.966},{\"x\":255,\"y\":230,\"pressure\":0.947},{\"x\":264,\"y\":230,\"pressure\":0.924},{\"x\":273,\"y\":230,\"pressure\":0.897},{\"x\":282,\"y\":230,\"pressure\":0.866},{\"x\":291,\"y\":230,\"pressure\":0.832},{\"x\":300,\"y\":230,\"pressure\":0.795},{\"x\":309,\"y\":230,\"pressure\":0.755},{\"x\":318,\"y\":230,\"pressure\":0.711},{\"x\":327,\"y\":230,\"pressure\":0.666},{\"x\":336,\"y\":230,\"pressure\":0.618},{\"x\":345,\"y\":230,\"pressure\":0.568},{\"x\":354,\"y\":230,\"pressure\":0.516},{\"x\":363,\"y\":230,\"pressure\":0.463},{\"x\":372,\"y\":230,\"pressure\":0.41},{\"x\":381,\"y\":230,\"pressure\":0.355},{\"x\":390,\"y\":230,\"pressure\":0.3}],\"size\":8},{\"brushId\":\"ink-pen\",\"color\":\"#2a2a2a\",\"points\":[{\"x\":30,\"y\":260,\"pressure\":0.3},{\"x\":39,\"y\":260,\"pressure\":0.355},{\"x\":48,\"y\":260,\"pressure\":0.41},{\"x\":57,\"y\":260,\"pressure\":0.463},{\"x\":66,\"y\":260,\"pressure\":0.516},{\"x\":75,\"y\":260,\"pressure\":0.568},{\"x\":84,\"y\":260,\"pressure\":0.618},{\"x\":93,\"y\":260,\"pressure\":0.666},{\"x\":102,\"y\":260,\"pressure\":0.711},{\"x\":111,\"y\":260,\"pressure\":0.755},{\"x\":120,\"y\":260,\"pressure\":0.795},{\"x\":129,\"y\":260,\"pressure\":0.832},{\"x\":138,\"y\":260,\"pressure\":0.866},{\"x\":147,\"y\":260,\"pressure\":0.897},{\"x\":156,\"y\":260,\"pressure\":0.924},{\"x\":165,\"y\":260,\"pressure\":0.947},{\"x\":174,\"y\":260,\"pressure\":0.966},{\"x\":183,\"y\":260,\"pressure\":0.981},{\"x\":192,\"y\":260,\"pressure\":0.991},{\"x\":201,\"y\":260,\"pressure\":0.998},{\"x\":210,\"y\":260,\"pressure\":1},{\"x\":219,\"y\":260,\"pressure\":0.998},{\"x\":228,\"y\":260,\"pressure\":0.991},{\"x\":237,\"y\":260,\"pressure\":0.981},{\"x\":246,\"y\":260,\"pressure\":0.966},{\"x\":255,\"y\":260,\"pressure\":0.947},{\"x\":264,\"y\":260,\"pressure\":0.924},{\"x\":273,\"y\":260,\"pressure\":0.897},{\"x\":282,\"y\":260,\"pressure\":0.866},{\"x\":291,\"y\":260,\"pressure\":0.832},{\"x\":300,\"y\":260,\"pressure\":0.795},{\"x\":309,\"y\":260,\"pressure\":0.755},{\"x\":318,\"y\":260,\"pressure\":0.711},{\"x\":327,\"y\":260,\"pressure\":0.666},{\"x\":336,\"y\":260,\"pressure\":0.618},{\"x\":345,\"y\":260,\"pressure\":0.568},{\"x\":354,\"y\":260,\"pressure\":0.516},{\"x\":363,\"y\":260,\"pressure\":0.463},{\"x\":372,\"y\":260,\"pressure\":0.41},{\"x\":381,\"y\":260,\"pressure\":0.355},{\"x\":390,\"y\":260,\"pressure\":0.3}],\"size\":6},{\"brushId\":\"marker\",\"color\":\"#884444\",\"points\":[{\"x\":75,\"y\":80,\"pressure\":0.5},{\"x\":74,\"y\":86,\"pressure\":0.598},{\"x\":71,\"y\":91,\"pressure\":0.691},{\"x\":66,\"y\":94,\"pressure\":0.778},{\"x\":60,\"y\":95,\"pressure\":0.854},{\"x\":54,\"y\":94,\"pressure\":0.916},{\"x\":49,\"y\":91,\"pressure\":0.962},{\"x\":46,\"y\":86,\"pressure\":0.99},{\"x\":45,\"y\":80,\"pressure\":1},{\"x\":46,\"y\":74,\"pressure\":0.99},{\"x\":49,\"y\":69,\"pressure\":0.962},{\"x\":54,\"y\":66,\"pressure\":0.916},{\"x\":60,\"y\":65,\"pressure\":0.854},{\"x\":66,\"y\":66,\"pressure\":0.778},{\"x\":71,\"y\":69,\"pressure\":0.691},{\"x\":74,\"y\":74,\"pressure\":0.598},{\"x\":75,\"y\":80,\"pressure\":0.5}],\"size\":14},{\"brushId\":\"marker\",\"color\":\"#884444\",\"points\":[{\"x\":375,\"y\":80,\"pressure\":0.5},{\"x\":374,\"y\":86,\"pressure\":0.598},{\"x\":371,\"y\":91,\"pressure\":0.691},{\"x\":366,\"y\":94,\"pressure\":0.778},{\"x\":360,\"y\":95,\"pressure\":0.854},{\"x\":354,\"y\":94,\"pressure\":0.916},{\"x\":349,\"y\":91,\"pressure\":0.962},{\"x\":346,\"y\":86,\"pressure\":0.99},{\"x\":345,\"y\":80,\"pressure\":1},{\"x\":346,\"y\":74,\"pressure\":0.99},{\"x\":349,\"y\":69,\"pressure\":0.962},{\"x\":354,\"y\":66,\"pressure\":0.916},{\"x\":360,\"y\":65,\"pressure\":0.854},{\"x\":366,\"y\":66,\"pressure\":0.778},{\"x\":371,\"y\":69,\"pressure\":0.691},{\"x\":374,\"y\":74,\"pressure\":0.598},{\"x\":375,\"y\":80,\"pressure\":0.5}],\"size\":14}]",
+        "brushes": "[]",
+        "seed": 33
+      }
+    },
+    {
+      "id": "l27",
+      "type": "typography:text",
+      "name": "Title: splatter",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 329,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Splatter Abstract",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#cccccc",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l28",
+      "type": "typography:text",
+      "name": "Sub: splatter",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 14,
+        "y": 343,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "watercolor-round + splatter + charcoal",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l29",
+      "type": "painting:stroke",
+      "name": "Strokes: splatter",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 8,
+        "y": 356,
+        "width": 420,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"watercolor-round\",\"color\":\"#2244aa\",\"points\":[{\"x\":130,\"y\":60,\"pressure\":0.5},{\"x\":129,\"y\":70,\"pressure\":0.552},{\"x\":126,\"y\":80,\"pressure\":0.604},{\"x\":120,\"y\":89,\"pressure\":0.655},{\"x\":113,\"y\":97,\"pressure\":0.703},{\"x\":105,\"y\":103,\"pressure\":0.75},{\"x\":95,\"y\":108,\"pressure\":0.794},{\"x\":85,\"y\":110,\"pressure\":0.835},{\"x\":75,\"y\":110,\"pressure\":0.872},{\"x\":65,\"y\":108,\"pressure\":0.905},{\"x\":55,\"y\":103,\"pressure\":0.933},{\"x\":47,\"y\":97,\"pressure\":0.957},{\"x\":40,\"y\":89,\"pressure\":0.976},{\"x\":34,\"y\":80,\"pressure\":0.989},{\"x\":31,\"y\":70,\"pressure\":0.997},{\"x\":30,\"y\":60,\"pressure\":1},{\"x\":31,\"y\":50,\"pressure\":0.997},{\"x\":34,\"y\":40,\"pressure\":0.989},{\"x\":40,\"y\":31,\"pressure\":0.976},{\"x\":47,\"y\":23,\"pressure\":0.957},{\"x\":55,\"y\":17,\"pressure\":0.933},{\"x\":65,\"y\":12,\"pressure\":0.905},{\"x\":75,\"y\":10,\"pressure\":0.872},{\"x\":85,\"y\":10,\"pressure\":0.835},{\"x\":95,\"y\":12,\"pressure\":0.794},{\"x\":105,\"y\":17,\"pressure\":0.75},{\"x\":113,\"y\":23,\"pressure\":0.703},{\"x\":120,\"y\":31,\"pressure\":0.655},{\"x\":126,\"y\":40,\"pressure\":0.604},{\"x\":129,\"y\":50,\"pressure\":0.552},{\"x\":130,\"y\":60,\"pressure\":0.5}],\"size\":50,\"seed\":0},{\"brushId\":\"watercolor-round\",\"color\":\"#aa2244\",\"points\":[{\"x\":400,\"y\":60,\"pressure\":0.5},{\"x\":399,\"y\":72,\"pressure\":0.552},{\"x\":395,\"y\":84,\"pressure\":0.604},{\"x\":389,\"y\":95,\"pressure\":0.655},{\"x\":380,\"y\":105,\"pressure\":0.703},{\"x\":370,\"y\":112,\"pressure\":0.75},{\"x\":359,\"y\":117,\"pressure\":0.794},{\"x\":346,\"y\":120,\"pressure\":0.835},{\"x\":334,\"y\":120,\"pressure\":0.872},{\"x\":321,\"y\":117,\"pressure\":0.905},{\"x\":310,\"y\":112,\"pressure\":0.933},{\"x\":300,\"y\":105,\"pressure\":0.957},{\"x\":291,\"y\":95,\"pressure\":0.976},{\"x\":285,\"y\":84,\"pressure\":0.989},{\"x\":281,\"y\":72,\"pressure\":0.997},{\"x\":280,\"y\":60,\"pressure\":1},{\"x\":281,\"y\":48,\"pressure\":0.997},{\"x\":285,\"y\":36,\"pressure\":0.989},{\"x\":291,\"y\":25,\"pressure\":0.976},{\"x\":300,\"y\":15,\"pressure\":0.957},{\"x\":310,\"y\":8,\"pressure\":0.933},{\"x\":321,\"y\":3,\"pressure\":0.905},{\"x\":334,\"y\":0,\"pressure\":0.872},{\"x\":346,\"y\":0,\"pressure\":0.835},{\"x\":359,\"y\":3,\"pressure\":0.794},{\"x\":370,\"y\":8,\"pressure\":0.75},{\"x\":380,\"y\":15,\"pressure\":0.703},{\"x\":389,\"y\":25,\"pressure\":0.655},{\"x\":395,\"y\":36,\"pressure\":0.604},{\"x\":399,\"y\":48,\"pressure\":0.552},{\"x\":400,\"y\":60,\"pressure\":0.5}],\"size\":50,\"seed\":111},{\"brushId\":\"watercolor-round\",\"color\":\"#22aa66\",\"points\":[{\"x\":150,\"y\":220,\"pressure\":0.5},{\"x\":148,\"y\":235,\"pressure\":0.552},{\"x\":144,\"y\":248,\"pressure\":0.604},{\"x\":137,\"y\":261,\"pressure\":0.655},{\"x\":127,\"y\":272,\"pressure\":0.703},{\"x\":115,\"y\":281,\"pressure\":0.75},{\"x\":102,\"y\":287,\"pressure\":0.794},{\"x\":87,\"y\":290,\"pressure\":0.835},{\"x\":73,\"y\":290,\"pressure\":0.872},{\"x\":58,\"y\":287,\"pressure\":0.905},{\"x\":45,\"y\":281,\"pressure\":0.933},{\"x\":33,\"y\":272,\"pressure\":0.957},{\"x\":23,\"y\":261,\"pressure\":0.976},{\"x\":16,\"y\":248,\"pressure\":0.989},{\"x\":12,\"y\":235,\"pressure\":0.997},{\"x\":10,\"y\":220,\"pressure\":1},{\"x\":12,\"y\":205,\"pressure\":0.997},{\"x\":16,\"y\":192,\"pressure\":0.989},{\"x\":23,\"y\":179,\"pressure\":0.976},{\"x\":33,\"y\":168,\"pressure\":0.957},{\"x\":45,\"y\":159,\"pressure\":0.933},{\"x\":58,\"y\":153,\"pressure\":0.905},{\"x\":73,\"y\":150,\"pressure\":0.872},{\"x\":87,\"y\":150,\"pressure\":0.835},{\"x\":102,\"y\":153,\"pressure\":0.794},{\"x\":115,\"y\":159,\"pressure\":0.75},{\"x\":127,\"y\":168,\"pressure\":0.703},{\"x\":137,\"y\":179,\"pressure\":0.655},{\"x\":144,\"y\":192,\"pressure\":0.604},{\"x\":148,\"y\":205,\"pressure\":0.552},{\"x\":150,\"y\":220,\"pressure\":0.5}],\"size\":50,\"seed\":222},{\"brushId\":\"watercolor-round\",\"color\":\"#aa8822\",\"points\":[{\"x\":420,\"y\":220,\"pressure\":0.5},{\"x\":418,\"y\":237,\"pressure\":0.552},{\"x\":413,\"y\":253,\"pressure\":0.604},{\"x\":405,\"y\":267,\"pressure\":0.655},{\"x\":394,\"y\":279,\"pressure\":0.703},{\"x\":380,\"y\":289,\"pressure\":0.75},{\"x\":365,\"y\":296,\"pressure\":0.794},{\"x\":348,\"y\":300,\"pressure\":0.835},{\"x\":332,\"y\":300,\"pressure\":0.872},{\"x\":315,\"y\":296,\"pressure\":0.905},{\"x\":300,\"y\":289,\"pressure\":0.933},{\"x\":286,\"y\":279,\"pressure\":0.957},{\"x\":275,\"y\":267,\"pressure\":0.976},{\"x\":267,\"y\":253,\"pressure\":0.989},{\"x\":262,\"y\":237,\"pressure\":0.997},{\"x\":260,\"y\":220,\"pressure\":1},{\"x\":262,\"y\":203,\"pressure\":0.997},{\"x\":267,\"y\":187,\"pressure\":0.989},{\"x\":275,\"y\":173,\"pressure\":0.976},{\"x\":286,\"y\":161,\"pressure\":0.957},{\"x\":300,\"y\":151,\"pressure\":0.933},{\"x\":315,\"y\":144,\"pressure\":0.905},{\"x\":332,\"y\":140,\"pressure\":0.872},{\"x\":348,\"y\":140,\"pressure\":0.835},{\"x\":365,\"y\":144,\"pressure\":0.794},{\"x\":380,\"y\":151,\"pressure\":0.75},{\"x\":394,\"y\":161,\"pressure\":0.703},{\"x\":405,\"y\":173,\"pressure\":0.655},{\"x\":413,\"y\":187,\"pressure\":0.604},{\"x\":418,\"y\":203,\"pressure\":0.552},{\"x\":420,\"y\":220,\"pressure\":0.5}],\"size\":50,\"seed\":333},{\"brushId\":\"splatter\",\"color\":\"#ff4444\",\"points\":[{\"x\":10,\"y\":39,\"pressure\":0.513},{\"x\":51,\"y\":65,\"pressure\":0.776},{\"x\":57,\"y\":20,\"pressure\":0.918},{\"x\":62,\"y\":65,\"pressure\":0.818},{\"x\":44,\"y\":68,\"pressure\":0.435},{\"x\":61,\"y\":39,\"pressure\":0.446},{\"x\":77,\"y\":82,\"pressure\":0.891},{\"x\":40,\"y\":63,\"pressure\":0.812},{\"x\":59,\"y\":57,\"pressure\":0.558},{\"x\":95,\"y\":97,\"pressure\":0.593},{\"x\":69,\"y\":99,\"pressure\":0.421},{\"x\":56,\"y\":74,\"pressure\":0.564},{\"x\":80,\"y\":118,\"pressure\":0.627},{\"x\":99,\"y\":79,\"pressure\":0.605},{\"x\":109,\"y\":119,\"pressure\":0.516},{\"x\":92,\"y\":126,\"pressure\":0.79},{\"x\":70,\"y\":115,\"pressure\":0.364},{\"x\":108,\"y\":109,\"pressure\":0.79},{\"x\":85,\"y\":113,\"pressure\":0.58},{\"x\":98,\"y\":152,\"pressure\":0.601},{\"x\":78,\"y\":115,\"pressure\":0.393},{\"x\":120,\"y\":105,\"pressure\":0.5},{\"x\":100,\"y\":135,\"pressure\":0.453},{\"x\":135,\"y\":144,\"pressure\":0.677},{\"x\":141,\"y\":157,\"pressure\":0.79}],\"size\":8,\"seed\":0},{\"brushId\":\"splatter\",\"color\":\"#44ff88\",\"points\":[{\"x\":174,\"y\":30,\"pressure\":0.454},{\"x\":136,\"y\":57,\"pressure\":0.571},{\"x\":176,\"y\":56,\"pressure\":0.357},{\"x\":195,\"y\":30,\"pressure\":0.983},{\"x\":168,\"y\":31,\"pressure\":0.809},{\"x\":159,\"y\":59,\"pressure\":0.411},{\"x\":193,\"y\":63,\"pressure\":0.387},{\"x\":176,\"y\":94,\"pressure\":0.694},{\"x\":160,\"y\":85,\"pressure\":0.774},{\"x\":205,\"y\":92,\"pressure\":0.969},{\"x\":201,\"y\":94,\"pressure\":0.659},{\"x\":178,\"y\":115,\"pressure\":0.74},{\"x\":213,\"y\":104,\"pressure\":0.512},{\"x\":232,\"y\":68,\"pressure\":0.545},{\"x\":200,\"y\":98,\"pressure\":0.793},{\"x\":229,\"y\":99,\"pressure\":0.85},{\"x\":186,\"y\":94,\"pressure\":0.705},{\"x\":220,\"y\":91,\"pressure\":0.396},{\"x\":190,\"y\":140,\"pressure\":0.96},{\"x\":214,\"y\":99,\"pressure\":0.6},{\"x\":230,\"y\":106,\"pressure\":0.492},{\"x\":206,\"y\":123,\"pressure\":0.535},{\"x\":254,\"y\":165,\"pressure\":0.828},{\"x\":236,\"y\":170,\"pressure\":0.753},{\"x\":260,\"y\":122,\"pressure\":0.992}],\"size\":10,\"seed\":234},{\"brushId\":\"splatter\",\"color\":\"#4488ff\",\"points\":[{\"x\":278,\"y\":21,\"pressure\":0.918},{\"x\":272,\"y\":23,\"pressure\":0.536},{\"x\":278,\"y\":30,\"pressure\":0.549},{\"x\":279,\"y\":39,\"pressure\":0.674},{\"x\":294,\"y\":40,\"pressure\":0.414},{\"x\":326,\"y\":83,\"pressure\":0.544},{\"x\":310,\"y\":44,\"pressure\":0.677},{\"x\":283,\"y\":35,\"pressure\":0.723},{\"x\":277,\"y\":89,\"pressure\":0.312},{\"x\":305,\"y\":51,\"pressure\":0.754},{\"x\":323,\"y\":55,\"pressure\":0.671},{\"x\":312,\"y\":98,\"pressure\":0.348},{\"x\":304,\"y\":97,\"pressure\":0.676},{\"x\":297,\"y\":79,\"pressure\":0.437},{\"x\":307,\"y\":79,\"pressure\":0.591},{\"x\":318,\"y\":108,\"pressure\":0.56},{\"x\":339,\"y\":134,\"pressure\":0.947},{\"x\":356,\"y\":114,\"pressure\":0.95},{\"x\":343,\"y\":144,\"pressure\":0.884},{\"x\":339,\"y\":107,\"pressure\":0.409},{\"x\":373,\"y\":151,\"pressure\":0.808},{\"x\":325,\"y\":164,\"pressure\":0.563},{\"x\":340,\"y\":170,\"pressure\":0.978},{\"x\":371,\"y\":173,\"pressure\":0.822},{\"x\":372,\"y\":140,\"pressure\":0.515}],\"size\":12,\"seed\":468},{\"brushId\":\"splatter\",\"color\":\"#ffaa22\",\"points\":[{\"x\":22,\"y\":132,\"pressure\":0.524},{\"x\":18,\"y\":144,\"pressure\":0.978},{\"x\":28,\"y\":138,\"pressure\":0.701},{\"x\":71,\"y\":153,\"pressure\":0.859},{\"x\":41,\"y\":169,\"pressure\":0.512},{\"x\":39,\"y\":156,\"pressure\":0.693},{\"x\":35,\"y\":181,\"pressure\":0.467},{\"x\":64,\"y\":209,\"pressure\":0.397},{\"x\":41,\"y\":180,\"pressure\":0.427},{\"x\":82,\"y\":223,\"pressure\":0.308},{\"x\":58,\"y\":216,\"pressure\":0.768},{\"x\":88,\"y\":209,\"pressure\":0.918},{\"x\":106,\"y\":203,\"pressure\":0.862},{\"x\":78,\"y\":200,\"pressure\":0.318},{\"x\":97,\"y\":212,\"pressure\":0.691},{\"x\":83,\"y\":241,\"pressure\":0.811},{\"x\":73,\"y\":243,\"pressure\":0.941},{\"x\":103,\"y\":241,\"pressure\":0.46},{\"x\":74,\"y\":211,\"pressure\":0.982},{\"x\":100,\"y\":265,\"pressure\":0.785},{\"x\":102,\"y\":221,\"pressure\":0.478},{\"x\":94,\"y\":263,\"pressure\":0.452},{\"x\":112,\"y\":288,\"pressure\":0.664},{\"x\":139,\"y\":278,\"pressure\":0.834},{\"x\":117,\"y\":254,\"pressure\":0.855}],\"size\":14,\"seed\":702},{\"brushId\":\"splatter\",\"color\":\"#ff44ff\",\"points\":[{\"x\":187,\"y\":123,\"pressure\":0.445},{\"x\":176,\"y\":134,\"pressure\":0.989},{\"x\":145,\"y\":131,\"pressure\":0.602},{\"x\":175,\"y\":170,\"pressure\":0.373},{\"x\":183,\"y\":176,\"pressure\":0.403},{\"x\":178,\"y\":159,\"pressure\":0.556},{\"x\":155,\"y\":210,\"pressure\":0.614},{\"x\":166,\"y\":185,\"pressure\":0.575},{\"x\":175,\"y\":199,\"pressure\":0.568},{\"x\":179,\"y\":181,\"pressure\":0.741},{\"x\":165,\"y\":204,\"pressure\":0.365},{\"x\":206,\"y\":218,\"pressure\":0.682},{\"x\":182,\"y\":219,\"pressure\":0.638},{\"x\":218,\"y\":201,\"pressure\":0.386},{\"x\":208,\"y\":194,\"pressure\":0.438},{\"x\":182,\"y\":247,\"pressure\":0.606},{\"x\":232,\"y\":233,\"pressure\":0.862},{\"x\":240,\"y\":214,\"pressure\":0.706},{\"x\":204,\"y\":240,\"pressure\":0.569},{\"x\":244,\"y\":231,\"pressure\":0.467},{\"x\":236,\"y\":230,\"pressure\":0.802},{\"x\":247,\"y\":240,\"pressure\":0.626},{\"x\":204,\"y\":264,\"pressure\":0.495},{\"x\":240,\"y\":244,\"pressure\":0.359},{\"x\":237,\"y\":241,\"pressure\":0.423}],\"size\":16,\"seed\":936},{\"brushId\":\"splatter\",\"color\":\"#44ffff\",\"points\":[{\"x\":291,\"y\":174,\"pressure\":0.909},{\"x\":258,\"y\":141,\"pressure\":0.782},{\"x\":274,\"y\":180,\"pressure\":0.966},{\"x\":290,\"y\":154,\"pressure\":0.443},{\"x\":268,\"y\":182,\"pressure\":0.626},{\"x\":309,\"y\":172,\"pressure\":0.355},{\"x\":320,\"y\":202,\"pressure\":0.943},{\"x\":278,\"y\":206,\"pressure\":0.575},{\"x\":287,\"y\":182,\"pressure\":0.814},{\"x\":295,\"y\":198,\"pressure\":0.995},{\"x\":286,\"y\":183,\"pressure\":0.74},{\"x\":292,\"y\":231,\"pressure\":0.318},{\"x\":333,\"y\":202,\"pressure\":0.768},{\"x\":342,\"y\":213,\"pressure\":0.997},{\"x\":341,\"y\":225,\"pressure\":0.308},{\"x\":310,\"y\":245,\"pressure\":0.424},{\"x\":348,\"y\":209,\"pressure\":0.543},{\"x\":338,\"y\":240,\"pressure\":0.559},{\"x\":356,\"y\":235,\"pressure\":0.645},{\"x\":329,\"y\":274,\"pressure\":0.772},{\"x\":346,\"y\":252,\"pressure\":0.471},{\"x\":354,\"y\":247,\"pressure\":0.867},{\"x\":376,\"y\":234,\"pressure\":0.84},{\"x\":376,\"y\":271,\"pressure\":0.933},{\"x\":343,\"y\":246,\"pressure\":0.714}],\"size\":18,\"seed\":1170},{\"brushId\":\"charcoal-stick\",\"color\":\"#cccccc\",\"points\":[{\"x\":30,\"y\":140,\"pressure\":0.3},{\"x\":39,\"y\":140,\"pressure\":0.355},{\"x\":48,\"y\":140,\"pressure\":0.41},{\"x\":57,\"y\":140,\"pressure\":0.463},{\"x\":66,\"y\":140,\"pressure\":0.516},{\"x\":75,\"y\":140,\"pressure\":0.568},{\"x\":84,\"y\":140,\"pressure\":0.618},{\"x\":93,\"y\":140,\"pressure\":0.666},{\"x\":102,\"y\":140,\"pressure\":0.711},{\"x\":111,\"y\":140,\"pressure\":0.755},{\"x\":120,\"y\":140,\"pressure\":0.795},{\"x\":129,\"y\":140,\"pressure\":0.832},{\"x\":138,\"y\":140,\"pressure\":0.866},{\"x\":147,\"y\":140,\"pressure\":0.897},{\"x\":156,\"y\":140,\"pressure\":0.924},{\"x\":165,\"y\":140,\"pressure\":0.947},{\"x\":174,\"y\":140,\"pressure\":0.966},{\"x\":183,\"y\":140,\"pressure\":0.981},{\"x\":192,\"y\":140,\"pressure\":0.991},{\"x\":201,\"y\":140,\"pressure\":0.998},{\"x\":210,\"y\":140,\"pressure\":1},{\"x\":219,\"y\":140,\"pressure\":0.998},{\"x\":228,\"y\":140,\"pressure\":0.991},{\"x\":237,\"y\":140,\"pressure\":0.981},{\"x\":246,\"y\":140,\"pressure\":0.966},{\"x\":255,\"y\":140,\"pressure\":0.947},{\"x\":264,\"y\":140,\"pressure\":0.924},{\"x\":273,\"y\":140,\"pressure\":0.897},{\"x\":282,\"y\":140,\"pressure\":0.866},{\"x\":291,\"y\":140,\"pressure\":0.832},{\"x\":300,\"y\":140,\"pressure\":0.795},{\"x\":309,\"y\":140,\"pressure\":0.755},{\"x\":318,\"y\":140,\"pressure\":0.711},{\"x\":327,\"y\":140,\"pressure\":0.666},{\"x\":336,\"y\":140,\"pressure\":0.618},{\"x\":345,\"y\":140,\"pressure\":0.568},{\"x\":354,\"y\":140,\"pressure\":0.516},{\"x\":363,\"y\":140,\"pressure\":0.463},{\"x\":372,\"y\":140,\"pressure\":0.41},{\"x\":381,\"y\":140,\"pressure\":0.355},{\"x\":390,\"y\":140,\"pressure\":0.3}],\"size\":16,\"seed\":777}]",
+        "brushes": "[]",
+        "seed": 99
+      }
+    },
+    {
+      "id": "l30",
+      "type": "typography:text",
+      "name": "Title: field",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 442,
+        "y": 329,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Field Influence",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l31",
+      "type": "typography:text",
+      "name": "Sub: field",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 442,
+        "y": 343,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "left: no field · right: vortex field",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l32",
+      "type": "painting:stroke",
+      "name": "Strokes: no field",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 436,
+        "y": 356,
+        "width": 210,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"round-soft\",\"color\":\"#aa3333\",\"points\":[{\"x\":20,\"y\":30,\"pressure\":0},{\"x\":26,\"y\":30,\"pressure\":0.105},{\"x\":31,\"y\":30,\"pressure\":0.208},{\"x\":37,\"y\":30,\"pressure\":0.309},{\"x\":43,\"y\":30,\"pressure\":0.407},{\"x\":48,\"y\":30,\"pressure\":0.5},{\"x\":54,\"y\":30,\"pressure\":0.588},{\"x\":60,\"y\":30,\"pressure\":0.669},{\"x\":65,\"y\":30,\"pressure\":0.743},{\"x\":71,\"y\":30,\"pressure\":0.809},{\"x\":77,\"y\":30,\"pressure\":0.866},{\"x\":82,\"y\":30,\"pressure\":0.914},{\"x\":88,\"y\":30,\"pressure\":0.951},{\"x\":94,\"y\":30,\"pressure\":0.978},{\"x\":99,\"y\":30,\"pressure\":0.995},{\"x\":105,\"y\":30,\"pressure\":1},{\"x\":111,\"y\":30,\"pressure\":0.995},{\"x\":116,\"y\":30,\"pressure\":0.978},{\"x\":122,\"y\":30,\"pressure\":0.951},{\"x\":128,\"y\":30,\"pressure\":0.914},{\"x\":133,\"y\":30,\"pressure\":0.866},{\"x\":139,\"y\":30,\"pressure\":0.809},{\"x\":145,\"y\":30,\"pressure\":0.743},{\"x\":150,\"y\":30,\"pressure\":0.669},{\"x\":156,\"y\":30,\"pressure\":0.588},{\"x\":162,\"y\":30,\"pressure\":0.5},{\"x\":167,\"y\":30,\"pressure\":0.407},{\"x\":173,\"y\":30,\"pressure\":0.309},{\"x\":179,\"y\":30,\"pressure\":0.208},{\"x\":184,\"y\":30,\"pressure\":0.105},{\"x\":190,\"y\":30,\"pressure\":0}],\"size\":18,\"seed\":0},{\"brushId\":\"round-soft\",\"color\":\"#3355aa\",\"points\":[{\"x\":20,\"y\":80,\"pressure\":0},{\"x\":26,\"y\":80,\"pressure\":0.105},{\"x\":31,\"y\":80,\"pressure\":0.208},{\"x\":37,\"y\":80,\"pressure\":0.309},{\"x\":43,\"y\":80,\"pressure\":0.407},{\"x\":48,\"y\":80,\"pressure\":0.5},{\"x\":54,\"y\":80,\"pressure\":0.588},{\"x\":60,\"y\":80,\"pressure\":0.669},{\"x\":65,\"y\":80,\"pressure\":0.743},{\"x\":71,\"y\":80,\"pressure\":0.809},{\"x\":77,\"y\":80,\"pressure\":0.866},{\"x\":82,\"y\":80,\"pressure\":0.914},{\"x\":88,\"y\":80,\"pressure\":0.951},{\"x\":94,\"y\":80,\"pressure\":0.978},{\"x\":99,\"y\":80,\"pressure\":0.995},{\"x\":105,\"y\":80,\"pressure\":1},{\"x\":111,\"y\":80,\"pressure\":0.995},{\"x\":116,\"y\":80,\"pressure\":0.978},{\"x\":122,\"y\":80,\"pressure\":0.951},{\"x\":128,\"y\":80,\"pressure\":0.914},{\"x\":133,\"y\":80,\"pressure\":0.866},{\"x\":139,\"y\":80,\"pressure\":0.809},{\"x\":145,\"y\":80,\"pressure\":0.743},{\"x\":150,\"y\":80,\"pressure\":0.669},{\"x\":156,\"y\":80,\"pressure\":0.588},{\"x\":162,\"y\":80,\"pressure\":0.5},{\"x\":167,\"y\":80,\"pressure\":0.407},{\"x\":173,\"y\":80,\"pressure\":0.309},{\"x\":179,\"y\":80,\"pressure\":0.208},{\"x\":184,\"y\":80,\"pressure\":0.105},{\"x\":190,\"y\":80,\"pressure\":0}],\"size\":18,\"seed\":55},{\"brushId\":\"round-soft\",\"color\":\"#33aa55\",\"points\":[{\"x\":20,\"y\":130,\"pressure\":0},{\"x\":26,\"y\":130,\"pressure\":0.105},{\"x\":31,\"y\":130,\"pressure\":0.208},{\"x\":37,\"y\":130,\"pressure\":0.309},{\"x\":43,\"y\":130,\"pressure\":0.407},{\"x\":48,\"y\":130,\"pressure\":0.5},{\"x\":54,\"y\":130,\"pressure\":0.588},{\"x\":60,\"y\":130,\"pressure\":0.669},{\"x\":65,\"y\":130,\"pressure\":0.743},{\"x\":71,\"y\":130,\"pressure\":0.809},{\"x\":77,\"y\":130,\"pressure\":0.866},{\"x\":82,\"y\":130,\"pressure\":0.914},{\"x\":88,\"y\":130,\"pressure\":0.951},{\"x\":94,\"y\":130,\"pressure\":0.978},{\"x\":99,\"y\":130,\"pressure\":0.995},{\"x\":105,\"y\":130,\"pressure\":1},{\"x\":111,\"y\":130,\"pressure\":0.995},{\"x\":116,\"y\":130,\"pressure\":0.978},{\"x\":122,\"y\":130,\"pressure\":0.951},{\"x\":128,\"y\":130,\"pressure\":0.914},{\"x\":133,\"y\":130,\"pressure\":0.866},{\"x\":139,\"y\":130,\"pressure\":0.809},{\"x\":145,\"y\":130,\"pressure\":0.743},{\"x\":150,\"y\":130,\"pressure\":0.669},{\"x\":156,\"y\":130,\"pressure\":0.588},{\"x\":162,\"y\":130,\"pressure\":0.5},{\"x\":167,\"y\":130,\"pressure\":0.407},{\"x\":173,\"y\":130,\"pressure\":0.309},{\"x\":179,\"y\":130,\"pressure\":0.208},{\"x\":184,\"y\":130,\"pressure\":0.105},{\"x\":190,\"y\":130,\"pressure\":0}],\"size\":18,\"seed\":110},{\"brushId\":\"round-soft\",\"color\":\"#aa8822\",\"points\":[{\"x\":20,\"y\":180,\"pressure\":0},{\"x\":26,\"y\":180,\"pressure\":0.105},{\"x\":31,\"y\":180,\"pressure\":0.208},{\"x\":37,\"y\":180,\"pressure\":0.309},{\"x\":43,\"y\":180,\"pressure\":0.407},{\"x\":48,\"y\":180,\"pressure\":0.5},{\"x\":54,\"y\":180,\"pressure\":0.588},{\"x\":60,\"y\":180,\"pressure\":0.669},{\"x\":65,\"y\":180,\"pressure\":0.743},{\"x\":71,\"y\":180,\"pressure\":0.809},{\"x\":77,\"y\":180,\"pressure\":0.866},{\"x\":82,\"y\":180,\"pressure\":0.914},{\"x\":88,\"y\":180,\"pressure\":0.951},{\"x\":94,\"y\":180,\"pressure\":0.978},{\"x\":99,\"y\":180,\"pressure\":0.995},{\"x\":105,\"y\":180,\"pressure\":1},{\"x\":111,\"y\":180,\"pressure\":0.995},{\"x\":116,\"y\":180,\"pressure\":0.978},{\"x\":122,\"y\":180,\"pressure\":0.951},{\"x\":128,\"y\":180,\"pressure\":0.914},{\"x\":133,\"y\":180,\"pressure\":0.866},{\"x\":139,\"y\":180,\"pressure\":0.809},{\"x\":145,\"y\":180,\"pressure\":0.743},{\"x\":150,\"y\":180,\"pressure\":0.669},{\"x\":156,\"y\":180,\"pressure\":0.588},{\"x\":162,\"y\":180,\"pressure\":0.5},{\"x\":167,\"y\":180,\"pressure\":0.407},{\"x\":173,\"y\":180,\"pressure\":0.309},{\"x\":179,\"y\":180,\"pressure\":0.208},{\"x\":184,\"y\":180,\"pressure\":0.105},{\"x\":190,\"y\":180,\"pressure\":0}],\"size\":18,\"seed\":165},{\"brushId\":\"round-soft\",\"color\":\"#8833aa\",\"points\":[{\"x\":20,\"y\":230,\"pressure\":0},{\"x\":26,\"y\":230,\"pressure\":0.105},{\"x\":31,\"y\":230,\"pressure\":0.208},{\"x\":37,\"y\":230,\"pressure\":0.309},{\"x\":43,\"y\":230,\"pressure\":0.407},{\"x\":48,\"y\":230,\"pressure\":0.5},{\"x\":54,\"y\":230,\"pressure\":0.588},{\"x\":60,\"y\":230,\"pressure\":0.669},{\"x\":65,\"y\":230,\"pressure\":0.743},{\"x\":71,\"y\":230,\"pressure\":0.809},{\"x\":77,\"y\":230,\"pressure\":0.866},{\"x\":82,\"y\":230,\"pressure\":0.914},{\"x\":88,\"y\":230,\"pressure\":0.951},{\"x\":94,\"y\":230,\"pressure\":0.978},{\"x\":99,\"y\":230,\"pressure\":0.995},{\"x\":105,\"y\":230,\"pressure\":1},{\"x\":111,\"y\":230,\"pressure\":0.995},{\"x\":116,\"y\":230,\"pressure\":0.978},{\"x\":122,\"y\":230,\"pressure\":0.951},{\"x\":128,\"y\":230,\"pressure\":0.914},{\"x\":133,\"y\":230,\"pressure\":0.866},{\"x\":139,\"y\":230,\"pressure\":0.809},{\"x\":145,\"y\":230,\"pressure\":0.743},{\"x\":150,\"y\":230,\"pressure\":0.669},{\"x\":156,\"y\":230,\"pressure\":0.588},{\"x\":162,\"y\":230,\"pressure\":0.5},{\"x\":167,\"y\":230,\"pressure\":0.407},{\"x\":173,\"y\":230,\"pressure\":0.309},{\"x\":179,\"y\":230,\"pressure\":0.208},{\"x\":184,\"y\":230,\"pressure\":0.105},{\"x\":190,\"y\":230,\"pressure\":0}],\"size\":18,\"seed\":220}]",
+        "brushes": "[]",
+        "seed": 42
+      }
+    },
+    {
+      "id": "l33",
+      "type": "painting:stroke",
+      "name": "Strokes: vortex field",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 646,
+        "y": 356,
+        "width": 210,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"round-soft\",\"color\":\"#aa3333\",\"points\":[{\"x\":20,\"y\":30,\"pressure\":0},{\"x\":26,\"y\":30,\"pressure\":0.105},{\"x\":31,\"y\":30,\"pressure\":0.208},{\"x\":37,\"y\":30,\"pressure\":0.309},{\"x\":43,\"y\":30,\"pressure\":0.407},{\"x\":48,\"y\":30,\"pressure\":0.5},{\"x\":54,\"y\":30,\"pressure\":0.588},{\"x\":60,\"y\":30,\"pressure\":0.669},{\"x\":65,\"y\":30,\"pressure\":0.743},{\"x\":71,\"y\":30,\"pressure\":0.809},{\"x\":77,\"y\":30,\"pressure\":0.866},{\"x\":82,\"y\":30,\"pressure\":0.914},{\"x\":88,\"y\":30,\"pressure\":0.951},{\"x\":94,\"y\":30,\"pressure\":0.978},{\"x\":99,\"y\":30,\"pressure\":0.995},{\"x\":105,\"y\":30,\"pressure\":1},{\"x\":111,\"y\":30,\"pressure\":0.995},{\"x\":116,\"y\":30,\"pressure\":0.978},{\"x\":122,\"y\":30,\"pressure\":0.951},{\"x\":128,\"y\":30,\"pressure\":0.914},{\"x\":133,\"y\":30,\"pressure\":0.866},{\"x\":139,\"y\":30,\"pressure\":0.809},{\"x\":145,\"y\":30,\"pressure\":0.743},{\"x\":150,\"y\":30,\"pressure\":0.669},{\"x\":156,\"y\":30,\"pressure\":0.588},{\"x\":162,\"y\":30,\"pressure\":0.5},{\"x\":167,\"y\":30,\"pressure\":0.407},{\"x\":173,\"y\":30,\"pressure\":0.309},{\"x\":179,\"y\":30,\"pressure\":0.208},{\"x\":184,\"y\":30,\"pressure\":0.105},{\"x\":190,\"y\":30,\"pressure\":0}],\"size\":18,\"seed\":0},{\"brushId\":\"round-soft\",\"color\":\"#3355aa\",\"points\":[{\"x\":20,\"y\":80,\"pressure\":0},{\"x\":26,\"y\":80,\"pressure\":0.105},{\"x\":31,\"y\":80,\"pressure\":0.208},{\"x\":37,\"y\":80,\"pressure\":0.309},{\"x\":43,\"y\":80,\"pressure\":0.407},{\"x\":48,\"y\":80,\"pressure\":0.5},{\"x\":54,\"y\":80,\"pressure\":0.588},{\"x\":60,\"y\":80,\"pressure\":0.669},{\"x\":65,\"y\":80,\"pressure\":0.743},{\"x\":71,\"y\":80,\"pressure\":0.809},{\"x\":77,\"y\":80,\"pressure\":0.866},{\"x\":82,\"y\":80,\"pressure\":0.914},{\"x\":88,\"y\":80,\"pressure\":0.951},{\"x\":94,\"y\":80,\"pressure\":0.978},{\"x\":99,\"y\":80,\"pressure\":0.995},{\"x\":105,\"y\":80,\"pressure\":1},{\"x\":111,\"y\":80,\"pressure\":0.995},{\"x\":116,\"y\":80,\"pressure\":0.978},{\"x\":122,\"y\":80,\"pressure\":0.951},{\"x\":128,\"y\":80,\"pressure\":0.914},{\"x\":133,\"y\":80,\"pressure\":0.866},{\"x\":139,\"y\":80,\"pressure\":0.809},{\"x\":145,\"y\":80,\"pressure\":0.743},{\"x\":150,\"y\":80,\"pressure\":0.669},{\"x\":156,\"y\":80,\"pressure\":0.588},{\"x\":162,\"y\":80,\"pressure\":0.5},{\"x\":167,\"y\":80,\"pressure\":0.407},{\"x\":173,\"y\":80,\"pressure\":0.309},{\"x\":179,\"y\":80,\"pressure\":0.208},{\"x\":184,\"y\":80,\"pressure\":0.105},{\"x\":190,\"y\":80,\"pressure\":0}],\"size\":18,\"seed\":55},{\"brushId\":\"round-soft\",\"color\":\"#33aa55\",\"points\":[{\"x\":20,\"y\":130,\"pressure\":0},{\"x\":26,\"y\":130,\"pressure\":0.105},{\"x\":31,\"y\":130,\"pressure\":0.208},{\"x\":37,\"y\":130,\"pressure\":0.309},{\"x\":43,\"y\":130,\"pressure\":0.407},{\"x\":48,\"y\":130,\"pressure\":0.5},{\"x\":54,\"y\":130,\"pressure\":0.588},{\"x\":60,\"y\":130,\"pressure\":0.669},{\"x\":65,\"y\":130,\"pressure\":0.743},{\"x\":71,\"y\":130,\"pressure\":0.809},{\"x\":77,\"y\":130,\"pressure\":0.866},{\"x\":82,\"y\":130,\"pressure\":0.914},{\"x\":88,\"y\":130,\"pressure\":0.951},{\"x\":94,\"y\":130,\"pressure\":0.978},{\"x\":99,\"y\":130,\"pressure\":0.995},{\"x\":105,\"y\":130,\"pressure\":1},{\"x\":111,\"y\":130,\"pressure\":0.995},{\"x\":116,\"y\":130,\"pressure\":0.978},{\"x\":122,\"y\":130,\"pressure\":0.951},{\"x\":128,\"y\":130,\"pressure\":0.914},{\"x\":133,\"y\":130,\"pressure\":0.866},{\"x\":139,\"y\":130,\"pressure\":0.809},{\"x\":145,\"y\":130,\"pressure\":0.743},{\"x\":150,\"y\":130,\"pressure\":0.669},{\"x\":156,\"y\":130,\"pressure\":0.588},{\"x\":162,\"y\":130,\"pressure\":0.5},{\"x\":167,\"y\":130,\"pressure\":0.407},{\"x\":173,\"y\":130,\"pressure\":0.309},{\"x\":179,\"y\":130,\"pressure\":0.208},{\"x\":184,\"y\":130,\"pressure\":0.105},{\"x\":190,\"y\":130,\"pressure\":0}],\"size\":18,\"seed\":110},{\"brushId\":\"round-soft\",\"color\":\"#aa8822\",\"points\":[{\"x\":20,\"y\":180,\"pressure\":0},{\"x\":26,\"y\":180,\"pressure\":0.105},{\"x\":31,\"y\":180,\"pressure\":0.208},{\"x\":37,\"y\":180,\"pressure\":0.309},{\"x\":43,\"y\":180,\"pressure\":0.407},{\"x\":48,\"y\":180,\"pressure\":0.5},{\"x\":54,\"y\":180,\"pressure\":0.588},{\"x\":60,\"y\":180,\"pressure\":0.669},{\"x\":65,\"y\":180,\"pressure\":0.743},{\"x\":71,\"y\":180,\"pressure\":0.809},{\"x\":77,\"y\":180,\"pressure\":0.866},{\"x\":82,\"y\":180,\"pressure\":0.914},{\"x\":88,\"y\":180,\"pressure\":0.951},{\"x\":94,\"y\":180,\"pressure\":0.978},{\"x\":99,\"y\":180,\"pressure\":0.995},{\"x\":105,\"y\":180,\"pressure\":1},{\"x\":111,\"y\":180,\"pressure\":0.995},{\"x\":116,\"y\":180,\"pressure\":0.978},{\"x\":122,\"y\":180,\"pressure\":0.951},{\"x\":128,\"y\":180,\"pressure\":0.914},{\"x\":133,\"y\":180,\"pressure\":0.866},{\"x\":139,\"y\":180,\"pressure\":0.809},{\"x\":145,\"y\":180,\"pressure\":0.743},{\"x\":150,\"y\":180,\"pressure\":0.669},{\"x\":156,\"y\":180,\"pressure\":0.588},{\"x\":162,\"y\":180,\"pressure\":0.5},{\"x\":167,\"y\":180,\"pressure\":0.407},{\"x\":173,\"y\":180,\"pressure\":0.309},{\"x\":179,\"y\":180,\"pressure\":0.208},{\"x\":184,\"y\":180,\"pressure\":0.105},{\"x\":190,\"y\":180,\"pressure\":0}],\"size\":18,\"seed\":165},{\"brushId\":\"round-soft\",\"color\":\"#8833aa\",\"points\":[{\"x\":20,\"y\":230,\"pressure\":0},{\"x\":26,\"y\":230,\"pressure\":0.105},{\"x\":31,\"y\":230,\"pressure\":0.208},{\"x\":37,\"y\":230,\"pressure\":0.309},{\"x\":43,\"y\":230,\"pressure\":0.407},{\"x\":48,\"y\":230,\"pressure\":0.5},{\"x\":54,\"y\":230,\"pressure\":0.588},{\"x\":60,\"y\":230,\"pressure\":0.669},{\"x\":65,\"y\":230,\"pressure\":0.743},{\"x\":71,\"y\":230,\"pressure\":0.809},{\"x\":77,\"y\":230,\"pressure\":0.866},{\"x\":82,\"y\":230,\"pressure\":0.914},{\"x\":88,\"y\":230,\"pressure\":0.951},{\"x\":94,\"y\":230,\"pressure\":0.978},{\"x\":99,\"y\":230,\"pressure\":0.995},{\"x\":105,\"y\":230,\"pressure\":1},{\"x\":111,\"y\":230,\"pressure\":0.995},{\"x\":116,\"y\":230,\"pressure\":0.978},{\"x\":122,\"y\":230,\"pressure\":0.951},{\"x\":128,\"y\":230,\"pressure\":0.914},{\"x\":133,\"y\":230,\"pressure\":0.866},{\"x\":139,\"y\":230,\"pressure\":0.809},{\"x\":145,\"y\":230,\"pressure\":0.743},{\"x\":150,\"y\":230,\"pressure\":0.669},{\"x\":156,\"y\":230,\"pressure\":0.588},{\"x\":162,\"y\":230,\"pressure\":0.5},{\"x\":167,\"y\":230,\"pressure\":0.407},{\"x\":173,\"y\":230,\"pressure\":0.309},{\"x\":179,\"y\":230,\"pressure\":0.208},{\"x\":184,\"y\":230,\"pressure\":0.105},{\"x\":190,\"y\":230,\"pressure\":0}],\"size\":18,\"seed\":220}]",
+        "brushes": "[]",
+        "field": "vortex:0.5:0.5:0.4",
+        "fieldCols": 24,
+        "fieldRows": 24,
+        "seed": 42
+      }
+    },
+    {
+      "id": "l34",
+      "type": "typography:text",
+      "name": "Title: textures",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 870,
+        "y": 329,
+        "width": 408,
+        "height": 14,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "Texture Tips",
+        "fontFamily": "sans-serif",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#333333",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l35",
+      "type": "typography:text",
+      "name": "Sub: textures",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 870,
+        "y": 343,
+        "width": 408,
+        "height": 12,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "chalk · sponge · bristle on paper",
+        "fontFamily": "sans-serif",
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "fontStyle": "normal",
+        "color": "#888888",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l36",
+      "type": "painting:stroke",
+      "name": "Strokes: textures",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 864,
+        "y": 356,
+        "width": 420,
+        "height": 280,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "strokes": "[{\"brushId\":\"texture-chalk\",\"color\":\"#443322\",\"points\":[{\"x\":30,\"y\":30,\"pressure\":0.3},{\"x\":39,\"y\":30,\"pressure\":0.355},{\"x\":48,\"y\":30,\"pressure\":0.41},{\"x\":57,\"y\":30,\"pressure\":0.463},{\"x\":66,\"y\":30,\"pressure\":0.516},{\"x\":75,\"y\":30,\"pressure\":0.568},{\"x\":84,\"y\":30,\"pressure\":0.618},{\"x\":93,\"y\":30,\"pressure\":0.666},{\"x\":102,\"y\":30,\"pressure\":0.711},{\"x\":111,\"y\":30,\"pressure\":0.755},{\"x\":120,\"y\":30,\"pressure\":0.795},{\"x\":129,\"y\":30,\"pressure\":0.832},{\"x\":138,\"y\":30,\"pressure\":0.866},{\"x\":147,\"y\":30,\"pressure\":0.897},{\"x\":156,\"y\":30,\"pressure\":0.924},{\"x\":165,\"y\":30,\"pressure\":0.947},{\"x\":174,\"y\":30,\"pressure\":0.966},{\"x\":183,\"y\":30,\"pressure\":0.981},{\"x\":192,\"y\":30,\"pressure\":0.991},{\"x\":201,\"y\":30,\"pressure\":0.998},{\"x\":210,\"y\":30,\"pressure\":1},{\"x\":219,\"y\":30,\"pressure\":0.998},{\"x\":228,\"y\":30,\"pressure\":0.991},{\"x\":237,\"y\":30,\"pressure\":0.981},{\"x\":246,\"y\":30,\"pressure\":0.966},{\"x\":255,\"y\":30,\"pressure\":0.947},{\"x\":264,\"y\":30,\"pressure\":0.924},{\"x\":273,\"y\":30,\"pressure\":0.897},{\"x\":282,\"y\":30,\"pressure\":0.866},{\"x\":291,\"y\":30,\"pressure\":0.832},{\"x\":300,\"y\":30,\"pressure\":0.795},{\"x\":309,\"y\":30,\"pressure\":0.755},{\"x\":318,\"y\":30,\"pressure\":0.711},{\"x\":327,\"y\":30,\"pressure\":0.666},{\"x\":336,\"y\":30,\"pressure\":0.618},{\"x\":345,\"y\":30,\"pressure\":0.568},{\"x\":354,\"y\":30,\"pressure\":0.516},{\"x\":363,\"y\":30,\"pressure\":0.463},{\"x\":372,\"y\":30,\"pressure\":0.41},{\"x\":381,\"y\":30,\"pressure\":0.355},{\"x\":390,\"y\":30,\"pressure\":0.3}],\"size\":20},{\"brushId\":\"texture-chalk\",\"color\":\"#443322\",\"points\":[{\"x\":30,\"y\":65,\"pressure\":0},{\"x\":42,\"y\":65,\"pressure\":0.105},{\"x\":54,\"y\":65,\"pressure\":0.208},{\"x\":66,\"y\":65,\"pressure\":0.309},{\"x\":78,\"y\":65,\"pressure\":0.407},{\"x\":90,\"y\":65,\"pressure\":0.5},{\"x\":102,\"y\":65,\"pressure\":0.588},{\"x\":114,\"y\":65,\"pressure\":0.669},{\"x\":126,\"y\":65,\"pressure\":0.743},{\"x\":138,\"y\":65,\"pressure\":0.809},{\"x\":150,\"y\":65,\"pressure\":0.866},{\"x\":162,\"y\":65,\"pressure\":0.914},{\"x\":174,\"y\":65,\"pressure\":0.951},{\"x\":186,\"y\":65,\"pressure\":0.978},{\"x\":198,\"y\":65,\"pressure\":0.995},{\"x\":210,\"y\":65,\"pressure\":1},{\"x\":222,\"y\":65,\"pressure\":0.995},{\"x\":234,\"y\":65,\"pressure\":0.978},{\"x\":246,\"y\":65,\"pressure\":0.951},{\"x\":258,\"y\":65,\"pressure\":0.914},{\"x\":270,\"y\":65,\"pressure\":0.866},{\"x\":282,\"y\":65,\"pressure\":0.809},{\"x\":294,\"y\":65,\"pressure\":0.743},{\"x\":306,\"y\":65,\"pressure\":0.669},{\"x\":318,\"y\":65,\"pressure\":0.588},{\"x\":330,\"y\":65,\"pressure\":0.5},{\"x\":342,\"y\":65,\"pressure\":0.407},{\"x\":354,\"y\":65,\"pressure\":0.309},{\"x\":366,\"y\":65,\"pressure\":0.208},{\"x\":378,\"y\":65,\"pressure\":0.105},{\"x\":390,\"y\":65,\"pressure\":0}],\"size\":14},{\"brushId\":\"texture-sponge\",\"color\":\"#336655\",\"points\":[{\"x\":30,\"y\":125,\"pressure\":0.3},{\"x\":39,\"y\":125,\"pressure\":0.355},{\"x\":48,\"y\":125,\"pressure\":0.41},{\"x\":57,\"y\":125,\"pressure\":0.463},{\"x\":66,\"y\":125,\"pressure\":0.516},{\"x\":75,\"y\":125,\"pressure\":0.568},{\"x\":84,\"y\":125,\"pressure\":0.618},{\"x\":93,\"y\":125,\"pressure\":0.666},{\"x\":102,\"y\":125,\"pressure\":0.711},{\"x\":111,\"y\":125,\"pressure\":0.755},{\"x\":120,\"y\":125,\"pressure\":0.795},{\"x\":129,\"y\":125,\"pressure\":0.832},{\"x\":138,\"y\":125,\"pressure\":0.866},{\"x\":147,\"y\":125,\"pressure\":0.897},{\"x\":156,\"y\":125,\"pressure\":0.924},{\"x\":165,\"y\":125,\"pressure\":0.947},{\"x\":174,\"y\":125,\"pressure\":0.966},{\"x\":183,\"y\":125,\"pressure\":0.981},{\"x\":192,\"y\":125,\"pressure\":0.991},{\"x\":201,\"y\":125,\"pressure\":0.998},{\"x\":210,\"y\":125,\"pressure\":1},{\"x\":219,\"y\":125,\"pressure\":0.998},{\"x\":228,\"y\":125,\"pressure\":0.991},{\"x\":237,\"y\":125,\"pressure\":0.981},{\"x\":246,\"y\":125,\"pressure\":0.966},{\"x\":255,\"y\":125,\"pressure\":0.947},{\"x\":264,\"y\":125,\"pressure\":0.924},{\"x\":273,\"y\":125,\"pressure\":0.897},{\"x\":282,\"y\":125,\"pressure\":0.866},{\"x\":291,\"y\":125,\"pressure\":0.832},{\"x\":300,\"y\":125,\"pressure\":0.795},{\"x\":309,\"y\":125,\"pressure\":0.755},{\"x\":318,\"y\":125,\"pressure\":0.711},{\"x\":327,\"y\":125,\"pressure\":0.666},{\"x\":336,\"y\":125,\"pressure\":0.618},{\"x\":345,\"y\":125,\"pressure\":0.568},{\"x\":354,\"y\":125,\"pressure\":0.516},{\"x\":363,\"y\":125,\"pressure\":0.463},{\"x\":372,\"y\":125,\"pressure\":0.41},{\"x\":381,\"y\":125,\"pressure\":0.355},{\"x\":390,\"y\":125,\"pressure\":0.3}],\"size\":20},{\"brushId\":\"texture-sponge\",\"color\":\"#336655\",\"points\":[{\"x\":30,\"y\":160,\"pressure\":0},{\"x\":42,\"y\":160,\"pressure\":0.105},{\"x\":54,\"y\":160,\"pressure\":0.208},{\"x\":66,\"y\":160,\"pressure\":0.309},{\"x\":78,\"y\":160,\"pressure\":0.407},{\"x\":90,\"y\":160,\"pressure\":0.5},{\"x\":102,\"y\":160,\"pressure\":0.588},{\"x\":114,\"y\":160,\"pressure\":0.669},{\"x\":126,\"y\":160,\"pressure\":0.743},{\"x\":138,\"y\":160,\"pressure\":0.809},{\"x\":150,\"y\":160,\"pressure\":0.866},{\"x\":162,\"y\":160,\"pressure\":0.914},{\"x\":174,\"y\":160,\"pressure\":0.951},{\"x\":186,\"y\":160,\"pressure\":0.978},{\"x\":198,\"y\":160,\"pressure\":0.995},{\"x\":210,\"y\":160,\"pressure\":1},{\"x\":222,\"y\":160,\"pressure\":0.995},{\"x\":234,\"y\":160,\"pressure\":0.978},{\"x\":246,\"y\":160,\"pressure\":0.951},{\"x\":258,\"y\":160,\"pressure\":0.914},{\"x\":270,\"y\":160,\"pressure\":0.866},{\"x\":282,\"y\":160,\"pressure\":0.809},{\"x\":294,\"y\":160,\"pressure\":0.743},{\"x\":306,\"y\":160,\"pressure\":0.669},{\"x\":318,\"y\":160,\"pressure\":0.588},{\"x\":330,\"y\":160,\"pressure\":0.5},{\"x\":342,\"y\":160,\"pressure\":0.407},{\"x\":354,\"y\":160,\"pressure\":0.309},{\"x\":366,\"y\":160,\"pressure\":0.208},{\"x\":378,\"y\":160,\"pressure\":0.105},{\"x\":390,\"y\":160,\"pressure\":0}],\"size\":14},{\"brushId\":\"texture-bristle\",\"color\":\"#553344\",\"points\":[{\"x\":30,\"y\":220,\"pressure\":0.3},{\"x\":39,\"y\":220,\"pressure\":0.355},{\"x\":48,\"y\":220,\"pressure\":0.41},{\"x\":57,\"y\":220,\"pressure\":0.463},{\"x\":66,\"y\":220,\"pressure\":0.516},{\"x\":75,\"y\":220,\"pressure\":0.568},{\"x\":84,\"y\":220,\"pressure\":0.618},{\"x\":93,\"y\":220,\"pressure\":0.666},{\"x\":102,\"y\":220,\"pressure\":0.711},{\"x\":111,\"y\":220,\"pressure\":0.755},{\"x\":120,\"y\":220,\"pressure\":0.795},{\"x\":129,\"y\":220,\"pressure\":0.832},{\"x\":138,\"y\":220,\"pressure\":0.866},{\"x\":147,\"y\":220,\"pressure\":0.897},{\"x\":156,\"y\":220,\"pressure\":0.924},{\"x\":165,\"y\":220,\"pressure\":0.947},{\"x\":174,\"y\":220,\"pressure\":0.966},{\"x\":183,\"y\":220,\"pressure\":0.981},{\"x\":192,\"y\":220,\"pressure\":0.991},{\"x\":201,\"y\":220,\"pressure\":0.998},{\"x\":210,\"y\":220,\"pressure\":1},{\"x\":219,\"y\":220,\"pressure\":0.998},{\"x\":228,\"y\":220,\"pressure\":0.991},{\"x\":237,\"y\":220,\"pressure\":0.981},{\"x\":246,\"y\":220,\"pressure\":0.966},{\"x\":255,\"y\":220,\"pressure\":0.947},{\"x\":264,\"y\":220,\"pressure\":0.924},{\"x\":273,\"y\":220,\"pressure\":0.897},{\"x\":282,\"y\":220,\"pressure\":0.866},{\"x\":291,\"y\":220,\"pressure\":0.832},{\"x\":300,\"y\":220,\"pressure\":0.795},{\"x\":309,\"y\":220,\"pressure\":0.755},{\"x\":318,\"y\":220,\"pressure\":0.711},{\"x\":327,\"y\":220,\"pressure\":0.666},{\"x\":336,\"y\":220,\"pressure\":0.618},{\"x\":345,\"y\":220,\"pressure\":0.568},{\"x\":354,\"y\":220,\"pressure\":0.516},{\"x\":363,\"y\":220,\"pressure\":0.463},{\"x\":372,\"y\":220,\"pressure\":0.41},{\"x\":381,\"y\":220,\"pressure\":0.355},{\"x\":390,\"y\":220,\"pressure\":0.3}],\"size\":20},{\"brushId\":\"texture-bristle\",\"color\":\"#553344\",\"points\":[{\"x\":30,\"y\":255,\"pressure\":0},{\"x\":42,\"y\":255,\"pressure\":0.105},{\"x\":54,\"y\":255,\"pressure\":0.208},{\"x\":66,\"y\":255,\"pressure\":0.309},{\"x\":78,\"y\":255,\"pressure\":0.407},{\"x\":90,\"y\":255,\"pressure\":0.5},{\"x\":102,\"y\":255,\"pressure\":0.588},{\"x\":114,\"y\":255,\"pressure\":0.669},{\"x\":126,\"y\":255,\"pressure\":0.743},{\"x\":138,\"y\":255,\"pressure\":0.809},{\"x\":150,\"y\":255,\"pressure\":0.866},{\"x\":162,\"y\":255,\"pressure\":0.914},{\"x\":174,\"y\":255,\"pressure\":0.951},{\"x\":186,\"y\":255,\"pressure\":0.978},{\"x\":198,\"y\":255,\"pressure\":0.995},{\"x\":210,\"y\":255,\"pressure\":1},{\"x\":222,\"y\":255,\"pressure\":0.995},{\"x\":234,\"y\":255,\"pressure\":0.978},{\"x\":246,\"y\":255,\"pressure\":0.951},{\"x\":258,\"y\":255,\"pressure\":0.914},{\"x\":270,\"y\":255,\"pressure\":0.866},{\"x\":282,\"y\":255,\"pressure\":0.809},{\"x\":294,\"y\":255,\"pressure\":0.743},{\"x\":306,\"y\":255,\"pressure\":0.669},{\"x\":318,\"y\":255,\"pressure\":0.588},{\"x\":330,\"y\":255,\"pressure\":0.5},{\"x\":342,\"y\":255,\"pressure\":0.407},{\"x\":354,\"y\":255,\"pressure\":0.309},{\"x\":366,\"y\":255,\"pressure\":0.208},{\"x\":378,\"y\":255,\"pressure\":0.105},{\"x\":390,\"y\":255,\"pressure\":0}],\"size\":14}]",
+        "brushes": "[]",
+        "seed": 42
+      }
+    },
+    {
+      "id": "l37",
+      "type": "typography:text",
+      "name": "Label: texture-chalk",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 868,
+        "y": 358,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-chalk",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#555555",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l38",
+      "type": "typography:text",
+      "name": "Label: texture-sponge",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 868,
+        "y": 453,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-sponge",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#555555",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    },
+    {
+      "id": "l39",
+      "type": "typography:text",
+      "name": "Label: texture-bristle",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "blendMode": "normal",
+      "transform": {
+        "x": 868,
+        "y": 548,
+        "width": 120,
+        "height": 10,
+        "rotation": 0,
+        "scaleX": 1,
+        "scaleY": 1,
+        "anchorX": 0,
+        "anchorY": 0
+      },
+      "properties": {
+        "text": "texture-bristle",
+        "fontFamily": "sans-serif",
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "fontStyle": "normal",
+        "color": "#555555",
+        "align": "left",
+        "baseline": "top",
+        "lineHeight": 1.2
+      }
+    }
+  ]
+}

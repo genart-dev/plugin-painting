@@ -3,5 +3,4 @@ dist/
 *.tsbuildinfo
 .npmrc
 *.DS_Store
-test-renders/
-render-test*.cjs
+test-renders/*.png

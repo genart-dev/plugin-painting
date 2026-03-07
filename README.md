@@ -180,38 +180,37 @@ applyVerticalMask(field, { centerY: 0.5, spread: 0.3 });
 
 ## Examples
 
-![Medium comparison](images/deliverable-6-medium-comparison.png)
+![Medium comparison](test-renders/medium-comparison.png)
 
-<table>
-<tr>
-<td><img src="images/solo-oil.png" width="220" /><br><em>Oil / Acrylic</em></td>
-<td><img src="images/solo-gouache.png" width="220" /><br><em>Gouache</em></td>
-<td><img src="images/solo-pastel.png" width="220" /><br><em>Pastel</em></td>
-</tr>
-</table>
+All 6 painting media on the same noise field. ([source](test-renders/medium-comparison.genart))
 
 ### Brush Stroke System
 
-![Brush stroke gallery](images/brush-stroke-gallery.png)
+![Brush stroke demos](test-renders/stroke-demos.png)
 
-<table>
-<tr>
-<td><img src="images/01-preset-catalog.png" width="280" /><br><em>Preset Catalog</em></td>
-<td><img src="images/02-pressure-dynamics.png" width="280" /><br><em>Pressure Dynamics</em></td>
-</tr>
-<tr>
-<td><img src="images/03-calligraphy.png" width="280" /><br><em>Calligraphy</em></td>
-<td><img src="images/04-splatter-abstract.png" width="280" /><br><em>Splatter Abstract</em></td>
-</tr>
-<tr>
-<td><img src="images/05-field-influence.png" width="280" /><br><em>Field Influence</em></td>
-<td><img src="images/06-texture-tips.png" width="280" /><br><em>Texture Tips</em></td>
-</tr>
-</table>
+Preset catalog, pressure dynamics, calligraphy, splatter, field influence, and texture tips. ([source](test-renders/stroke-demos.genart))
+
+![Brush preset gallery](test-renders/brush-preset-gallery.png)
+
+All 14 brush presets, pressure curves, texture brushes, and scatter/directional brushes. ([source](test-renders/brush-preset-gallery.genart))
 
 ### Fill Styles
 
-![Fill styles](images/deliverable-8-fill-styles.png)
+![Fill styles](test-renders/fill-styles.png)
+
+Hatch, crosshatch, stipple, scumble, contour strategies with shading functions and presets. ([source](test-renders/fill-styles.genart))
+
+## Render Tests
+
+Regenerate the test images with the [genart CLI](https://github.com/genart-dev/cli):
+
+```bash
+bash test-renders/render.sh
+# → test-renders/medium-comparison.png
+# → test-renders/fill-styles.png
+# → test-renders/brush-preset-gallery.png
+# → test-renders/stroke-demos.png
+```
 
 ## Related Packages
 
