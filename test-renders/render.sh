@@ -19,4 +19,16 @@ $CLI render "$DIR/brush-preset-gallery.genart" -o "$DIR/brush-preset-gallery.png
 echo "Rendering stroke-demos..."
 $CLI render "$DIR/stroke-demos.genart" -o "$DIR/stroke-demos.png"
 
+echo "Rendering algorithm-bridge..."
+$CLI render "$DIR/algorithm-bridge.genart" -o "$DIR/algorithm-bridge.png" --wait 2s
+
+echo "Rendering algorithm-bridge-multi-layer..."
+$CLI render "$DIR/algorithm-bridge-multi-layer.genart" -o "$DIR/algorithm-bridge-multi-layer.png" --wait 2s
+
+echo "Rendering algorithm-bridge-shading..."
+$CLI render "$DIR/algorithm-bridge-shading.genart" -o "$DIR/algorithm-bridge-shading.png" --wait 2s
+
+echo "Rendering algorithm-bridge-combined..."
+$CLI render "$DIR/algorithm-bridge-combined.genart" -o "$DIR/algorithm-bridge-combined.png" --wait 2s
+
 echo "Done. Output in $DIR/"

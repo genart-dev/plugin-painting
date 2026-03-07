@@ -200,6 +200,24 @@ All 14 brush presets, pressure curves, texture brushes, and scatter/directional 
 
 Hatch, crosshatch, stipple, scumble, contour strategies with shading functions and presets. ([source](test-renders/fill-styles.genart))
 
+### Algorithm Data Bridge (ADR 062)
+
+![Algorithm bridge — wave interference](test-renders/algorithm-bridge.png)
+
+Ink strokes driven by a wave interference flow field (3 point sources). ([source](test-renders/algorithm-bridge.genart))
+
+![Algorithm bridge — multi-layer](test-renders/algorithm-bridge-multi-layer.png)
+
+Three media (watercolor, charcoal, ink) sharing the same Lissajous-derived flow field. ([source](test-renders/algorithm-bridge-multi-layer.genart))
+
+![Algorithm bridge — shading](test-renders/algorithm-bridge-shading.png)
+
+Stipple + scumble density controlled by an Archimedean spiral distance field — custom shading impossible with built-in presets. ([source](test-renders/algorithm-bridge-shading.genart))
+
+![Algorithm bridge — combined](test-renders/algorithm-bridge-combined.png)
+
+Flow field + value map together: watercolor/ink follow ocean currents, stipple depth follows wave troughs. ([source](test-renders/algorithm-bridge-combined.genart))
+
 ## Render Tests
 
 Regenerate the test images with the [genart CLI](https://github.com/genart-dev/cli):
@@ -210,6 +228,10 @@ bash test-renders/render.sh
 # → test-renders/fill-styles.png
 # → test-renders/brush-preset-gallery.png
 # → test-renders/stroke-demos.png
+# → test-renders/algorithm-bridge.png
+# → test-renders/algorithm-bridge-multi-layer.png
+# → test-renders/algorithm-bridge-shading.png
+# → test-renders/algorithm-bridge-combined.png
 ```
 
 ## Related Packages
