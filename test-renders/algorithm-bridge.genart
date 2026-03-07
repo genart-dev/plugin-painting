@@ -1,0 +1,48 @@
+{
+  "genart": "1.3",
+  "id": "algorithm-bridge-render-test",
+  "title": "ADR 062: Algorithm Data Bridge — Wave Interference",
+  "created": "2026-03-07T00:00:00Z",
+  "modified": "2026-03-07T00:00:00Z",
+  "renderer": {
+    "type": "canvas2d"
+  },
+  "canvas": {
+    "width": 800,
+    "height": 800
+  },
+  "parameters": [],
+  "colors": [],
+  "state": {
+    "seed": 42,
+    "params": {},
+    "colorPalette": []
+  },
+  "dataChannels": [
+    { "name": "flowField", "type": "vector", "cols": 50, "rows": 50 },
+    { "name": "valueMap", "type": "scalar", "cols": 50, "rows": 50 }
+  ],
+  "algorithm": "function sketch(ctx, state) {\n  var W = ctx.canvas.width, H = ctx.canvas.height;\n  var cols = 50, rows = 50;\n  var TWO_PI = Math.PI * 2;\n\n  // Wave interference: 3 point sources create interference pattern\n  var sources = [\n    { x: 0.25, y: 0.3, freq: 12, phase: 0 },\n    { x: 0.75, y: 0.35, freq: 10, phase: 1.2 },\n    { x: 0.5, y: 0.8, freq: 14, phase: 2.5 }\n  ];\n\n  var flowField = new Float32Array(cols * rows * 3);\n  var valueMap = new Float32Array(cols * rows);\n\n  for (var row = 0; row < rows; row++) {\n    for (var col = 0; col < cols; col++) {\n      var nx = col / (cols - 1);\n      var ny = row / (rows - 1);\n      var eps = 0.005;\n\n      // Sum of waves from all sources\n      function waveAt(px, py) {\n        var sum = 0;\n        for (var i = 0; i < sources.length; i++) {\n          var s = sources[i];\n          var dx = px - s.x, dy = py - s.y;\n          var dist = Math.sqrt(dx * dx + dy * dy);\n          sum += Math.sin(dist * s.freq * TWO_PI + s.phase);\n        }\n        return sum / sources.length;\n      }\n\n      // Gradient of wave field (curl gives flow direction)\n      var dfdx = (waveAt(nx + eps, ny) - waveAt(nx - eps, ny)) / (2 * eps);\n      var dfdy = (waveAt(nx, ny + eps) - waveAt(nx, ny - eps)) / (2 * eps);\n      // Curl: perpendicular to gradient\n      var dx = dfdy;\n      var dy = -dfdx;\n      var mag = Math.sqrt(dx * dx + dy * dy);\n\n      var idx = (row * cols + col) * 3;\n      flowField[idx]     = mag > 0.01 ? dx / mag : 0;\n      flowField[idx + 1] = mag > 0.01 ? dy / mag : 0;\n      flowField[idx + 2] = Math.min(1, mag * 0.08);\n\n      // Value map: absolute wave amplitude (interference pattern)\n      var val = (waveAt(nx, ny) + 1) * 0.5;\n      valueMap[row * cols + col] = val;\n    }\n  }\n\n  if (typeof window !== 'undefined' && window.__genart_data) {\n    window.__genart_data.flowField = flowField;\n    window.__genart_data.valueMap = valueMap;\n    window.__genart_data.cols = cols;\n    window.__genart_data.rows = rows;\n  }\n\n  ctx.fillStyle = '#f5f0e8';\n  ctx.fillRect(0, 0, W, H);\n  return {};\n}\n",
+  "layers": [
+    {
+      "id": "ink-flow",
+      "type": "painting:ink",
+      "name": "Ink following wave interference curl",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.9,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "field": "algorithm:flowField",
+        "fieldCols": 50,
+        "fieldRows": 50,
+        "colors": "[\"#1a1a1a\",\"#2d1f1a\"]",
+        "weight": 1.8,
+        "taper": "both",
+        "style": "fluid",
+        "seed": 42
+      }
+    }
+  ]
+}

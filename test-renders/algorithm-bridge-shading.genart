@@ -1,0 +1,63 @@
+{
+  "genart": "1.3",
+  "id": "algorithm-bridge-shading",
+  "title": "ADR 062: Algorithm Shading — Spiral Distance Field",
+  "created": "2026-03-07T00:00:00Z",
+  "modified": "2026-03-07T00:00:00Z",
+  "renderer": {
+    "type": "canvas2d"
+  },
+  "canvas": {
+    "width": 800,
+    "height": 800
+  },
+  "parameters": [],
+  "colors": [],
+  "state": {
+    "seed": 55,
+    "params": {},
+    "colorPalette": []
+  },
+  "dataChannels": [
+    { "name": "valueMap", "type": "scalar", "cols": 80, "rows": 80 }
+  ],
+  "algorithm": "function sketch(ctx, state) {\n  var W = ctx.canvas.width, H = ctx.canvas.height;\n  var cols = 80, rows = 80;\n\n  // Compute distance from an Archimedean spiral.\n  // This creates concentric-but-unwinding bands that can't be replicated\n  // with built-in linear/radial/noise shading.\n  var valueMap = new Float32Array(cols * rows);\n  var spiralTurns = 3;\n  var maxR = 0.45;\n\n  // Sample points along the spiral for distance calculation\n  var spiralPts = [];\n  var numSamples = 800;\n  for (var i = 0; i < numSamples; i++) {\n    var t = i / numSamples;\n    var angle = t * spiralTurns * Math.PI * 2;\n    var r = t * maxR;\n    spiralPts.push({ x: 0.5 + r * Math.cos(angle), y: 0.5 + r * Math.sin(angle) });\n  }\n\n  for (var row = 0; row < rows; row++) {\n    for (var col = 0; col < cols; col++) {\n      var nx = col / (cols - 1);\n      var ny = row / (rows - 1);\n\n      // Find minimum distance to spiral\n      var minDist = 999;\n      for (var s = 0; s < spiralPts.length; s++) {\n        var dx = nx - spiralPts[s].x;\n        var dy = ny - spiralPts[s].y;\n        var d = Math.sqrt(dx * dx + dy * dy);\n        if (d < minDist) minDist = d;\n      }\n\n      // Map distance to shading: close to spiral = dark (1.0), far = light (0.0)\n      // Spacing between arms is ~maxR/spiralTurns = ~0.096\n      var armSpacing = maxR / spiralTurns;\n      // Sharp falloff: pow(x, 0.5) gives more contrast near spiral arms\n      var raw = 1.0 - Math.min(1, minDist / (armSpacing * 0.45));\n      var val = Math.pow(Math.max(0, raw), 0.5);\n      valueMap[row * cols + col] = Math.max(0, Math.min(1, val));\n    }\n  }\n\n  if (typeof window !== 'undefined' && window.__genart_data) {\n    window.__genart_data.valueMap = valueMap;\n    window.__genart_data.cols = cols;\n    window.__genart_data.rows = rows;\n  }\n\n  ctx.fillStyle = '#f5f0e8';\n  ctx.fillRect(0, 0, W, H);\n  return {};\n}\n",
+  "layers": [
+    {
+      "id": "stipple-spiral",
+      "type": "painting:fill",
+      "name": "Stipple — spiral distance controls density+weight",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.9,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":60,\"distribution\":\"poisson\"}",
+        "shading": "{\"type\":\"algorithm\",\"channel\":\"valueMap\",\"range\":[0.0,1.0]}",
+        "shadingAffects": "[\"density\",\"weight\"]",
+        "color": "#2a1a10",
+        "size": 3,
+        "seed": 55
+      }
+    },
+    {
+      "id": "scumble-spiral",
+      "type": "painting:fill",
+      "name": "Scumble — spiral distance controls density",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.6,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "strategy": "{\"type\":\"scumble\",\"density\":20,\"strokeLength\":15,\"curvature\":0.6}",
+        "shading": "{\"type\":\"algorithm\",\"channel\":\"valueMap\",\"range\":[0.0,1.0]}",
+        "shadingAffects": "[\"density\",\"weight\"]",
+        "color": "#5a3020",
+        "size": 2,
+        "seed": 56
+      }
+    }
+  ]
+}

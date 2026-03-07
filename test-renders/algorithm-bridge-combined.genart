@@ -1,0 +1,66 @@
+{
+  "genart": "1.3",
+  "id": "algorithm-bridge-combined",
+  "title": "ADR 062: Combined — Flow Field + Value Map (Schwere See Use Case)",
+  "created": "2026-03-07T00:00:00Z",
+  "modified": "2026-03-07T00:00:00Z",
+  "renderer": {
+    "type": "canvas2d"
+  },
+  "canvas": {
+    "width": 800,
+    "height": 800
+  },
+  "parameters": [],
+  "colors": [],
+  "state": {
+    "seed": 1337,
+    "params": {},
+    "colorPalette": []
+  },
+  "dataChannels": [
+    { "name": "flowField", "type": "vector", "cols": 60, "rows": 60 },
+    { "name": "valueMap", "type": "scalar", "cols": 60, "rows": 60 }
+  ],
+  "algorithm": "function sketch(ctx, state) {\n  var W = ctx.canvas.width, H = ctx.canvas.height;\n  var seed = state.seed || 1337;\n  var cols = 60, rows = 60;\n\n  // PRNG\n  function mulberry32(a) {\n    return function() {\n      a |= 0; a = a + 0x6D2B79F5 | 0;\n      var t = Math.imul(a ^ a >>> 15, 1 | a);\n      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;\n      return ((t ^ t >>> 14) >>> 0) / 4294967296;\n    };\n  }\n  var rng = mulberry32(seed);\n  var vals = new Float64Array(256);\n  for (var i = 0; i < 256; i++) vals[i] = rng();\n  function hash(x, y) {\n    return vals[((x * 374761393 + y * 668265263) & 0x7fffffff) % 256];\n  }\n  function vnoise(x, y) {\n    var ix = Math.floor(x), iy = Math.floor(y);\n    var fx = x - ix, fy = y - iy;\n    fx = fx * fx * (3 - 2 * fx);\n    fy = fy * fy * (3 - 2 * fy);\n    var a = hash(ix, iy), b = hash(ix + 1, iy);\n    var c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1);\n    return a + fx * (b - a) + fy * (c - a) + fx * fy * (a - b - c + d);\n  }\n  function fbm(x, y) {\n    var v = 0, amp = 1, freq = 1, mx = 0;\n    for (var o = 0; o < 5; o++) {\n      v += amp * vnoise(x * freq, y * freq);\n      mx += amp; amp *= 0.5; freq *= 2;\n    }\n    return v / mx;\n  }\n\n  // Combined: curl noise flow field + sinusoidal wave value map\n  // Like ocean waves: horizontal flow with vertical wave modulation\n  var flowField = new Float32Array(cols * rows * 3);\n  var valueMap = new Float32Array(cols * rows);\n  var eps = 0.1;\n  var scale = 2.5;\n\n  for (var row = 0; row < rows; row++) {\n    for (var col = 0; col < cols; col++) {\n      var nx = col / (cols - 1);\n      var ny = row / (rows - 1);\n      var sx = nx * scale;\n      var sy = ny * scale;\n\n      // Curl noise for flow direction\n      var dndx = (fbm(sx + eps, sy) - fbm(sx - eps, sy)) / (2 * eps);\n      var dndy = (fbm(sx, sy + eps) - fbm(sx, sy - eps)) / (2 * eps);\n      // Add strong horizontal bias (ocean current)\n      var dx = dndy + 0.5;\n      var dy = -dndx;\n      var mag = Math.sqrt(dx * dx + dy * dy);\n\n      var idx = (row * cols + col) * 3;\n      flowField[idx]     = mag > 0.001 ? dx / mag : 1;\n      flowField[idx + 1] = mag > 0.001 ? dy / mag : 0;\n      flowField[idx + 2] = Math.min(1, mag * 1.5);\n\n      // Value map: wave troughs with sharp ridges\n      // Domain-warped sine creates organic wave crests\n      var warp = fbm(sx * 0.8, sy * 0.6) * 2.5;\n      var wave = Math.sin(ny * 6 + nx * 1.5 + warp);\n      // Sharpen: square root of abs for crest/trough contrast\n      var sharp = Math.pow(Math.abs(wave), 0.4) * (wave > 0 ? 1 : -1);\n      var val = (sharp + 1) * 0.5;\n      // Power curve for more dark troughs, narrow bright crests\n      val = Math.pow(val, 1.8);\n      // Depth gradient: darker at bottom\n      val = val * (0.4 + 0.6 * (1 - ny * 0.7));\n      valueMap[row * cols + col] = Math.max(0, Math.min(1, val));\n    }\n  }\n\n  if (typeof window !== 'undefined' && window.__genart_data) {\n    window.__genart_data.flowField = flowField;\n    window.__genart_data.valueMap = valueMap;\n    window.__genart_data.cols = cols;\n    window.__genart_data.rows = rows;\n  }\n\n  ctx.fillStyle = '#f5f0e8';\n  ctx.fillRect(0, 0, W, H);\n  return {};\n}\n",
+  "layers": [
+    {
+      "id": "ink-currents",
+      "type": "painting:ink",
+      "name": "Ink strokes following ocean flow",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.85,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "field": "algorithm:flowField",
+        "fieldCols": 60,
+        "fieldRows": 60,
+        "colors": "[\"#1a2a3a\",\"#2d3d4d\"]",
+        "weight": 1.8,
+        "taper": "both",
+        "style": "fluid",
+        "seed": 42
+      }
+    },
+    {
+      "id": "stipple-depth",
+      "type": "painting:fill",
+      "name": "Stipple tonal depth from wave value map",
+      "visible": true,
+      "locked": false,
+      "opacity": 0.8,
+      "blendMode": "multiply",
+      "transform": { "x": 0, "y": 0, "width": 800, "height": 800, "rotation": 0, "scaleX": 1, "scaleY": 1, "anchorX": 0, "anchorY": 0 },
+      "properties": {
+        "strategy": "{\"type\":\"stipple\",\"density\":55,\"distribution\":\"poisson\"}",
+        "shading": "{\"type\":\"algorithm\",\"channel\":\"valueMap\",\"range\":[0.0,1.0]}",
+        "shadingAffects": "[\"density\",\"weight\"]",
+        "color": "#1a2a3a",
+        "size": 2.5,
+        "seed": 99
+      }
+    }
+  ]
+}
