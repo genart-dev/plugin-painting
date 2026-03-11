@@ -12,6 +12,8 @@ import { renderStrokes } from "./brush/stamp-renderer.js";
 import { BRUSH_PRESETS } from "./brush/presets.js";
 import { preloadTextureTip } from "./brush/tip-generator.js";
 import type { BrushDefinition, BrushStroke } from "./brush/types.js";
+import { parsePathSource, convertPathsToStrokes } from "./path-source.js";
+import { parseDepthMapping, applyDepthMapping } from "./depth-mapping.js";
 
 // ---------------------------------------------------------------------------
 // Property schema
@@ -31,6 +33,35 @@ const STROKE_PROPERTIES: LayerPropertySchema[] = [
     label: "Strokes",
     type: "string",
     default: "[]",
+    group: "stroke",
+  },
+  // Algorithm path source (ADR 072)
+  {
+    key: "pathSource",
+    label: "Path Source",
+    type: "string",
+    default: "",
+    group: "stroke",
+  },
+  {
+    key: "pathBrushId",
+    label: "Path Brush",
+    type: "string",
+    default: "flat",
+    group: "stroke",
+  },
+  {
+    key: "pathColor",
+    label: "Path Color",
+    type: "color",
+    default: "#000000",
+    group: "stroke",
+  },
+  {
+    key: "depthMapping",
+    label: "Depth Mapping",
+    type: "string",
+    default: "",
     group: "stroke",
   },
   // Optional vector field (for hybrid flow influence)
@@ -143,6 +174,10 @@ export const strokeLayerType: LayerTypeDefinition = {
   ): void {
     const brushesStr = (properties.brushes as string) ?? "[]";
     const strokesStr = (properties.strokes as string) ?? "[]";
+    const pathSourceStr = (properties.pathSource as string) ?? "";
+    const pathBrushId = (properties.pathBrushId as string) ?? "flat";
+    const pathColor = (properties.pathColor as string) ?? "#000000";
+    const depthMappingStr = (properties.depthMapping as string) ?? "";
     const fieldStr = (properties.field as string) ?? "";
     const cols = (properties.fieldCols as number) ?? 20;
     const rows = (properties.fieldRows as number) ?? 20;
@@ -169,12 +204,31 @@ export const strokeLayerType: LayerTypeDefinition = {
       if (b.id) brushMap[b.id] = b;
     }
 
-    // Parse strokes
+    // Parse strokes — from JSON property or algorithm path source (ADR 072)
     let strokes: BrushStroke[] = [];
-    try {
-      strokes = JSON.parse(strokesStr) as BrushStroke[];
-    } catch {
-      strokes = [];
+
+    if (pathSourceStr) {
+      // ADR 072: Convert algorithm stroke paths to brush strokes
+      const algorithmPaths = parsePathSource(pathSourceStr);
+      if (algorithmPaths.length > 0) {
+        const depthMap = parseDepthMapping(depthMappingStr);
+        if (depthMap) {
+          strokes = applyDepthMapping(algorithmPaths, depthMap, pathBrushId, pathColor, seed);
+        } else {
+          strokes = convertPathsToStrokes(algorithmPaths, {
+            brushId: pathBrushId,
+            color: pathColor,
+            size: undefined,
+            seed,
+          });
+        }
+      }
+    } else {
+      try {
+        strokes = JSON.parse(strokesStr) as BrushStroke[];
+      } catch {
+        strokes = [];
+      }
     }
 
     if (strokes.length === 0) return;
@@ -249,6 +303,21 @@ export const strokeLayerType: LayerTypeDefinition = {
         }
       } catch {
         errors.push({ property: "brushes", message: "Brushes must be valid JSON" });
+      }
+    }
+
+    // Validate depthMapping JSON
+    const depthMappingVal = properties.depthMapping;
+    if (typeof depthMappingVal === "string" && depthMappingVal !== "") {
+      try {
+        const parsed = JSON.parse(depthMappingVal);
+        if (typeof parsed !== "object" || parsed === null) {
+          errors.push({ property: "depthMapping", message: "Depth mapping must be a JSON object" });
+        } else if (typeof parsed.maxDepth !== "number") {
+          errors.push({ property: "depthMapping", message: "Depth mapping must have a numeric maxDepth" });
+        }
+      } catch {
+        errors.push({ property: "depthMapping", message: "Depth mapping must be valid JSON" });
       }
     }
 

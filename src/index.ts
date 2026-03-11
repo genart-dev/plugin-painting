@@ -66,6 +66,19 @@ export {
   clearTipCache,
 } from "./brush/tip-generator.js";
 export {
+  type AlgorithmPathPoint,
+  type AlgorithmStrokePath,
+  type PathConversionOptions,
+  parsePathSource,
+  convertPathsToStrokes,
+} from "./path-source.js";
+export {
+  type DepthRange,
+  type DepthMapping,
+  applyDepthMapping,
+  parseDepthMapping,
+} from "./depth-mapping.js";
+export {
   type VectorField,
   type VectorSample,
   noiseField,
