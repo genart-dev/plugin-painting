@@ -7,6 +7,8 @@ import { gouacheLayerType } from "./gouache.js";
 import { pastelLayerType } from "./pastel.js";
 import { strokeLayerType } from "./stroke-layer.js";
 import { fillLayerType } from "./fill-layer.js";
+import { markFieldLayerType } from "./mark-field.js";
+import { flowLinesLayerType } from "./flow-lines.js";
 import { paintingMcpTools } from "./painting-tools.js";
 
 const paintingPlugin: DesignPlugin = {
@@ -15,7 +17,7 @@ const paintingPlugin: DesignPlugin = {
   version: "0.1.0",
   tier: "pro",
   description:
-    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke, fill.",
+    "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke, fill, mark field, flow lines.",
 
   layerTypes: [
     watercolorLayerType,
@@ -26,6 +28,8 @@ const paintingPlugin: DesignPlugin = {
     pastelLayerType,
     strokeLayerType,
     fillLayerType,
+    markFieldLayerType,
+    flowLinesLayerType,
   ],
   tools: [],
   exportHandlers: [],
@@ -44,6 +48,8 @@ export { gouacheLayerType } from "./gouache.js";
 export { pastelLayerType } from "./pastel.js";
 export { strokeLayerType } from "./stroke-layer.js";
 export { fillLayerType } from "./fill-layer.js";
+export { markFieldLayerType } from "./mark-field.js";
+export { flowLinesLayerType } from "./flow-lines.js";
 export { paintingMcpTools } from "./painting-tools.js";
 export {
   type FillRegion,

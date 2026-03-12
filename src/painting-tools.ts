@@ -1311,6 +1311,224 @@ export const listFillPresetsTool: McpToolDefinition = {
 };
 
 // ---------------------------------------------------------------------------
+// add_mark_field — add a mark-field layer
+// ---------------------------------------------------------------------------
+
+import { markFieldLayerType } from "./mark-field.js";
+
+export const addMarkFieldTool: McpToolDefinition = {
+  name: "add_mark_field",
+  description:
+    "Add a mark-field layer — fills regions with short directional marks following a vector field. " +
+    "Creates hatching/cross-hatching effects that follow flow direction.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      density: {
+        type: "number",
+        description: "Number of marks (50–5000, default: 800).",
+      },
+      markLength: {
+        type: "number",
+        description: "Mark length in pixels (3–60, default: 15).",
+      },
+      markWeight: {
+        type: "number",
+        description: "Mark stroke weight (0.3–8, default: 1.2).",
+      },
+      color: {
+        type: "string",
+        description: 'Mark color as hex string (default: "#2a2a2a").',
+      },
+      opacity: {
+        type: "number",
+        description: "Layer opacity 0–1 (default: 0.7).",
+      },
+      field: {
+        type: "string",
+        description:
+          'Vector field shorthand. Shorthands: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", "radial:cx:cy:diverge|converge", "vortex:cx:cy:radius", "algorithm:channelName". Default: "noise:0:0.1:3".',
+      },
+      paintMode: {
+        type: "string",
+        enum: ["multiply", "normal", "screen"],
+        description: "Composite operation (default: multiply).",
+      },
+      depthScale: {
+        type: "boolean",
+        description: "Scale density + weight with vertical position (default: false).",
+      },
+      horizonY: {
+        type: "number",
+        description: "Horizon Y position 0–1 (default: 0.3).",
+      },
+      index: {
+        type: "number",
+        description: "Layer stack position (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const defaults = markFieldLayerType.createDefault();
+    const properties: Record<string, unknown> = { ...defaults };
+
+    // Apply overrides from input
+    for (const key of [
+      "density", "markLength", "markWeight", "color", "opacity",
+      "field", "paintMode", "depthScale", "horizonY",
+    ] as const) {
+      if (input[key] !== undefined) properties[key] = input[key];
+    }
+
+    // Validate field if provided
+    const fieldStr = properties.field as string;
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, properties.fieldCols as number, properties.fieldRows as number);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
+    }
+
+    const layer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:mark-field",
+      name: "Mark Field",
+      visible: true,
+      locked: false,
+      opacity: typeof input.opacity === "number" ? input.opacity : 0.7,
+      blendMode: "multiply",
+      transform: fullCanvasTransform(context),
+      properties: properties as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(layer, idx);
+    context.emitChange("layer-added");
+
+    return textResult(`Added Mark Field layer '${layer.id}' with ${properties.density} marks.`);
+  },
+};
+
+// ---------------------------------------------------------------------------
+// add_flow_lines — add a flow-lines layer
+// ---------------------------------------------------------------------------
+
+import { flowLinesLayerType } from "./flow-lines.js";
+
+export const addFlowLinesTool: McpToolDefinition = {
+  name: "add_flow_lines",
+  description:
+    "Add a flow-lines layer — thousands of streamlines traced through a vector field. " +
+    "Creates engraving, topographic, and Schwere See-style effects.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      lineCount: {
+        type: "number",
+        description: "Number of flow lines (100–10000, default: 2000).",
+      },
+      lineLength: {
+        type: "number",
+        description: "Max steps per line (20–500, default: 120).",
+      },
+      lineWeight: {
+        type: "number",
+        description: "Line stroke weight (0.2–5, default: 0.8).",
+      },
+      color: {
+        type: "string",
+        description: 'Line color as hex string (default: "#1a1a1a").',
+      },
+      opacity: {
+        type: "number",
+        description: "Layer opacity 0–1 (default: 0.6).",
+      },
+      field: {
+        type: "string",
+        description:
+          'Vector field shorthand. Shorthands: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", "radial:cx:cy:diverge|converge", "vortex:cx:cy:radius", "algorithm:channelName". Default: "noise:0:0.08:4".',
+      },
+      seedDistribution: {
+        type: "string",
+        enum: ["uniform", "grid-jittered", "poisson"],
+        description: "Seed point distribution (default: grid-jittered).",
+      },
+      taper: {
+        type: "string",
+        enum: ["none", "head", "tail", "both"],
+        description: "Line taper mode (default: tail).",
+      },
+      paintMode: {
+        type: "string",
+        enum: ["multiply", "normal", "screen"],
+        description: "Composite operation (default: multiply).",
+      },
+      depthScale: {
+        type: "boolean",
+        description: "Scale weight + opacity with vertical position (default: true).",
+      },
+      horizonY: {
+        type: "number",
+        description: "Horizon Y position 0–1 (default: 0.3).",
+      },
+      index: {
+        type: "number",
+        description: "Layer stack position (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const defaults = flowLinesLayerType.createDefault();
+    const properties: Record<string, unknown> = { ...defaults };
+
+    // Apply overrides from input
+    for (const key of [
+      "lineCount", "lineLength", "lineWeight", "color", "opacity",
+      "field", "seedDistribution", "taper", "paintMode", "depthScale", "horizonY",
+    ] as const) {
+      if (input[key] !== undefined) properties[key] = input[key];
+    }
+
+    // Validate field if provided
+    const fieldStr = properties.field as string;
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, properties.fieldCols as number, properties.fieldRows as number);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
+    }
+
+    const layer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:flow-lines",
+      name: "Flow Lines",
+      visible: true,
+      locked: false,
+      opacity: typeof input.opacity === "number" ? input.opacity : 0.6,
+      blendMode: "multiply",
+      transform: fullCanvasTransform(context),
+      properties: properties as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(layer, idx);
+    context.emitChange("layer-added");
+
+    return textResult(`Added Flow Lines layer '${layer.id}' with ${properties.lineCount} lines.`);
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
@@ -1326,4 +1544,6 @@ export const paintingMcpTools: McpToolDefinition[] = [
   fillRegionTool,
   updateFillTool,
   listFillPresetsTool,
+  addMarkFieldTool,
+  addFlowLinesTool,
 ];
