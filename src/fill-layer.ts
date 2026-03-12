@@ -200,9 +200,12 @@ function renderNativePaths(
 // Layer type definition
 // ---------------------------------------------------------------------------
 
+/** @deprecated Use `patterns:fill` from `@genart-dev/plugin-patterns` instead. */
+let _deprecationWarned = false;
+
 export const fillLayerType: LayerTypeDefinition = {
   typeId: "painting:fill",
-  displayName: "Fill",
+  displayName: "Fill (deprecated)",
   icon: "bucket",
   category: "draw",
   properties: FILL_PROPERTIES,
@@ -222,6 +225,13 @@ export const fillLayerType: LayerTypeDefinition = {
     bounds: LayerBounds,
     _resources: RenderResources,
   ): void {
+    if (!_deprecationWarned) {
+      _deprecationWarned = true;
+      console.warn(
+        "painting:fill is deprecated. Use patterns:fill from @genart-dev/plugin-patterns instead.",
+      );
+    }
+
     const w = Math.ceil(bounds.width);
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;

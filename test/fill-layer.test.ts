@@ -136,8 +136,8 @@ describe("fillLayerType", () => {
     expect(fillLayerType.category).toBe("draw");
   });
 
-  it("has displayName 'Fill'", () => {
-    expect(fillLayerType.displayName).toBe("Fill");
+  it("has displayName 'Fill (deprecated)'", () => {
+    expect(fillLayerType.displayName).toBe("Fill (deprecated)");
   });
 
   describe("createDefault", () => {
