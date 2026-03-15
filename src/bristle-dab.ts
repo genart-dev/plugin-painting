@@ -101,7 +101,7 @@ export const bristleDabLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-dab",
   displayName: "Bristle Dab",
   icon: "bristle-dab",
-  category: "paint",
+  category: "draw",
   properties: BRISTLE_DAB_PROPERTIES,
   propertyEditorId: "painting:bristle-dab-editor",
 

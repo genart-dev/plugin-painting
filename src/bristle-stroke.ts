@@ -99,7 +99,7 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-stroke",
   displayName: "Bristle Stroke",
   icon: "bristle-stroke",
-  category: "paint",
+  category: "draw",
   properties: BRISTLE_STROKE_PROPERTIES,
   propertyEditorId: "painting:bristle-stroke-editor",
 

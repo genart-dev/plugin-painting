@@ -105,3 +105,18 @@ export {
   applyVerticalMask,
 } from "./vector-field.js";
 export { renderDebugOverlay, type DebugMode } from "./debug-overlay.js";
+export {
+  type Vec2,
+  type BristleConfig,
+  lerp,
+  smoothstep,
+  clamp,
+  hexToRgb,
+  gaussianOffset,
+  taperProfile,
+  computePerpendiculars,
+  traceDabPath,
+  traceBrushPath,
+  renderBristleStroke,
+  defaultBristleConfig,
+} from "./shared/bristle.js";
