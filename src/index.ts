@@ -9,6 +9,8 @@ import { strokeLayerType } from "./stroke-layer.js";
 import { fillLayerType } from "./fill-layer.js";
 import { markFieldLayerType } from "./mark-field.js";
 import { flowLinesLayerType } from "./flow-lines.js";
+import { bristleDabLayerType } from "./bristle-dab.js";
+import { bristleStrokeLayerType } from "./bristle-stroke.js";
 import { paintingMcpTools } from "./painting-tools.js";
 
 const paintingPlugin: DesignPlugin = {
@@ -30,6 +32,8 @@ const paintingPlugin: DesignPlugin = {
     fillLayerType,
     markFieldLayerType,
     flowLinesLayerType,
+    bristleDabLayerType,
+    bristleStrokeLayerType,
   ],
   tools: [],
   exportHandlers: [],
@@ -50,6 +54,8 @@ export { strokeLayerType } from "./stroke-layer.js";
 export { fillLayerType } from "./fill-layer.js";
 export { markFieldLayerType } from "./mark-field.js";
 export { flowLinesLayerType } from "./flow-lines.js";
+export { bristleDabLayerType } from "./bristle-dab.js";
+export { bristleStrokeLayerType } from "./bristle-stroke.js";
 export { paintingMcpTools } from "./painting-tools.js";
 export {
   type FillRegion,

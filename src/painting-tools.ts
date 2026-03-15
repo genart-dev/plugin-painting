@@ -1419,6 +1419,8 @@ export const addMarkFieldTool: McpToolDefinition = {
 // ---------------------------------------------------------------------------
 
 import { flowLinesLayerType } from "./flow-lines.js";
+import { bristleDabLayerType } from "./bristle-dab.js";
+import { bristleStrokeLayerType } from "./bristle-stroke.js";
 
 export const addFlowLinesTool: McpToolDefinition = {
   name: "add_flow_lines",
@@ -1529,6 +1531,238 @@ export const addFlowLinesTool: McpToolDefinition = {
 };
 
 // ---------------------------------------------------------------------------
+// add_bristle_dab — add a bristle-dab layer
+// ---------------------------------------------------------------------------
+
+export const addBristleDabTool: McpToolDefinition = {
+  name: "add_bristle_dab",
+  description:
+    "Add a bristle-dab layer — impressionist short dabs grid-placed over a vector field. " +
+    "Creates stippled, hatched, and painterly impasto effects.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      field: {
+        type: "string",
+        description:
+          'Vector field shorthand: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", ' +
+          '"radial:cx:cy:diverge|converge", "vortex:cx:cy:radius", "algorithm:channelName". Default: "noise:0:0.1:3".',
+      },
+      colors: {
+        type: "string",
+        description: 'JSON array of hex color strings (default: ["#3a2a1a","#6b4c2a"]).',
+      },
+      brushWidth: {
+        type: "number",
+        description: "Brush width in pixels (4–120, default: 24).",
+      },
+      bristleCount: {
+        type: "number",
+        description: "Number of bristles per dab (4–40, default: 12).",
+      },
+      dabLength: {
+        type: "number",
+        description: "Length of each dab in pixels (4–100, default: 20).",
+      },
+      overlapDensity: {
+        type: "number",
+        description: "Grid density relative to brush width — higher = more overlap (0.1–2.0, default: 0.6).",
+      },
+      colorMode: {
+        type: "string",
+        enum: ["single","lateral","along","loaded","random","split","streaked","rainbow","complementary","analogous","temperature","loaded-knife"],
+        description: "Bristle color distribution mode (default: single).",
+      },
+      texture: {
+        type: "string",
+        enum: ["smooth","dry","rough","stipple","feathered","impasto"],
+        description: "Surface texture preset (default: smooth).",
+      },
+      taper: {
+        type: "string",
+        enum: ["pointed","blunt","chisel"],
+        description: "Brush tip taper style (default: pointed).",
+      },
+      paintMode: {
+        type: "string",
+        enum: ["multiply","normal","screen"],
+        description: "Composite operation (default: normal).",
+      },
+      opacity: {
+        type: "number",
+        description: "Layer opacity 0–1 (default: 0.65).",
+      },
+      seed: {
+        type: "number",
+        description: "Random seed for reproducible output (default: 0).",
+      },
+      index: {
+        type: "number",
+        description: "Layer stack position (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const defaults = bristleDabLayerType.createDefault();
+    const properties: Record<string, unknown> = { ...defaults };
+
+    for (const key of [
+      "field", "colors", "brushWidth", "bristleCount", "dabLength",
+      "overlapDensity", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
+    ] as const) {
+      if (input[key] !== undefined) properties[key] = input[key];
+    }
+
+    const fieldStr = properties.field as string;
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, properties.fieldCols as number, properties.fieldRows as number);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
+    }
+
+    const layer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:bristle-dab",
+      name: "Bristle Dab",
+      visible: true,
+      locked: false,
+      opacity: typeof input.opacity === "number" ? input.opacity : 0.65,
+      blendMode: "normal",
+      transform: fullCanvasTransform(context),
+      properties: properties as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(layer, idx);
+    context.emitChange("layer-added");
+
+    return textResult(`Added Bristle Dab layer '${layer.id}'.`);
+  },
+};
+
+// ---------------------------------------------------------------------------
+// add_bristle_stroke — add a bristle-stroke layer
+// ---------------------------------------------------------------------------
+
+export const addBristleStrokeTool: McpToolDefinition = {
+  name: "add_bristle_stroke",
+  description:
+    "Add a bristle-stroke layer — oil-paint long strokes following a vector field. " +
+    "Creates expressive brushed paint and impasto effects.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      field: {
+        type: "string",
+        description:
+          'Vector field shorthand: "noise:seed:scale:octaves", "linear:angleDeg:magnitude", ' +
+          '"radial:cx:cy:diverge|converge", "vortex:cx:cy:radius", "algorithm:channelName". Default: "noise:0:0.08:4".',
+      },
+      colors: {
+        type: "string",
+        description: 'JSON array of hex color strings (default: ["#2a1a0a","#5c3a1a"]).',
+      },
+      brushWidth: {
+        type: "number",
+        description: "Brush width in pixels (4–100, default: 20).",
+      },
+      bristleCount: {
+        type: "number",
+        description: "Number of bristles per stroke (4–40, default: 10).",
+      },
+      strokeSteps: {
+        type: "number",
+        description: "Steps along each stroke path (10–200, default: 40).",
+      },
+      strokeCount: {
+        type: "number",
+        description: "Approximate number of strokes to place (20–2000, default: 300).",
+      },
+      colorMode: {
+        type: "string",
+        enum: ["single","lateral","along","loaded","random","split","streaked","rainbow","complementary","analogous","temperature","loaded-knife"],
+        description: "Bristle color distribution mode (default: single).",
+      },
+      texture: {
+        type: "string",
+        enum: ["smooth","dry","rough","stipple","feathered","impasto"],
+        description: "Surface texture preset (default: smooth).",
+      },
+      taper: {
+        type: "string",
+        enum: ["pointed","blunt","chisel"],
+        description: "Brush tip taper style (default: pointed).",
+      },
+      paintMode: {
+        type: "string",
+        enum: ["multiply","normal","screen"],
+        description: "Composite operation (default: normal).",
+      },
+      opacity: {
+        type: "number",
+        description: "Layer opacity 0–1 (default: 0.5).",
+      },
+      seed: {
+        type: "number",
+        description: "Random seed for reproducible output (default: 0).",
+      },
+      index: {
+        type: "number",
+        description: "Layer stack position (default: top).",
+      },
+    },
+  } satisfies JsonSchema,
+
+  async handler(
+    input: Record<string, unknown>,
+    context: McpToolContext,
+  ): Promise<McpToolResult> {
+    const defaults = bristleStrokeLayerType.createDefault();
+    const properties: Record<string, unknown> = { ...defaults };
+
+    for (const key of [
+      "field", "colors", "brushWidth", "bristleCount", "strokeSteps",
+      "strokeCount", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
+    ] as const) {
+      if (input[key] !== undefined) properties[key] = input[key];
+    }
+
+    const fieldStr = properties.field as string;
+    if (!fieldStr.startsWith("algorithm:")) {
+      try {
+        parseField(fieldStr, properties.fieldCols as number, properties.fieldRows as number);
+      } catch {
+        return errorResult(`Invalid field specification: "${fieldStr}"`);
+      }
+    }
+
+    const layer: DesignLayer = {
+      id: generateLayerId(),
+      type: "painting:bristle-stroke",
+      name: "Bristle Stroke",
+      visible: true,
+      locked: false,
+      opacity: typeof input.opacity === "number" ? input.opacity : 0.5,
+      blendMode: "normal",
+      transform: fullCanvasTransform(context),
+      properties: properties as Record<string, string | number | boolean | null>,
+    };
+
+    const idx = typeof input.index === "number" ? input.index : undefined;
+    context.layers.add(layer, idx);
+    context.emitChange("layer-added");
+
+    return textResult(`Added Bristle Stroke layer '${layer.id}'.`);
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Exports
 // ---------------------------------------------------------------------------
 
@@ -1546,4 +1780,6 @@ export const paintingMcpTools: McpToolDefinition[] = [
   listFillPresetsTool,
   addMarkFieldTool,
   addFlowLinesTool,
+  addBristleDabTool,
+  addBristleStrokeTool,
 ];
