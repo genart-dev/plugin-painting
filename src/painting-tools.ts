@@ -1624,6 +1624,14 @@ export const addBristleDabTool: McpToolDefinition = {
         type: "number",
         description: "Horizon Y position 0–1 (default: 0.5).",
       },
+      wetness: {
+        type: "number",
+        description: "Paint wetness 0–1 for wet-on-wet mixing (default: 0 = dry).",
+      },
+      mixStrength: {
+        type: "number",
+        description: "Wet mixing strength 0–1 (default: 0.5).",
+      },
       index: {
         type: "number",
         description: "Layer stack position (default: top).",
@@ -1642,7 +1650,7 @@ export const addBristleDabTool: McpToolDefinition = {
       "field", "colors", "brushWidth", "bristleCount", "dabLength",
       "overlapDensity", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
       "lightAngle", "lightElevation", "shadowDepth", "highlightStrength", "shadowTemperature",
-      "atmosphereStrength", "atmosphereHorizon",
+      "atmosphereStrength", "atmosphereHorizon", "wetness", "mixStrength",
     ] as const) {
       if (input[key] !== undefined) properties[key] = input[key];
     }
@@ -1770,6 +1778,14 @@ export const addBristleStrokeTool: McpToolDefinition = {
         type: "number",
         description: "Horizon Y position 0–1 (default: 0.5).",
       },
+      wetness: {
+        type: "number",
+        description: "Paint wetness 0–1 for wet-on-wet mixing (default: 0 = dry).",
+      },
+      mixStrength: {
+        type: "number",
+        description: "Wet mixing strength 0–1 (default: 0.5).",
+      },
       index: {
         type: "number",
         description: "Layer stack position (default: top).",
@@ -1788,7 +1804,7 @@ export const addBristleStrokeTool: McpToolDefinition = {
       "field", "colors", "brushWidth", "bristleCount", "strokeSteps",
       "strokeCount", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
       "lightAngle", "lightElevation", "shadowDepth", "highlightStrength", "shadowTemperature",
-      "atmosphereStrength", "atmosphereHorizon",
+      "atmosphereStrength", "atmosphereHorizon", "wetness", "mixStrength",
     ] as const) {
       if (input[key] !== undefined) properties[key] = input[key];
     }

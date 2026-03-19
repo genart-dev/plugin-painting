@@ -158,3 +158,8 @@ export {
   DEFAULT_VALUE_MAP,
   createValueMap,
 } from "./shared/value-map.js";
+export {
+  WetBuffer,
+  type WetMixConfig,
+  DEFAULT_WET_MIX,
+} from "./shared/wet-buffer.js";

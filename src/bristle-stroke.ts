@@ -17,6 +17,7 @@ import {
 } from "./shared/bristle.js";
 import { degreesToLightAngle, type LightSource } from "./shared/light-source.js";
 import { applyAtmosphere, atmosphereDensityScale, type AtmosphereConfig } from "./shared/atmosphere.js";
+import { WetBuffer, type WetMixConfig } from "./shared/wet-buffer.js";
 
 // ---------------------------------------------------------------------------
 // Property schema
@@ -91,6 +92,10 @@ const BRISTLE_STROKE_PROPERTIES: LayerPropertySchema[] = [
   { key: "atmosphereTemp",     label: "Atmosphere Temperature", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "atmosphere" },
   { key: "atmosphereChroma",   label: "Atmosphere Chroma",    type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "atmosphere" },
   { key: "atmosphereDensity",  label: "Atmosphere Density",   type: "number", default: 0.3, min: 0, max: 1, step: 0.05, group: "atmosphere" },
+  { key: "wetness",      label: "Wetness",        type: "number", default: 0, min: 0, max: 1, step: 0.05, group: "wet" },
+  { key: "mixStrength",  label: "Mix Strength",   type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "wet" },
+  { key: "dryingRate",   label: "Drying Rate",    type: "number", default: 0.3, min: 0, max: 1, step: 0.05, group: "wet" },
+  { key: "muddyLimit",   label: "Muddy Limit",    type: "number", default: 0.7, min: 0, max: 1, step: 0.05, group: "wet" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -176,9 +181,28 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
       densityFalloff: atmoDensity * atmoStrength,
     };
 
+    const wetnessProp  = (properties.wetness as number)     ?? 0;
+    const mixStrProp   = (properties.mixStrength as number) ?? 0.5;
+    const dryingProp   = (properties.dryingRate as number)  ?? 0.3;
+    const muddyProp    = (properties.muddyLimit as number)  ?? 0.7;
+    const useWet = wetnessProp > 0;
+
+    const wetConfig: WetMixConfig = {
+      wetness: wetnessProp,
+      mixStrength: mixStrProp,
+      dryingRate: dryingProp,
+      muddyLimit: muddyProp,
+    };
+
     const w = Math.ceil(bounds.width);
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
+
+    let wetBuffer: WetBuffer | null = null;
+    if (useWet) {
+      wetBuffer = new WetBuffer(w, h);
+      wetBuffer.snapshot(ctx);
+    }
 
     const field = parseField(fieldStr, cols, rows);
     const rng   = mulberry32(seed);
@@ -227,17 +251,18 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
         const sx = (sgc + 0.5) * strokeSpacing + (rng() - 0.5) * strokeSpacing * 0.5;
         const sy = (sgr + 0.5) * strokeSpacing + (rng() - 0.5) * strokeSpacing * 0.5;
         const ny = Math.max(0, Math.min(1, sy / h));
+        let strokePalette = palette;
         if (useAtmosphere) {
           const densityScale = atmosphereDensityScale(ny, atmosphere);
           if (densityScale < 1 && rng() > densityScale) continue;
-          const atmoPalette = palette.map(c => applyAtmosphere(c, ny, atmosphere));
-          const atmoCfg = { ...cfg, palette: atmoPalette };
-          const path = traceBrushPath(flowFn, sx, sy, strokeSteps, 2.5, angleOffset, angleSpread, flowInfluence, rng);
-          renderBristleStroke(ctx, path, atmoCfg, rng);
-        } else {
-          const path = traceBrushPath(flowFn, sx, sy, strokeSteps, 2.5, angleOffset, angleSpread, flowInfluence, rng);
-          renderBristleStroke(ctx, path, cfg, rng);
+          strokePalette = strokePalette.map(c => applyAtmosphere(c, ny, atmosphere));
         }
+        if (wetBuffer) {
+          strokePalette = strokePalette.map(c => wetBuffer!.mixWithUnderlying(c, sx, sy, wetConfig));
+        }
+        const strokeCfg = strokePalette !== palette ? { ...cfg, palette: strokePalette } : cfg;
+        const path = traceBrushPath(flowFn, sx, sy, strokeSteps, 2.5, angleOffset, angleSpread, flowInfluence, rng);
+        renderBristleStroke(ctx, path, strokeCfg, rng);
       }
     }
 
