@@ -74,8 +74,8 @@ describe("bristleStrokeLayerType", () => {
     expect(bristleStrokeLayerType.displayName).toBe("Bristle Stroke");
   });
 
-  it("has category 'paint'", () => {
-    expect(bristleStrokeLayerType.category).toBe("paint");
+  it("has category 'draw'", () => {
+    expect(bristleStrokeLayerType.category).toBe("draw");
   });
 
   describe("createDefault", () => {

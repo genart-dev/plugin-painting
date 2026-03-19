@@ -74,8 +74,8 @@ describe("bristleDabLayerType", () => {
     expect(bristleDabLayerType.displayName).toBe("Bristle Dab");
   });
 
-  it("has category 'paint'", () => {
-    expect(bristleDabLayerType.category).toBe("paint");
+  it("has category 'draw'", () => {
+    expect(bristleDabLayerType.category).toBe("draw");
   });
 
   describe("createDefault", () => {
