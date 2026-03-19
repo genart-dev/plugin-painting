@@ -3,6 +3,13 @@
  * TypeScript port of the bristle-stroke-renderer + brush-stroke-paths components.
  */
 
+import { type RGB, mixPigment, shiftShadow, shiftHighlight, jitterOklab } from "./color-mix.js";
+import {
+  type LightSource, DEFAULT_LIGHT,
+  computeShadowOffset, computeHighlightOffset,
+  computeShadowColor, computeHighlightColor,
+} from "./light-source.js";
+
 export interface Vec2 { x: number; y: number }
 
 export interface BristleConfig {
@@ -18,6 +25,10 @@ export interface BristleConfig {
   palette: [number, number, number][];
   mixAmount: number;
   colorJitter: number;
+  /** Color mixing space: "oklab" (default, perceptual) or "rgb" (legacy). */
+  colorSpace: "oklab" | "rgb";
+  /** Optional directional light source. When set, drives shadow/highlight direction and color. */
+  light?: LightSource;
   shadowAlpha: number;
   shadowWidthScale: number;
   highlightAlpha: number;
@@ -164,8 +175,44 @@ export function renderBristleStroke(
   const useChunks = texture !== "smooth";
   const TAPER_PASSES = strokeSteps < 20 ? 3 : 4;
 
-  const shOx = -1, shOy = -1;
-  const hiOx = 0.4, hiOy = 0.4;
+  const useOklab = cfg.colorSpace !== "rgb";
+  const light = cfg.light;
+  const isImpasto = texture === "impasto";
+
+  // Light-driven offsets are pre-computed as absolute pixels.
+  // Legacy hardcoded offsets are relative and get multiplied by bwBase*0.7 per bristle.
+  const useLightOffsets = !!light;
+  let lightShOx = 0, lightShOy = 0, lightHiOx = 0, lightHiOy = 0;
+  if (light) {
+    const shOff = computeShadowOffset(light, brushW, isImpasto);
+    const hiOff = computeHighlightOffset(light, brushW, isImpasto);
+    lightShOx = shOff.x; lightShOy = shOff.y;
+    lightHiOx = hiOff.x; lightHiOy = hiOff.y;
+  }
+
+  /** Mix two palette colors at ratio t, using Oklab or RGB based on colorSpace. */
+  function mixColors(a: RGB, b: RGB, t: number): RGB {
+    if (useOklab) return mixPigment(a, b, t);
+    return [
+      Math.round(lerp(a[0], b[0], t)),
+      Math.round(lerp(a[1], b[1], t)),
+      Math.round(lerp(a[2], b[2], t)),
+    ];
+  }
+
+  /** Compute shadow color from base RGB. */
+  function shadowColor(rgb: RGB): RGB {
+    if (light) return computeShadowColor(rgb, light, isImpasto);
+    if (useOklab) return shiftShadow(rgb, 0.3);
+    return [Math.max(0, rgb[0] - 50), Math.max(0, rgb[1] - 45), Math.max(0, rgb[2] - 35)];
+  }
+
+  /** Compute highlight color from base RGB. */
+  function highlightColor(rgb: RGB): RGB {
+    if (light) return computeHighlightColor(rgb, light, isImpasto);
+    if (useOklab) return shiftHighlight(rgb, 0.25);
+    return [Math.min(255, rgb[0] + 40), Math.min(255, rgb[1] + 35), Math.min(255, rgb[2] + 20)];
+  }
 
   for (let bi = 0; bi < bristleN; bi++) {
     if (rng() < bristleSkipChance) continue;
@@ -174,55 +221,37 @@ export function renderBristleStroke(
     const lateralT = (lateralBase + 1) * 0.5;
 
     // Color selection
-    let rgb: [number, number, number] = [128, 128, 128];
+    let rgb: RGB = [128, 128, 128];
     if (palette.length === 0) {
       rgb = [128, 128, 128];
     } else if (colorMode === "single" || palette.length === 1) {
-      rgb = [...palette[0]!] as [number, number, number];
+      rgb = [...palette[0]!] as RGB;
     } else if (colorMode === "split") {
-      rgb = [...palette[lateralT < 0.5 ? 0 : 1]!] as [number, number, number];
+      rgb = [...palette[lateralT < 0.5 ? 0 : 1]!] as RGB;
     } else if (colorMode === "streaked") {
-      const si = bi % 3 === 0 ? 0 : Math.min(1, palette.length - 1);
       const sm = bi % 3 === 2 ? 0.5 : (bi % 3 === 0 ? 0 : 1);
-      rgb = [
-        Math.round(lerp(palette[0]![0], palette[Math.min(1, palette.length - 1)]![0], sm)),
-        Math.round(lerp(palette[0]![1], palette[Math.min(1, palette.length - 1)]![1], sm)),
-        Math.round(lerp(palette[0]![2], palette[Math.min(1, palette.length - 1)]![2], sm)),
-      ];
-      void si; // streaked uses sm directly
+      rgb = mixColors(palette[0]!, palette[Math.min(1, palette.length - 1)]!, sm);
     } else if (colorMode === "rainbow" || colorMode === "analogous") {
       const cIdx = lateralT * (palette.length - 1);
       const ci0 = Math.floor(cIdx), ci1 = Math.min(ci0 + 1, palette.length - 1);
       const ct = cIdx - ci0;
-      rgb = [
-        Math.round(lerp(palette[ci0]![0], palette[ci1]![0], ct)),
-        Math.round(lerp(palette[ci0]![1], palette[ci1]![1], ct)),
-        Math.round(lerp(palette[ci0]![2], palette[ci1]![2], ct)),
-      ];
+      rgb = mixColors(palette[ci0]!, palette[ci1]!, ct);
     } else if (colorMode === "complementary") {
       const st = smoothstep(0.35, 0.65, lateralT);
-      rgb = [
-        Math.round(lerp(palette[0]![0], palette[1]![0], st)),
-        Math.round(lerp(palette[0]![1], palette[1]![1], st)),
-        Math.round(lerp(palette[0]![2], palette[1]![2], st)),
-      ];
+      rgb = mixColors(palette[0]!, palette[1]!, st);
     } else if (colorMode === "loaded-knife") {
       const bw = 1 / palette.length;
       const bIdx = Math.min(Math.floor(lateralT / bw), palette.length - 1);
       const bPos = (lateralT % bw) / bw;
       const nb = Math.min(bIdx + 1, palette.length - 1);
       const sm = smoothstep(0.7, 1.0, bPos) * mixAmount;
-      rgb = [
-        Math.round(lerp(palette[bIdx]![0], palette[nb]![0], sm)),
-        Math.round(lerp(palette[bIdx]![1], palette[nb]![1], sm)),
-        Math.round(lerp(palette[bIdx]![2], palette[nb]![2], sm)),
-      ];
+      rgb = mixColors(palette[bIdx]!, palette[nb]!, sm);
     } else if (colorMode === "temperature") {
       const bIdx = Math.min(Math.floor(lateralT * (palette.length - 1)), palette.length - 1);
-      rgb = [...palette[bIdx]!] as [number, number, number];
+      rgb = [...palette[bIdx]!] as RGB;
     } else {
       // lateral, random, along, loaded — resolved below via mixAmount blending
-      rgb = [...palette[bi % palette.length]!] as [number, number, number];
+      rgb = [...palette[bi % palette.length]!] as RGB;
     }
 
     // MixAmount blending for 2-colour modes
@@ -233,27 +262,23 @@ export function renderBristleStroke(
       let mixT = lateralT;
       if (colorMode === "random") mixT = rng();
       mixT = lerp(mixT, 0.5, 1 - mixAmount);
-      rgb = [
-        Math.round(lerp(palette[0]![0], palette[1]![0], mixT)),
-        Math.round(lerp(palette[0]![1], palette[1]![1], mixT)),
-        Math.round(lerp(palette[0]![2], palette[1]![2], mixT)),
-      ];
+      rgb = mixColors(palette[0]!, palette[1]!, mixT);
     }
 
     // Per-bristle jitter
     if (colorJit > 0) {
-      rgb[0] = clamp(rgb[0] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
-      rgb[1] = clamp(rgb[1] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
-      rgb[2] = clamp(rgb[2] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
+      if (useOklab) {
+        rgb = jitterOklab(rgb, colorJit, rng);
+      } else {
+        rgb[0] = clamp(rgb[0] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
+        rgb[1] = clamp(rgb[1] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
+        rgb[2] = clamp(rgb[2] + Math.round((rng() - 0.5) * colorJit * 2), 0, 255);
+      }
     }
 
     const wobbleRng = mulberry32(Math.floor(rng() * 10000));
-    const shR = Math.max(0, rgb[0] - 50);
-    const shG = Math.max(0, rgb[1] - 45);
-    const shB = Math.max(0, rgb[2] - 35);
-    const hiR = Math.min(255, rgb[0] + 40);
-    const hiG = Math.min(255, rgb[1] + 35);
-    const hiB = Math.min(255, rgb[2] + 20);
+    const sh = shadowColor(rgb);
+    const hi = highlightColor(rgb);
 
     // Build bristle waypoints
     const bp: Vec2[] = new Array(path.length);
@@ -275,7 +300,8 @@ export function renderBristleStroke(
       bwBase = Math.max(0.5, bwBase * (1 - bristleWidthJitter * (rng() - 0.5) * 2));
     }
 
-    const shOff = bwBase * 0.7;
+    // Per-bristle shadow offset scale (legacy) or absolute (light-driven)
+    const shOffScale = bwBase * 0.7;
 
     function smoothPath(startI: number, endI: number, ox: number, oy: number): void {
       ctx.moveTo(bp[startI]!.x + ox, bp[startI]!.y + oy);
@@ -311,8 +337,10 @@ export function renderBristleStroke(
         if (sa > 0.003) {
           ctx.lineWidth = bw * shWidthScale;
           ctx.beginPath();
-          smoothPath(sp, ep, shOx * shOff, shOy * shOff);
-          ctx.strokeStyle = `rgba(${shR},${shG},${shB},${sa.toFixed(3)})`;
+          smoothPath(sp, ep,
+            useLightOffsets ? lightShOx : -1 * shOffScale,
+            useLightOffsets ? lightShOy : -1 * shOffScale);
+          ctx.strokeStyle = `rgba(${sh[0]},${sh[1]},${sh[2]},${sa.toFixed(3)})`;
           ctx.stroke();
         }
         ctx.lineWidth = bw;
@@ -335,48 +363,44 @@ export function renderBristleStroke(
         const passAlpha = alpha * loadMul * lerp(0.65, 0.3, passT);
         if (passAlpha < 0.003) continue;
 
-        let cR = rgb[0], cG = rgb[1], cB = rgb[2];
-        let csR = shR, csG = shG, csB = shB;
-        let chR = hiR, chG = hiG, chB = hiB;
+        let c: RGB = [rgb[0], rgb[1], rgb[2]];
+        let cs = sh;
+        let ch = hi;
 
         if (colorMode === "along" && palette.length >= 2) {
           const am = lerp(lerp(lateralT, 1 - lateralT, midT), 0.5, 1 - mixAmount);
-          cR = clamp(Math.round(lerp(palette[0]![0], palette[1]![0], am)), 0, 255);
-          cG = clamp(Math.round(lerp(palette[0]![1], palette[1]![1], am)), 0, 255);
-          cB = clamp(Math.round(lerp(palette[0]![2], palette[1]![2], am)), 0, 255);
-          csR = Math.max(0, cR - 50); csG = Math.max(0, cG - 45); csB = Math.max(0, cB - 35);
-          chR = Math.min(255, cR + 40); chG = Math.min(255, cG + 35); chB = Math.min(255, cB + 20);
+          c = mixColors(palette[0]!, palette[1]!, am);
+          cs = shadowColor(c);
+          ch = highlightColor(c);
         } else if (colorMode === "loaded" && palette.length >= 2) {
           const lm = midT * mixAmount;
-          cR = clamp(Math.round(lerp(palette[0]![0], palette[1]![0], lm)), 0, 255);
-          cG = clamp(Math.round(lerp(palette[0]![1], palette[1]![1], lm)), 0, 255);
-          cB = clamp(Math.round(lerp(palette[0]![2], palette[1]![2], lm)), 0, 255);
-          csR = Math.max(0, cR - 50); csG = Math.max(0, cG - 45); csB = Math.max(0, cB - 35);
-          chR = Math.min(255, cR + 40); chG = Math.min(255, cG + 35); chB = Math.min(255, cB + 20);
+          c = mixColors(palette[0]!, palette[1]!, lm);
+          cs = shadowColor(c);
+          ch = highlightColor(c);
         } else if (colorMode === "temperature" && palette.length >= 2) {
           const ti0 = Math.floor(midT * (palette.length - 1));
           const ti1 = Math.min(ti0 + 1, palette.length - 1);
           const tt = midT * (palette.length - 1) - ti0;
-          cR = Math.round(lerp(palette[ti0]![0], palette[ti1]![0], tt));
-          cG = Math.round(lerp(palette[ti0]![1], palette[ti1]![1], tt));
-          cB = Math.round(lerp(palette[ti0]![2], palette[ti1]![2], tt));
-          csR = Math.max(0, cR - 50); csG = Math.max(0, cG - 45); csB = Math.max(0, cB - 35);
-          chR = Math.min(255, cR + 40); chG = Math.min(255, cG + 35); chB = Math.min(255, cB + 20);
+          c = mixColors(palette[ti0]!, palette[ti1]!, tt);
+          cs = shadowColor(c);
+          ch = highlightColor(c);
         }
 
         const sa = passAlpha * shAlphaScale;
         if (sa > 0.003) {
           ctx.lineWidth = bw * shWidthScale;
           ctx.beginPath();
-          smoothPath(0, passEnd, shOx * shOff, shOy * shOff);
-          ctx.strokeStyle = `rgba(${csR},${csG},${csB},${sa.toFixed(3)})`;
+          smoothPath(0, passEnd,
+            useLightOffsets ? lightShOx : -1 * shOffScale,
+            useLightOffsets ? lightShOy : -1 * shOffScale);
+          ctx.strokeStyle = `rgba(${cs[0]},${cs[1]},${cs[2]},${sa.toFixed(3)})`;
           ctx.stroke();
         }
 
         ctx.lineWidth = bw;
         ctx.beginPath();
         smoothPath(0, passEnd, 0, 0);
-        ctx.strokeStyle = `rgba(${cR},${cG},${cB},${passAlpha.toFixed(3)})`;
+        ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},${passAlpha.toFixed(3)})`;
         ctx.stroke();
 
         const ha = passAlpha * hiAlphaScale;
@@ -385,8 +409,10 @@ export function renderBristleStroke(
           ctx.globalCompositeOperation = hiBlend as GlobalCompositeOperation;
           ctx.lineWidth = bw * hiWidthScale;
           ctx.beginPath();
-          smoothPath(0, passEnd, hiOx * shOff, hiOy * shOff);
-          ctx.strokeStyle = `rgba(${chR},${chG},${chB},${ha.toFixed(3)})`;
+          smoothPath(0, passEnd,
+            useLightOffsets ? lightHiOx : 0.4 * shOffScale,
+            useLightOffsets ? lightHiOy : 0.4 * shOffScale);
+          ctx.strokeStyle = `rgba(${ch[0]},${ch[1]},${ch[2]},${ha.toFixed(3)})`;
           ctx.stroke();
           ctx.restore();
         }
@@ -408,6 +434,7 @@ export function defaultBristleConfig(overrides: Partial<BristleConfig> = {}): Br
     palette: [[80, 80, 80]],
     mixAmount: 0.6,
     colorJitter: 20,
+    colorSpace: "oklab",
     shadowAlpha: 0.2,
     shadowWidthScale: 1.3,
     highlightAlpha: 0.08,

@@ -16,6 +16,8 @@ import {
   defaultBristleConfig,
   type BristleConfig,
 } from "./shared/bristle.js";
+import { degreesToLightAngle, type LightSource } from "./shared/light-source.js";
+import { applyAtmosphere, atmosphereDensityScale, type AtmosphereConfig } from "./shared/atmosphere.js";
 
 // ---------------------------------------------------------------------------
 // Property schema
@@ -81,6 +83,16 @@ const BRISTLE_DAB_PROPERTIES: LayerPropertySchema[] = [
   },
   { key: "opacity", label: "Opacity", type: "number", default: 0.65, min: 0, max: 1, step: 0.01, group: "paint" },
   { key: "seed",    label: "Seed",    type: "number", default: 0, min: 0, max: 99999, step: 1, group: "paint" },
+  { key: "lightAngle",    label: "Light Angle°",     type: "number", default: 315, min: 0, max: 360, step: 5, group: "light" },
+  { key: "lightElevation",label: "Light Elevation",   type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "light" },
+  { key: "shadowDepth",   label: "Shadow Depth",      type: "number", default: 0.3, min: 0, max: 1, step: 0.05, group: "light" },
+  { key: "highlightStrength", label: "Highlight Strength", type: "number", default: 0.25, min: 0, max: 1, step: 0.05, group: "light" },
+  { key: "shadowTemperature", label: "Shadow Temperature", type: "number", default: 0, min: -1, max: 1, step: 0.1, group: "light" },
+  { key: "atmosphereHorizon",  label: "Horizon Y",           type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "atmosphere" },
+  { key: "atmosphereStrength", label: "Atmosphere Strength",  type: "number", default: 0, min: 0, max: 1, step: 0.05, group: "atmosphere" },
+  { key: "atmosphereTemp",     label: "Atmosphere Temperature", type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "atmosphere" },
+  { key: "atmosphereChroma",   label: "Atmosphere Chroma",    type: "number", default: 0.5, min: 0, max: 1, step: 0.05, group: "atmosphere" },
+  { key: "atmosphereDensity",  label: "Atmosphere Density",   type: "number", default: 0.3, min: 0, max: 1, step: 0.05, group: "atmosphere" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -138,6 +150,34 @@ export const bristleDabLayerType: LayerTypeDefinition = {
     const paintMode      = (properties.paintMode as string)      ?? "normal";
     const opacity        = (properties.opacity as number)        ?? 0.65;
     const seed           = (properties.seed as number)           ?? 0;
+    const lightAngleDeg  = (properties.lightAngle as number)     ?? 315;
+    const lightElevation = (properties.lightElevation as number) ?? 0.5;
+    const shadowDepth    = (properties.shadowDepth as number)    ?? 0.3;
+    const highlightStr   = (properties.highlightStrength as number) ?? 0.25;
+    const shadowTemp     = (properties.shadowTemperature as number) ?? 0;
+
+    const light: LightSource = {
+      angle: degreesToLightAngle(lightAngleDeg),
+      elevation: lightElevation,
+      shadowDepth,
+      highlightStrength: highlightStr,
+      shadowTemperature: shadowTemp,
+    };
+
+    const atmoStrength  = (properties.atmosphereStrength as number) ?? 0;
+    const atmoHorizon   = (properties.atmosphereHorizon as number)  ?? 0.5;
+    const atmoTemp      = (properties.atmosphereTemp as number)     ?? 0.5;
+    const atmoChroma    = (properties.atmosphereChroma as number)   ?? 0.5;
+    const atmoDensity   = (properties.atmosphereDensity as number)  ?? 0.3;
+    const useAtmosphere = atmoStrength > 0;
+
+    const atmosphere: AtmosphereConfig = {
+      horizonY: atmoHorizon,
+      valueCompression: atmoStrength,
+      temperatureShift: atmoTemp * atmoStrength,
+      chromaFalloff: atmoChroma * atmoStrength,
+      densityFalloff: atmoDensity * atmoStrength,
+    };
 
     const w = Math.ceil(bounds.width);
     const h = Math.ceil(bounds.height);
@@ -176,6 +216,7 @@ export const bristleDabLayerType: LayerTypeDefinition = {
       colorMode: colorMode as BristleConfig["colorMode"],
       palette,
       colorJitter,
+      light,
     });
 
     const artistAngRad = angleOffset * Math.PI / 180;
@@ -196,8 +237,18 @@ export const bristleDabLayerType: LayerTypeDefinition = {
         const spreadAng = (rng() - 0.5) * 2 * angleSpread * Math.PI;
         const angle     = lerp(artistAngRad + spreadAng, flowAng, flowInfluence);
 
-        const path = traceDabPath(cx, cy, angle, dabLength);
-        renderBristleStroke(ctx, path, cfg, rng);
+        // Atmospheric perspective: skip dabs for density falloff, modify palette colors
+        if (useAtmosphere) {
+          const densityScale = atmosphereDensityScale(ny, atmosphere);
+          if (densityScale < 1 && rng() > densityScale) continue;
+          const atmoPalette = palette.map(c => applyAtmosphere(c, ny, atmosphere));
+          const atmoCfg = { ...cfg, palette: atmoPalette };
+          const path = traceDabPath(cx, cy, angle, dabLength);
+          renderBristleStroke(ctx, path, atmoCfg, rng);
+        } else {
+          const path = traceDabPath(cx, cy, angle, dabLength);
+          renderBristleStroke(ctx, path, cfg, rng);
+        }
       }
     }
 

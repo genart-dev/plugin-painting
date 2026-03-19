@@ -1596,6 +1596,34 @@ export const addBristleDabTool: McpToolDefinition = {
         type: "number",
         description: "Random seed for reproducible output (default: 0).",
       },
+      lightAngle: {
+        type: "number",
+        description: "Light direction in degrees 0–360 (default: 315 = upper-left).",
+      },
+      lightElevation: {
+        type: "number",
+        description: "Light elevation 0–1, 0=raking shadows, 1=overhead (default: 0.5).",
+      },
+      shadowDepth: {
+        type: "number",
+        description: "Shadow darkness 0–1 (default: 0.3).",
+      },
+      highlightStrength: {
+        type: "number",
+        description: "Specular highlight strength 0–1 (default: 0.25).",
+      },
+      shadowTemperature: {
+        type: "number",
+        description: "Shadow color temperature -1 (cool/blue) to +1 (warm/orange) (default: 0).",
+      },
+      atmosphereStrength: {
+        type: "number",
+        description: "Atmospheric perspective strength 0–1 (default: 0 = disabled).",
+      },
+      atmosphereHorizon: {
+        type: "number",
+        description: "Horizon Y position 0–1 (default: 0.5).",
+      },
       index: {
         type: "number",
         description: "Layer stack position (default: top).",
@@ -1613,6 +1641,8 @@ export const addBristleDabTool: McpToolDefinition = {
     for (const key of [
       "field", "colors", "brushWidth", "bristleCount", "dabLength",
       "overlapDensity", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
+      "lightAngle", "lightElevation", "shadowDepth", "highlightStrength", "shadowTemperature",
+      "atmosphereStrength", "atmosphereHorizon",
     ] as const) {
       if (input[key] !== undefined) properties[key] = input[key];
     }
@@ -1712,6 +1742,34 @@ export const addBristleStrokeTool: McpToolDefinition = {
         type: "number",
         description: "Random seed for reproducible output (default: 0).",
       },
+      lightAngle: {
+        type: "number",
+        description: "Light direction in degrees 0–360 (default: 315 = upper-left).",
+      },
+      lightElevation: {
+        type: "number",
+        description: "Light elevation 0–1, 0=raking shadows, 1=overhead (default: 0.5).",
+      },
+      shadowDepth: {
+        type: "number",
+        description: "Shadow darkness 0–1 (default: 0.3).",
+      },
+      highlightStrength: {
+        type: "number",
+        description: "Specular highlight strength 0–1 (default: 0.25).",
+      },
+      shadowTemperature: {
+        type: "number",
+        description: "Shadow color temperature -1 (cool/blue) to +1 (warm/orange) (default: 0).",
+      },
+      atmosphereStrength: {
+        type: "number",
+        description: "Atmospheric perspective strength 0–1 (default: 0 = disabled).",
+      },
+      atmosphereHorizon: {
+        type: "number",
+        description: "Horizon Y position 0–1 (default: 0.5).",
+      },
       index: {
         type: "number",
         description: "Layer stack position (default: top).",
@@ -1729,6 +1787,8 @@ export const addBristleStrokeTool: McpToolDefinition = {
     for (const key of [
       "field", "colors", "brushWidth", "bristleCount", "strokeSteps",
       "strokeCount", "colorMode", "texture", "taper", "paintMode", "opacity", "seed",
+      "lightAngle", "lightElevation", "shadowDepth", "highlightStrength", "shadowTemperature",
+      "atmosphereStrength", "atmosphereHorizon",
     ] as const) {
       if (input[key] !== undefined) properties[key] = input[key];
     }

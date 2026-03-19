@@ -120,3 +120,41 @@ export {
   renderBristleStroke,
   defaultBristleConfig,
 } from "./shared/bristle.js";
+export {
+  type RGB,
+  type MixPigmentOpts,
+  rgbToOklab,
+  oklabToRgb,
+  mixPigment,
+  shiftShadow,
+  shiftHighlight,
+  jitterOklab,
+} from "./shared/color-mix.js";
+export {
+  type LightSource,
+  DEFAULT_LIGHT,
+  computeShadowOffset,
+  computeHighlightOffset,
+  computeShadowColor,
+  computeHighlightColor,
+  degreesToLightAngle,
+} from "./shared/light-source.js";
+export {
+  type AtmosphereConfig,
+  DEFAULT_ATMOSPHERE,
+  applyAtmosphere,
+  atmosphereDensityScale,
+} from "./shared/atmosphere.js";
+export {
+  type GridConfig,
+  type GridPoint,
+  generateGrid,
+  generateShuffledGrid,
+  generateMultiScaleGrid,
+} from "./shared/grid-placement.js";
+export {
+  type ValueMapConfig,
+  type ValueMap,
+  DEFAULT_VALUE_MAP,
+  createValueMap,
+} from "./shared/value-map.js";
