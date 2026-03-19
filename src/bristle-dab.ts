@@ -11,10 +11,10 @@ import { mulberry32 } from "./shared/prng.js";
 import {
   hexToRgb,
   lerp,
-  traceDabPath,
   renderBristleStroke,
   defaultBristleConfig,
   type BristleConfig,
+  type Vec2,
 } from "./shared/bristle.js";
 import { degreesToLightAngle, type LightSource } from "./shared/light-source.js";
 import { applyAtmosphere, atmosphereDensityScale, type AtmosphereConfig } from "./shared/atmosphere.js";
@@ -201,11 +201,22 @@ export const bristleDabLayerType: LayerTypeDefinition = {
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
 
+    // Offset for modifier-path rendering (bounds.x/y are non-zero when
+    // composited directly onto the main canvas rather than an offscreen).
+    const ox = Math.round(bounds.x ?? 0);
+    const oy = Math.round(bounds.y ?? 0);
+
     // Wet buffer: snapshot canvas before rendering so strokes can read underlying paint
     let wetBuffer: WetBuffer | null = null;
     if (useWet) {
       wetBuffer = new WetBuffer(w, h);
-      wetBuffer.snapshot(ctx);
+      wetBuffer.snapshot(ctx, ox, oy);
+    }
+
+    // Translate drawing context so dab positions (0..w, 0..h) map to canvas position
+    if (ox !== 0 || oy !== 0) {
+      ctx.save();
+      ctx.translate(ox, oy);
     }
 
     const field = parseField(fieldStr, cols, rows);
@@ -273,12 +284,30 @@ export const bristleDabLayerType: LayerTypeDefinition = {
           dabPalette = dabPalette.map(c => wetBuffer!.mixWithUnderlying(c, cx, cy, wetConfig));
         }
         const dabCfg = dabPalette !== palette ? { ...cfg, palette: dabPalette } : cfg;
-        const path = traceDabPath(cx, cy, angle, dabLength);
+        // Flow-following curved path instead of straight line
+        const dabSteps = Math.max(4, Math.ceil(dabLength / 4));
+        const dabStepSize = dabLength / dabSteps;
+        const path: Vec2[] = [{ x: cx, y: cy }];
+        let px = cx, py = cy;
+        for (let ds = 0; ds < dabSteps; ds++) {
+          const pnx = Math.max(0, Math.min(1, px / w));
+          const pny = Math.max(0, Math.min(1, py / h));
+          const fs = sampleField(field, pnx, pny);
+          const fa = Math.atan2(fs.dy, fs.dx);
+          const stepAng = lerp(angle, fa, flowInfluence);
+          px += Math.cos(stepAng) * dabStepSize;
+          py += Math.sin(stepAng) * dabStepSize;
+          path.push({ x: px, y: py });
+        }
         renderBristleStroke(ctx, path, dabCfg, rng);
       }
     }
 
     ctx.restore();
+    // Undo translate offset if applied
+    if (ox !== 0 || oy !== 0) {
+      ctx.restore();
+    }
   },
 
   validate(properties: LayerProperties): ValidationError[] | null {

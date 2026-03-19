@@ -52,12 +52,29 @@ export class WetBuffer {
     this.wetness = new Float32Array(this.halfW * this.halfH);
   }
 
-  /** Capture the current canvas state for wet-mix reads. Call once per layer render. */
-  snapshot(ctx: CanvasRenderingContext2D): void {
-    const imageData = ctx.getImageData(0, 0, this.w, this.h);
+  /**
+   * Capture the current canvas state for wet-mix reads. Call once per layer render.
+   * @param offsetX - X offset into the canvas (for modifier-path rendering)
+   * @param offsetY - Y offset into the canvas (for modifier-path rendering)
+   */
+  snapshot(ctx: CanvasRenderingContext2D, offsetX = 0, offsetY = 0): void {
+    const imageData = ctx.getImageData(offsetX, offsetY, this.w, this.h);
     this.snapshotData = imageData.data;
     this.snapshotW = this.w;
     this.snapshotH = this.h;
+
+    // Pre-fill wetness grid from snapshot alpha so cross-layer wet mixing
+    // works: if there are existing non-transparent pixels, mark them as wet.
+    for (let hy = 0; hy < this.halfH; hy++) {
+      for (let hx = 0; hx < this.halfW; hx++) {
+        const sx = Math.min(hx * 2, this.w - 1);
+        const sy = Math.min(hy * 2, this.h - 1);
+        const alpha = this.snapshotData[(sy * this.w + sx) * 4 + 3]!;
+        if (alpha > 20) {
+          this.wetness[hy * this.halfW + hx] = (alpha / 255) * 0.6;
+        }
+      }
+    }
   }
 
   /** Deposit wet paint at a position. */

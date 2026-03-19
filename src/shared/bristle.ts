@@ -280,22 +280,25 @@ export function renderBristleStroke(
     const sh = shadowColor(rgb);
     const hi = highlightColor(rgb);
 
-    // Build bristle waypoints
+    // Build bristle waypoints with smooth wobble drift
     const bp: Vec2[] = new Array(path.length);
+    let wobbleDrift = (wobbleRng() - 0.5) * (0.08 + extraWobble * 0.5);
     for (let pi = 0; pi < path.length; pi++) {
       const t = pi / (path.length - 1);
       const tap = taperProfile(t, taperStyle);
       const press = tap * lerp(1 - pressAmt * 0.6, 1, tap);
       const halfW = brushW * 0.5 * press;
-      const wobble = (wobbleRng() - 0.5) * (0.15 + extraWobble);
-      const lateral = (lateralBase + wobble) * halfW;
+      // Smooth wobble: gentle drift instead of random jitter per point
+      wobbleDrift += (wobbleRng() - 0.5) * (0.03 + extraWobble * 0.2);
+      wobbleDrift *= 0.93; // decay toward center
+      const lateral = (lateralBase + wobbleDrift) * halfW;
       bp[pi] = {
         x: path[pi]!.x + perps[pi]!.x * lateral,
         y: path[pi]!.y + perps[pi]!.y * lateral,
       };
     }
 
-    let bwBase = brushW / bristleN * lerp(0.9, 2.5, (1 - Math.abs(lateralBase)) ** 2);
+    let bwBase = brushW / bristleN * lerp(1.5, 3.5, (1 - Math.abs(lateralBase)) ** 2);
     if (bristleWidthJitter !== 0) {
       bwBase = Math.max(0.5, bwBase * (1 - bristleWidthJitter * (rng() - 0.5) * 2));
     }
@@ -327,8 +330,8 @@ export function renderBristleStroke(
         if (rng() < bristleGapProb) continue;
 
         const chunkT = (sp + ep) * 0.5 / effectiveSteps;
-        const taperMul = lerp(1.0, 1.0 - pressAmt * 0.7, chunkT * chunkT);
-        const bw = bwBase * taperMul;
+        const tapVal = taperProfile(chunkT, taperStyle);
+        const bw = bwBase * Math.max(0.15, tapVal);
         const loadMul = Math.max(0.2, 1 - chunkT * chunkT * lerp(1.5, 0.15, load));
         const chunkAlpha = alpha * loadMul;
         if (chunkAlpha < 0.005) break;
@@ -357,8 +360,8 @@ export function renderBristleStroke(
         if (passEnd < 3) continue;
 
         const midT = (passEnd * 0.5) / effectiveSteps;
-        const taperMul = lerp(1.0, 1.0 - pressAmt * 0.7, passT * passT);
-        const bw = bwBase * taperMul;
+        const tapVal = taperProfile(midT, taperStyle);
+        const bw = bwBase * Math.max(0.15, tapVal);
         const loadMul = Math.max(0.2, 1 - midT * midT * lerp(1.5, 0.15, load));
         const passAlpha = alpha * loadMul * lerp(0.65, 0.3, passT);
         if (passAlpha < 0.003) continue;

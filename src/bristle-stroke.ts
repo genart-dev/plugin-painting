@@ -198,10 +198,18 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
 
+    const ox = Math.round(bounds.x ?? 0);
+    const oy = Math.round(bounds.y ?? 0);
+
     let wetBuffer: WetBuffer | null = null;
     if (useWet) {
       wetBuffer = new WetBuffer(w, h);
-      wetBuffer.snapshot(ctx);
+      wetBuffer.snapshot(ctx, ox, oy);
+    }
+
+    if (ox !== 0 || oy !== 0) {
+      ctx.save();
+      ctx.translate(ox, oy);
     }
 
     const field = parseField(fieldStr, cols, rows);
@@ -267,6 +275,9 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
     }
 
     ctx.restore();
+    if (ox !== 0 || oy !== 0) {
+      ctx.restore();
+    }
   },
 
   validate(properties: LayerProperties): ValidationError[] | null {
