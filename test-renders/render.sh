@@ -37,4 +37,14 @@ $CLI render "$DIR/algorithm-bridge-accumulative.genart" -o "$DIR/algorithm-bridg
 echo "Rendering algorithm-bridge-accumulative-layered (p5 + design layers, ~15s)..."
 $CLI render "$DIR/algorithm-bridge-accumulative-layered.genart" -o "$DIR/algorithm-bridge-accumulative-layered.png" --wait 15s
 
+echo "Rendering oklab-color-mixing (painting v2 — Oklab pigment mixing)..."
+$CLI render "$DIR/oklab-color-mixing.genart" -o "$DIR/oklab-color-mixing.png"
+echo "Rendering directional-light (painting v2 — light angles on impasto)..."
+$CLI render "$DIR/directional-light.genart" -o "$DIR/directional-light.png"
+echo "Rendering atmospheric-perspective (painting v2 — horizon depth)..."
+$CLI render "$DIR/atmospheric-perspective.genart" -o "$DIR/atmospheric-perspective.png"
+echo "Rendering wet-on-wet (painting v2 — wet paint mixing)..."
+$CLI render "$DIR/wet-on-wet.genart" -o "$DIR/wet-on-wet.png"
+echo "Rendering scene-over-layers (painting v2 — paint scene)..."
+$CLI render "$DIR/scene-over-layers.genart" -o "$DIR/scene-over-layers.png"
 echo "Done. Output in $DIR/"
