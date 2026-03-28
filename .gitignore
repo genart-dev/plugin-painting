@@ -4,3 +4,10 @@ dist/
 .npmrc
 *.DS_Store
 
+.env*
+test-renders/
+
+# Yarn PnP
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/
