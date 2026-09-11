@@ -241,12 +241,10 @@ function renderWash(
   const h = Math.ceil(bounds.height);
   if (w <= 0 || h <= 0) return;
 
-  // Create offscreen canvas compatible with the main context's canvas module
-  const offscreen = createOffscreenCanvas(w, h, ctx);
-  if (!offscreen) return;
-
-  const offCtx = offscreen.getContext("2d");
-  if (!offCtx) return;
+  // A cleared, reused canvas compatible with the main context's canvas module
+  const scratch = washScratchFor(ctx, w, h);
+  if (!scratch) return;
+  const { canvas: offscreen, ctx: offCtx } = scratch;
 
   offCtx.globalCompositeOperation = "source-over";
 
@@ -292,7 +290,7 @@ function renderWash(
  * Draw a tip ImageData tinted with a color.
  * The tip's alpha channel is used as a mask; RGB are replaced with the tint color.
  *
- * Uses a temporary canvas + drawImage for proper compositing.
+ * Uses a scratch canvas + drawImage for proper compositing.
  * (putImageData replaces pixels directly and ignores globalAlpha/blendMode,
  * which would erase the background underneath transparent tip pixels.)
  */
@@ -303,32 +301,130 @@ function drawTintedTip(
   y: number,
   color: string,
 ): void {
-  const [r, g, b] = hexToRgb(color);
+  const scratch = tipScratchFor(ctx, tip.width, tip.height);
+  if (!scratch) return;
 
-  // Create a small temporary canvas for the tinted tip
-  const tmpCanvas = createOffscreenCanvas(tip.width, tip.height, ctx);
-  if (!tmpCanvas) return;
+  // Tips are cached by size, so consecutive stamps along a stroke usually share
+  // one tip object and one color. Only re-tint when either changes.
+  if (scratch.tip !== tip || scratch.color !== color) {
+    const [r, g, b] = hexToRgb(color);
 
-  const tmpCtx = tmpCanvas.getContext("2d") as CanvasRenderingContext2D | null;
-  if (!tmpCtx) return;
+    // Build tinted ImageData: tip's alpha as mask, color as RGB
+    const tinted = scratch.ctx.createImageData(tip.width, tip.height);
+    const src = tip.data;
+    const dst = tinted.data;
 
-  // Build tinted ImageData: tip's alpha as mask, color as RGB
-  const tinted = tmpCtx.createImageData(tip.width, tip.height);
-  const src = tip.data;
-  const dst = tinted.data;
+    for (let i = 0; i < src.length; i += 4) {
+      dst[i] = r;
+      dst[i + 1] = g;
+      dst[i + 2] = b;
+      dst[i + 3] = src[i + 3]!;
+    }
 
-  for (let i = 0; i < src.length; i += 4) {
-    dst[i] = r;
-    dst[i + 1] = g;
-    dst[i + 2] = b;
-    dst[i + 3] = src[i + 3]!;
+    // The scratch is exactly the tip's size, so this replaces all of it
+    scratch.ctx.putImageData(tinted, 0, 0);
+    scratch.tip = tip;
+    scratch.color = color;
   }
 
-  // Put onto temp canvas (putImageData is fine here — temp canvas is blank)
-  tmpCtx.putImageData(tinted, 0, 0);
+  // Draw the scratch onto the target using proper compositing (respects
+  // globalAlpha + blendMode)
+  ctx.drawImage(scratch.canvas as unknown as CanvasImageSource, x, y);
+}
 
-  // Draw temp canvas onto target using proper compositing (respects globalAlpha + blendMode)
-  ctx.drawImage(tmpCanvas as unknown as CanvasImageSource, x, y);
+// ---------------------------------------------------------------------------
+// Scratch canvases
+// ---------------------------------------------------------------------------
+
+/** A reusable offscreen canvas and its 2D context. */
+interface Scratch {
+  canvas: OffscreenCanvas | HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+}
+
+/** The tip scratch also records what it holds, so identical stamps skip the re-tint. */
+interface TipScratch extends Scratch {
+  tip: ImageData | null;
+  color: string;
+}
+
+/*
+ * Stamping used to allocate a new canvas per stamp and per wash stroke. In
+ * Chrome each one is a fresh GPU-backed surface to upload, and a heavy layer
+ * makes hundreds of thousands of them: on macOS that exhausts IOSurfaces, the
+ * page's canvas loses its context mid-render and is restored blank. Scratches
+ * are kept instead, keyed by the target canvas's constructor so a node-canvas
+ * target still gets a same-module scratch (see createOffscreenCanvas); a
+ * browser has two such keys, HTMLCanvasElement targets and the OffscreenCanvas
+ * that wash mode stamps into.
+ *
+ * Tip scratches are kept one per tip size, each exactly that size, and drawn
+ * whole: the same drawImage the per-stamp canvases got. Drawing a tip-sized
+ * region out of one larger shared canvas instead moved 2,861 pixels of a
+ * pencil-heavy render by up to 3/255; this way it is pixel-identical to the
+ * per-stamp version. Tip sizes are quantized (see tip-generator), so the set
+ * stays small.
+ */
+const tipScratches = new Map<unknown, Map<number, TipScratch>>();
+const washScratches = new Map<unknown, Scratch>();
+
+function scratchKey(ctx: CanvasRenderingContext2D): unknown {
+  return (ctx.canvas as { constructor?: unknown } | undefined)?.constructor ?? null;
+}
+
+/** The tip scratch of exactly `width` x `height` for this target's canvas type. */
+function tipScratchFor(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+): TipScratch | null {
+  const key = scratchKey(ctx);
+  let bySize = tipScratches.get(key);
+  if (!bySize) {
+    bySize = new Map();
+    tipScratches.set(key, bySize);
+  }
+  const sizeKey = width * 65536 + height;
+  const existing = bySize.get(sizeKey);
+  if (existing) return existing;
+
+  const canvas = createOffscreenCanvas(width, height, ctx);
+  const scratchCtx = canvas?.getContext("2d") as CanvasRenderingContext2D | null | undefined;
+  if (!canvas || !scratchCtx) return null;
+  const created: TipScratch = { canvas, ctx: scratchCtx, tip: null, color: "" };
+  bySize.set(sizeKey, created);
+  return created;
+}
+
+/** A transparent wash scratch of exactly `width` x `height`. */
+function washScratchFor(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+): Scratch | null {
+  const key = scratchKey(ctx);
+  const existing = washScratches.get(key);
+  if (existing) {
+    if (existing.canvas.width !== width || existing.canvas.height !== height) {
+      // Resizing also clears the canvas
+      existing.canvas.width = width;
+      existing.canvas.height = height;
+    } else {
+      existing.ctx.clearRect(0, 0, width, height);
+    }
+    return existing;
+  }
+
+  const canvas = createOffscreenCanvas(width, height, ctx);
+  // Read back once per stroke to clamp alpha, so keep it CPU-side
+  const scratchCtx = canvas?.getContext("2d", { willReadFrequently: true }) as
+    | CanvasRenderingContext2D
+    | null
+    | undefined;
+  if (!canvas || !scratchCtx) return null;
+  const created: Scratch = { canvas, ctx: scratchCtx };
+  washScratches.set(key, created);
+  return created;
 }
 
 function hexToRgb(hex: string): [number, number, number] {

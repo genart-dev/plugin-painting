@@ -38,6 +38,7 @@ function createMockCtx(width = 200, height = 200) {
     save: vi.fn(),
     restore: vi.fn(),
     drawImage: vi.fn(),
+    clearRect: vi.fn(),
     getImageData: vi.fn().mockReturnValue(imageData),
     putImageData: vi.fn(),
     createImageData: vi.fn((w: number, h: number) => createMockImageData(w, h)),
@@ -220,6 +221,65 @@ describe("renderStrokes", () => {
       renderStrokes([stroke], BRUSH_PRESETS, ctx, BOUNDS, 0);
 
       expect(ctx.save).toHaveBeenCalled();
+    });
+  });
+
+  describe("scratch canvas reuse", () => {
+    // A canvas per stamp exhausted GPU surfaces in Chrome and blanked the frame.
+    type DrawCall = [{ getContext: ReturnType<typeof vi.fn> }, ...number[]];
+    const drawCalls = (ctx: CanvasRenderingContext2D) =>
+      (ctx.drawImage as unknown as { mock: { calls: DrawCall[] } }).mock.calls;
+
+    it("draws buildup stamps from one exact-size tip canvas per tip size", () => {
+      const ctx = createMockCtx();
+      // Tapered and pressure-driven, so the tip size changes along the stroke
+      renderStrokes(
+        [makeStroke({ brushId: "pencil", points: PRESSURE_POINTS })],
+        BRUSH_PRESETS,
+        ctx,
+        BOUNDS,
+        0,
+      );
+
+      const calls = drawCalls(ctx);
+      const canvases = new Set(
+        calls.map((c) => c[0] as unknown as { width: number; height: number }),
+      );
+      const sizes = new Set([...canvases].map((c) => `${c.width}x${c.height}`));
+      expect(calls.length).toBeGreaterThan(canvases.size);
+      expect(sizes.size).toBe(canvases.size);
+      // Drawn whole at the stamp position, as a fresh per-stamp canvas was
+      for (const call of calls) expect(call.length).toBe(3);
+    });
+
+    it("re-tints the tip canvas only when the tip or color changes", () => {
+      const ctx = createMockCtx();
+      renderStrokes([makeStroke({ brushId: "round-hard" })], BRUSH_PRESETS, ctx, BOUNDS, 0);
+
+      const calls = drawCalls(ctx);
+      const scratchCtx = calls[0]![0].getContext.mock.results[0]!.value as {
+        putImageData: ReturnType<typeof vi.fn>;
+      };
+      expect(scratchCtx.putImageData.mock.calls.length).toBeGreaterThan(0);
+      expect(scratchCtx.putImageData.mock.calls.length).toBeLessThan(calls.length);
+    });
+
+    it("composites every wash stroke from one cleared wash canvas", () => {
+      const ctx = createMockCtx();
+      const strokes = [
+        makeStroke({ brushId: "ink-pen", color: "#112233" }),
+        makeStroke({ brushId: "ink-pen", color: "#445566" }),
+      ];
+      renderStrokes(strokes, BRUSH_PRESETS, ctx, BOUNDS, 0);
+
+      // In wash mode the main context only receives each stroke's composite.
+      const calls = drawCalls(ctx);
+      expect(calls.length).toBe(2);
+      expect(calls[0]![0]).toBe(calls[1]![0]);
+      const washCtx = calls[0]![0].getContext.mock.results[0]!.value as {
+        clearRect: ReturnType<typeof vi.fn>;
+      };
+      expect(washCtx.clearRect).toHaveBeenCalledWith(0, 0, BOUNDS.width, BOUNDS.height);
     });
   });
 
