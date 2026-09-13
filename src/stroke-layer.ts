@@ -8,7 +8,7 @@ import type {
 } from "@genart-dev/core";
 import { parseField, sampleField } from "./vector-field.js";
 import { renderDebugOverlay, type DebugMode } from "./debug-overlay.js";
-import { renderStrokes } from "./brush/stamp-renderer.js";
+import { renderStrokes, createOffscreenCanvas } from "./brush/stamp-renderer.js";
 import { BRUSH_PRESETS } from "./brush/presets.js";
 import { preloadTextureTip } from "./brush/tip-generator.js";
 import type { BrushDefinition, BrushStroke } from "./brush/types.js";
@@ -147,6 +147,26 @@ const STROKE_PROPERTIES: LayerPropertySchema[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Blend isolation
+// ---------------------------------------------------------------------------
+
+/**
+ * A full-size scratch canvas carrying `ctx`'s current transform, so a layer
+ * can be painted apart and composited once with the op `ctx` already holds.
+ * Returns null when no scratch canvas can be made; the caller then paints
+ * directly, as before.
+ */
+function isolate(
+  ctx: CanvasRenderingContext2D,
+): { canvas: OffscreenCanvas | HTMLCanvasElement; ctx: CanvasRenderingContext2D } | null {
+  const canvas = createOffscreenCanvas(ctx.canvas.width, ctx.canvas.height, ctx);
+  const scratch = canvas?.getContext("2d") as CanvasRenderingContext2D | null | undefined;
+  if (!canvas || !scratch) return null;
+  if (typeof ctx.getTransform === "function") scratch.setTransform(ctx.getTransform());
+  return { canvas, ctx: scratch };
+}
+
+// ---------------------------------------------------------------------------
 // Layer type definition
 // ---------------------------------------------------------------------------
 
@@ -249,19 +269,30 @@ export const strokeLayerType: LayerTypeDefinition = {
       }
     }
 
+    // A layer with a non-normal blend mode must composite ONCE. The stamp
+    // renderer sets each brush's own globalCompositeOperation and a per-stamp
+    // globalAlpha on whatever context it is handed, so drawn straight onto
+    // the output it silently replaced the layer's blend: a multiply layer
+    // painted as source-over. Such a layer paints into a scratch canvas with
+    // the same transform and is drawn back with the compositor's op and
+    // alpha. Normal layers keep the direct path, unchanged.
+    const isolation = ctx.globalCompositeOperation !== "source-over" ? isolate(ctx) : null;
+    const target = isolation?.ctx ?? ctx;
+
     // Render strokes
-    ctx.save();
-    ctx.globalAlpha = layerOpacity;
-    renderStrokes(strokes, brushMap, ctx, bounds, seed);
-    ctx.restore();
+    target.save();
+    target.globalAlpha = layerOpacity;
+    renderStrokes(strokes, brushMap, target, bounds, seed);
+    target.restore();
 
     // Optional field-based hybrid influence: if a field is specified,
     // modulate the rendered strokes by sampling field magnitude as an
     // alpha mask. This lets vector fields subtly influence brush output.
+    let field: ReturnType<typeof parseField> | null = null;
     if (fieldStr) {
       try {
-        const field = parseField(fieldStr, cols, rows);
-        const imageData = ctx.getImageData(bounds.x, bounds.y, w, h);
+        field = parseField(fieldStr, cols, rows);
+        const imageData = target.getImageData(bounds.x, bounds.y, w, h);
         const data = imageData.data;
 
         for (let py = 0; py < h; py++) {
@@ -275,18 +306,29 @@ export const strokeLayerType: LayerTypeDefinition = {
           }
         }
 
-        ctx.putImageData(imageData, bounds.x, bounds.y);
-
-        // Debug overlay for the field
-        if (debug) {
-          renderDebugOverlay(field, ctx, bounds, {
-            mode: debugMode,
-            opacity: debugOpacity,
-          });
-        }
+        target.putImageData(imageData, bounds.x, bounds.y);
       } catch {
         // Invalid field string — skip field influence
+        field = null;
       }
+    }
+
+    if (isolation) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(isolation.canvas as CanvasImageSource, 0, 0);
+      ctx.restore();
+    }
+
+    // Debug overlay for the field, drawn last and never blended
+    if (field && debug) {
+      ctx.save();
+      ctx.globalCompositeOperation = "source-over";
+      renderDebugOverlay(field, ctx, bounds, {
+        mode: debugMode,
+        opacity: debugOpacity,
+      });
+      ctx.restore();
     }
   },
 

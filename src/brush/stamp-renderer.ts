@@ -438,7 +438,7 @@ function hexToRgb(hex: string): [number, number, number] {
  * module as the reference context (avoids dual node-canvas native module issues).
  * Falls back to OffscreenCanvas, node-canvas require, or document.createElement.
  */
-function createOffscreenCanvas(
+export function createOffscreenCanvas(
   width: number,
   height: number,
   referenceCtx?: CanvasRenderingContext2D,
