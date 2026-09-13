@@ -12,6 +12,7 @@ import { flowLinesLayerType } from "./flow-lines.js";
 import { bristleDabLayerType } from "./bristle-dab.js";
 import { bristleStrokeLayerType } from "./bristle-stroke.js";
 import { sceneLayerType } from "./scene.js";
+import { washLayerType } from "./wash.js";
 import { paintingMcpTools } from "./painting-tools.js";
 
 const paintingPlugin: DesignPlugin = {
@@ -36,6 +37,7 @@ const paintingPlugin: DesignPlugin = {
     bristleDabLayerType,
     bristleStrokeLayerType,
     sceneLayerType,
+    washLayerType,
   ],
   tools: [],
   exportHandlers: [],
@@ -59,6 +61,7 @@ export { flowLinesLayerType } from "./flow-lines.js";
 export { bristleDabLayerType } from "./bristle-dab.js";
 export { bristleStrokeLayerType } from "./bristle-stroke.js";
 export { sceneLayerType } from "./scene.js";
+export { washLayerType } from "./wash.js";
 export { paintingMcpTools } from "./painting-tools.js";
 export {
   type FillRegion,
