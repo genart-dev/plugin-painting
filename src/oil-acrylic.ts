@@ -57,6 +57,9 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const oilAcrylicLayerType: LayerTypeDefinition = {
   typeId: "painting:oil",
+  // Its feature scales, including the blend radius, are relative to the canvas
+  // width (sc = 800 / w), so they follow a device-resolution buffer (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Oil / Acrylic",

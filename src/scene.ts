@@ -92,6 +92,8 @@ const SCENE_PROPERTIES: LayerPropertySchema[] = [
 
 export const sceneLayerType: LayerTypeDefinition = {
   typeId: "painting:scene",
+  // Paints its dabs at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Paint Scene",
@@ -110,9 +112,13 @@ export const sceneLayerType: LayerTypeDefinition = {
     const fieldStr      = (properties.field as string)        ?? "noise:0:0.1:3";
     const cols          = (properties.fieldCols as number)    ?? 20;
     const rows          = (properties.fieldRows as number)    ?? 20;
-    const brushWidth    = (properties.brushWidth as number)   ?? 16;
+    // Device pixels per layout unit (ADR 111). The brush dimensions come from
+    // the properties in layout units while positions come from the bounds,
+    // which arrive already scaled, so the brush is scaled to match.
+    const dsc           = bounds.scale ?? 1;
+    const brushWidth    = ((properties.brushWidth as number)  ?? 16) * dsc;
     const bristleCount  = (properties.bristleCount as number) ?? 8;
-    const dabLength     = (properties.dabLength as number)    ?? 14;
+    const dabLength     = ((properties.dabLength as number)   ?? 14) * dsc;
     const overlapDensity = (properties.overlapDensity as number) ?? 0.8;
     const gridJitter    = (properties.gridJitter as number)   ?? 0.5;
     const paintLoad     = (properties.paintLoad as number)    ?? 0.7;

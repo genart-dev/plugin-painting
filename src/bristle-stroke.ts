@@ -114,6 +114,8 @@ function taperIndex(t: string): number {
 
 export const bristleStrokeLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-stroke",
+  // Paints its bristles at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Bristle Stroke",
@@ -138,7 +140,11 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
     const cols          = (properties.fieldCols as number)      ?? 30;
     const rows          = (properties.fieldRows as number)      ?? 30;
     const colorsStr     = (properties.colors as string)         ?? '["#2a1a0a"]';
-    const brushWidth    = (properties.brushWidth as number)     ?? 20;
+    // Device pixels per layout unit (ADR 111). The brush dimensions come from
+    // the properties in layout units while positions come from the bounds,
+    // which arrive already scaled, so the brush is scaled to match.
+    const dsc           = bounds.scale ?? 1;
+    const brushWidth    = ((properties.brushWidth as number)    ?? 20) * dsc;
     const bristleCount  = (properties.bristleCount as number)   ?? 10;
     const strokeSteps   = (properties.strokeSteps as number)    ?? 40;
     const strokeCount   = (properties.strokeCount as number)    ?? 300;
@@ -271,7 +277,7 @@ export const bristleStrokeLayerType: LayerTypeDefinition = {
           strokePalette = strokePalette.map(c => wetBuffer!.mixWithUnderlying(c, sx, sy, wetConfig));
         }
         const strokeCfg = strokePalette !== palette ? { ...cfg, palette: strokePalette } : cfg;
-        const path = traceBrushPath(flowFn, sx, sy, strokeSteps, 2.5, angleOffset, angleSpread, flowInfluence, rng);
+        const path = traceBrushPath(flowFn, sx, sy, strokeSteps, 2.5 * dsc, angleOffset, angleSpread, flowInfluence, rng);
         renderBristleStroke(ctx, path, strokeCfg, rng);
       }
     }

@@ -184,6 +184,8 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const watercolorLayerType: LayerTypeDefinition = {
   typeId: "painting:watercolor",
+  // Builds its pixels at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Watercolor",
@@ -238,6 +240,12 @@ export const watercolorLayerType: LayerTypeDefinition = {
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
 
+    // Device pixels per layout unit (ADR 111). Everything in this renderer is
+    // sampled in normalised coordinates except the two fixed-pixel noise
+    // scales below, so those are the only quantities that need it: granulation
+    // and the edge feather stay the same size on the paper.
+    const sc = bounds.scale ?? 1;
+
     // Granulation noise — fine-scale pigment settling in low-velocity zones
     const granNoise = createFractalNoise(seed, 4);
     // Edge softness noise — adds local alpha variation at edges
@@ -275,14 +283,14 @@ export const watercolorLayerType: LayerTypeDefinition = {
 
           // Granulation: in low-velocity zones, pigment settles into paper tooth
           // Fine noise adds texture; strength scales with granulation param and 1-mag
-          const gran = granNoise(px / 8, py / 8);
+          const gran = granNoise(px / (8 * sc), py / (8 * sc));
           const granStrength = granulation * (1 - mag) * 0.6;
           const grainedAlpha = pooledAlpha * (1 - granStrength * (1 - gran));
 
           // Edge softness: noise-based feathering that erodes paint at low coverage.
           // Threshold rises as grainedAlpha falls — so edges (sparse paint) drop out
           // more than the dense interior. edgeSoftness=0 → crisp; 1 → very feathered.
-          const edge = edgeNoise(px / 18, py / 18);
+          const edge = edgeNoise(px / (18 * sc), py / (18 * sc));
           const threshold = edgeSoftness * clamp(1 - grainedAlpha * 1.8, 0, 1);
           // Vertical Gaussian mask (maskCenterY=-1 means disabled)
           const vMask = maskCenterY >= 0

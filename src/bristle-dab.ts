@@ -116,6 +116,8 @@ function taperIndex(t: string): number {
 
 export const bristleDabLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-dab",
+  // Paints its bristles at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Bristle Dab",
@@ -140,9 +142,13 @@ export const bristleDabLayerType: LayerTypeDefinition = {
     const cols           = (properties.fieldCols as number)      ?? 20;
     const rows           = (properties.fieldRows as number)      ?? 20;
     const colorsStr      = (properties.colors as string)         ?? '["#3a2a1a"]';
-    const brushWidth     = (properties.brushWidth as number)     ?? 24;
+    // Device pixels per layout unit (ADR 111). The brush dimensions come from
+    // the properties in layout units while positions come from the bounds,
+    // which arrive already scaled, so the brush is scaled to match.
+    const dsc            = bounds.scale ?? 1;
+    const brushWidth     = ((properties.brushWidth as number)    ?? 24) * dsc;
     const bristleCount   = (properties.bristleCount as number)   ?? 12;
-    const dabLength      = (properties.dabLength as number)      ?? 20;
+    const dabLength      = ((properties.dabLength as number)     ?? 20) * dsc;
     const overlapDensity = (properties.overlapDensity as number) ?? 0.6;
     const gridJitter     = (properties.gridJitter as number)     ?? 0.5;
     const paintLoad      = (properties.paintLoad as number)      ?? 0.7;

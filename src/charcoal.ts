@@ -41,6 +41,8 @@ const CHARCOAL_PROPERTIES: LayerPropertySchema[] = [
 
 export const charcoalLayerType: LayerTypeDefinition = {
   typeId: "painting:charcoal",
+  // Builds its pixels at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Charcoal",
@@ -97,6 +99,10 @@ export const charcoalLayerType: LayerTypeDefinition = {
 
     const strokeLen = smear ? 8 : 4;
 
+    const dsc = bounds.scale ?? 1;
+    // Device pixels per layout unit (ADR 111). Everything else here is
+    // sampled in normalised coordinates; only the two grain scales are in
+    // pixels, so the tooth stays the same size on the paper.
     for (let py = 0; py < h; py++) {
       for (let px = 0; px < w; px++) {
         const nx = w > 1 ? px / (w - 1) : 0;
@@ -108,7 +114,7 @@ export const charcoalLayerType: LayerTypeDefinition = {
           : 1;
         if (vMask < 0.02) continue;
 
-        const g       = grainNoise(px / 12, py / 12);
+        const g       = grainNoise(px / (12 * dsc), py / (12 * dsc));
         const coverage= density * sample.magnitude * vMask * lerp(0.3, 1.0, g);
 
         if (rand() > coverage) continue;
@@ -165,7 +171,7 @@ export const charcoalLayerType: LayerTypeDefinition = {
       const gc = colorList[0]!;
       for (let py = 0; py < h; py++) {
         for (let px = 0; px < w; px++) {
-          const g2 = grainNoise(px / 3.5, py / 3.5);
+          const g2 = grainNoise(px / (3.5 * dsc), py / (3.5 * dsc));
           if (g2 > 0.6 && rand() < grain * 0.08) {
             const i = (py * w + px) * 4;
             const dr = data[i]!;

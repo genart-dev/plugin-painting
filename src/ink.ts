@@ -57,6 +57,8 @@ const INK_PROPERTIES: LayerPropertySchema[] = [
 
 export const inkLayerType: LayerTypeDefinition = {
   typeId: "painting:ink",
+  // Draws its marks at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Ink",
@@ -81,7 +83,11 @@ export const inkLayerType: LayerTypeDefinition = {
     const cols        = (properties.fieldCols as number) ?? 20;
     const rows        = (properties.fieldRows as number) ?? 20;
     const colorsStr   = (properties.colors as string)  ?? '["#1a1a1a"]';
-    const weight      = (properties.weight as number)  ?? 2;
+    // Device pixels per layout unit (ADR 111). Stream positions come from the
+    // bounds and stream spacing from the canvas size, so both already scale;
+    // the stroke weight comes from the properties and is scaled here.
+    const dsc = bounds.scale ?? 1;
+    const weight      = ((properties.weight as number)  ?? 2) * dsc;
     const paintMode   = (properties.paintMode as string) ?? "multiply";
     const taper       = (properties.taper as string)   ?? "none";
     const style       = (properties.style as string)   ?? "fluid";
@@ -202,7 +208,7 @@ export const inkLayerType: LayerTypeDefinition = {
 
           ctx.strokeStyle = strokeColor;
           ctx.globalAlpha = layerOpacity * vMask;
-          ctx.lineWidth = Math.max(0.3, w_local);
+          ctx.lineWidth = Math.max(0.3 * dsc, w_local);
           ctx.lineTo(points[p]![0], points[p]![1]);
           ctx.stroke();
           ctx.beginPath();

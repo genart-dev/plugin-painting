@@ -56,6 +56,9 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const gouacheLayerType: LayerTypeDefinition = {
   typeId: "painting:gouache",
+  // Its feature scales are all relative to the canvas width (sc = 800 / w), so
+  // they follow a device-resolution buffer on their own (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Gouache",

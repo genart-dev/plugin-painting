@@ -91,6 +91,8 @@ function hslToRgba(h: number, s: number, l: number, a: number): string {
 
 export const markFieldLayerType: LayerTypeDefinition = {
   typeId: "painting:mark-field",
+  // Draws its marks at the canvas's own resolution (ADR 111).
+  resolution: "device",
   displayName: "Mark Field",
   icon: "mark-field",
   category: "draw",
@@ -133,6 +135,13 @@ export const markFieldLayerType: LayerTypeDefinition = {
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
 
+    // Device pixels per layout unit (ADR 111). Mark positions come from the
+    // bounds and are already scaled; the two lengths that come from the
+    // properties are scaled here so each mark keeps its size and weight.
+    const sc = bounds.scale ?? 1;
+    const markLen = markLength * sc;
+    const markW = markWeight * sc;
+
     const field = parseField(fieldStr, cols, rows);
     const rand  = mulberry32(seed);
 
@@ -167,11 +176,11 @@ export const markFieldLayerType: LayerTypeDefinition = {
 
       // Compute mark length with variation and magnitude
       const lenJitter = 1 + markLengthVar * (rand() - 0.5) * 2;
-      const len = markLength * lenJitter * sample.magnitude;
+      const len = markLen * lenJitter * sample.magnitude;
 
       // Compute mark weight with variation
       const weightJitter = 1 + markWeightVar * (rand() - 0.5) * 2;
-      let mw = markWeight * weightJitter;
+      let mw = markW * weightJitter;
 
       // Depth scaling
       let densityMult = 1;
@@ -207,7 +216,7 @@ export const markFieldLayerType: LayerTypeDefinition = {
       ctx.moveTo(cx - sample.dx * halfLen, cy - sample.dy * halfLen);
       ctx.lineTo(cx + sample.dx * halfLen, cy + sample.dy * halfLen);
       ctx.strokeStyle = hslToRgba(jH, jS, jL, markAlpha);
-      ctx.lineWidth = Math.max(0.3, mw);
+      ctx.lineWidth = Math.max(0.3 * sc, mw);
       ctx.stroke();
     }
 
