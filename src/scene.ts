@@ -157,8 +157,15 @@ export const sceneLayerType: LayerTypeDefinition = {
     const h = Math.ceil(bounds.height);
     if (w <= 0 || h <= 0) return;
 
+    // Modifier-path layers render straight onto the composite context with no
+    // transform applied, so reads and marks must be offset by the layer origin.
+    // getImageData ignores the CTM, so the offset is explicit here and the
+    // drawing is translated below.
+    const ox = Math.round(bounds.x ?? 0);
+    const oy = Math.round(bounds.y ?? 0);
+
     // *** PAINT-FIRST: Read underlying layers as color data ***
-    const sourceData = ctx.getImageData(0, 0, w, h).data;
+    const sourceData = ctx.getImageData(ox, oy, w, h).data;
 
     const field = parseField(fieldStr, cols, rows);
     const rng = mulberry32(seed);
@@ -167,7 +174,7 @@ export const sceneLayerType: LayerTypeDefinition = {
     let wetBuffer: WetBuffer | null = null;
     if (useWet) {
       wetBuffer = new WetBuffer(w, h);
-      wetBuffer.snapshot(ctx);
+      wetBuffer.snapshot(ctx, ox, oy);
     }
 
     // Grid layout
@@ -176,6 +183,7 @@ export const sceneLayerType: LayerTypeDefinition = {
     const gRows = Math.ceil(h / spacing) + 1;
 
     ctx.save();
+    if (ox !== 0 || oy !== 0) ctx.translate(ox, oy);
 
     for (let gr = 0; gr < gRows; gr++) {
       for (let gc = 0; gc < gCols; gc++) {
