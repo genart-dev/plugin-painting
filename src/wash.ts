@@ -118,18 +118,28 @@ export function renderWashPixels(
   bounds: LayerBounds,
 ): { data: Uint8ClampedArray; x: number; y: number; width: number; height: number } | null {
   const region = parseJson<FillRegion>(properties.region, { type: "bounds" });
-  const poly = regionToPolygon(region, bounds);
+  // Device pixels per layout unit (ADR 111). The bounds arrive already scaled,
+  // so everything that comes from the properties instead — the region's own
+  // coordinates and every length below — is scaled to match. Noise is sampled
+  // as position/scale, so scaling the scales keeps each feature the same
+  // physical size and the wash looks identical, just resolved finer.
+  const sc = bounds.scale ?? 1;
+  const rawPoly = regionToPolygon(region, bounds);
+  const poly =
+    sc === 1 || region.type === "bounds"
+      ? rawPoly
+      : rawPoly.map((pt) => ({ x: pt.x * sc, y: pt.y * sc }));
   if (poly.length < 3) return null;
 
   const [cr, cg, cb] = hexToRgb((properties.color as string) ?? "#8c867c");
   const density = (properties.density as number) ?? 0.5;
   const pool = (properties.pool as number) ?? 0.35;
-  const poolWidth = Math.max(0.5, (properties.poolWidth as number) ?? 6);
-  const ragged = (properties.ragged as number) ?? 2;
-  const raggedScale = Math.max(1, (properties.raggedScale as number) ?? 12);
-  const feather = Math.max(0.5, (properties.feather as number) ?? 1);
+  const poolWidth = Math.max(0.5, (properties.poolWidth as number) ?? 6) * sc;
+  const ragged = ((properties.ragged as number) ?? 2) * sc;
+  const raggedScale = Math.max(1, (properties.raggedScale as number) ?? 12) * sc;
+  const feather = Math.max(0.5, (properties.feather as number) ?? 1) * sc;
   const mottle = (properties.mottle as number) ?? 0.3;
-  const mottleScale = Math.max(4, (properties.mottleScale as number) ?? 80);
+  const mottleScale = Math.max(4, (properties.mottleScale as number) ?? 80) * sc;
   const mottleStretch = Math.max(1, (properties.mottleStretch as number) ?? 1);
   // Value noise is built on a square lattice with axis-aligned gradients, so
   // at large scales its blotches come out square. Sampling it in a frame
@@ -138,7 +148,7 @@ export function renderWashPixels(
   const mCos = Math.cos(mAngle);
   const mSin = Math.sin(mAngle);
   const granulation = (properties.granulation as number) ?? 0.2;
-  const granScale = Math.max(1, (properties.granScale as number) ?? 3);
+  const granScale = Math.max(1, (properties.granScale as number) ?? 3) * sc;
   const seed = (properties.seed as number) ?? 0;
   const gradient = parseJson<WashGradient | null>(properties.gradient, null);
   const weightsIn = parseJson<number[] | null>(properties.edgeWeights, null);
@@ -271,6 +281,8 @@ export function renderWashPixels(
 /** A wash flooded inside a polygon, rect or ellipse, with pooled edges, mottling and granulation. */
 export const washLayerType: LayerTypeDefinition = {
   typeId: "painting:wash",
+  // Builds its pixels at the canvas's own resolution (ADR 111).
+  resolution: "device",
   displayName: "Wash",
   icon: "watercolor",
   category: "draw",

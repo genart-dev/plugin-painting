@@ -172,6 +172,8 @@ function isolate(
 
 export const strokeLayerType: LayerTypeDefinition = {
   typeId: "painting:stroke",
+  // Stamps its marks at the canvas's own resolution (ADR 111).
+  resolution: "device",
   // Reads the pixels earlier layers drew (ADR 111).
   reads: "composite",
   displayName: "Brush Stroke",

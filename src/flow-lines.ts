@@ -185,6 +185,8 @@ function generateSeedPoints(
 
 export const flowLinesLayerType: LayerTypeDefinition = {
   typeId: "painting:flow-lines",
+  // Draws its marks at the canvas's own resolution (ADR 111).
+  resolution: "device",
   displayName: "Flow Lines",
   icon: "flow-lines",
   category: "draw",
@@ -211,8 +213,14 @@ export const flowLinesLayerType: LayerTypeDefinition = {
     const lineCount         = (properties.lineCount as number) ?? 2000;
     const seedDistribution  = (properties.seedDistribution as string) ?? "grid-jittered";
     const lineLength        = (properties.lineLength as number) ?? 120;
-    const stepSize          = (properties.stepSize as number) ?? 3;
-    const lineWeight        = (properties.lineWeight as number) ?? 0.8;
+    // Device pixels per layout unit (ADR 111). The bounds arrive already
+    // scaled, so the two lengths that come from the properties are scaled to
+    // match: each step covers the same distance across the picture and each
+    // line keeps its weight, with the marks resolved at the canvas's own
+    // resolution rather than drawn small and enlarged.
+    const sc = bounds.scale ?? 1;
+    const stepSize          = ((properties.stepSize as number) ?? 3) * sc;
+    const lineWeight        = ((properties.lineWeight as number) ?? 0.8) * sc;
     const lineWeightVar     = (properties.lineWeightVariation as number) ?? 0.15;
     const taper             = (properties.taper as string)   ?? "tail";
     const color             = (properties.color as string)   ?? "#1a1a1a";
@@ -329,7 +337,7 @@ export const flowLinesLayerType: LayerTypeDefinition = {
         ctx.moveTo(points[p - 1]![0], points[p - 1]![1]);
         ctx.lineTo(points[p]![0], points[p]![1]);
         ctx.strokeStyle = hslToRgba(jH, jS, jL, segOpacity);
-        ctx.lineWidth = Math.max(0.2, segWeight);
+        ctx.lineWidth = Math.max(0.2 * sc, segWeight);
         ctx.stroke();
       }
     }

@@ -50,13 +50,23 @@ function renderSingleStroke(
     ?? BRUSH_PRESETS[stroke.brushId]
     ?? BRUSH_PRESETS["round-hard"]!;
 
+  // Device pixels per layout unit (ADR 111). Stroke geometry and brush size
+  // come from the properties in layout units while the bounds arrive already
+  // scaled, so both are scaled here. Everything downstream — stamp spacing,
+  // tip size, scatter — is derived from the size, so it follows.
+  const sc = bounds.scale ?? 1;
+
   // Apply stroke-level overrides
-  const baseSize = stroke.size ?? brush.size;
+  const baseSize = (stroke.size ?? brush.size) * sc;
   const strokeOpacity = stroke.opacity ?? brush.opacity;
   const strokeSeed = stroke.seed ?? globalSeed;
 
   // Interpolate path
-  const interpolated = interpolatePath(stroke.points, brush.smoothing);
+  const points =
+    sc === 1
+      ? stroke.points
+      : stroke.points.map((pt) => ({ ...pt, x: pt.x * sc, y: pt.y * sc }));
+  const interpolated = interpolatePath(points, brush.smoothing);
   if (interpolated.length < 2) return;
 
   // Arc-length parameterization
