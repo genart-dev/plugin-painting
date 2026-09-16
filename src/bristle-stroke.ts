@@ -114,6 +114,8 @@ function taperIndex(t: string): number {
 
 export const bristleStrokeLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-stroke",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Bristle Stroke",
   icon: "bristle-stroke",
   category: "draw",

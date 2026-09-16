@@ -116,6 +116,8 @@ function taperIndex(t: string): number {
 
 export const bristleDabLayerType: LayerTypeDefinition = {
   typeId: "painting:bristle-dab",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Bristle Dab",
   icon: "bristle-dab",
   category: "draw",

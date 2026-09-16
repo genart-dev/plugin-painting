@@ -92,6 +92,8 @@ const SCENE_PROPERTIES: LayerPropertySchema[] = [
 
 export const sceneLayerType: LayerTypeDefinition = {
   typeId: "painting:scene",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Paint Scene",
   icon: "paint-scene",
   category: "draw",

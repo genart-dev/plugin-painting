@@ -56,6 +56,8 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const gouacheLayerType: LayerTypeDefinition = {
   typeId: "painting:gouache",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Gouache",
   icon: "gouache",
   category: "draw",

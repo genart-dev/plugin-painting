@@ -57,6 +57,8 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const oilAcrylicLayerType: LayerTypeDefinition = {
   typeId: "painting:oil",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Oil / Acrylic",
   icon: "oil",
   category: "draw",

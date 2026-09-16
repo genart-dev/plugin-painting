@@ -41,6 +41,8 @@ const CHARCOAL_PROPERTIES: LayerPropertySchema[] = [
 
 export const charcoalLayerType: LayerTypeDefinition = {
   typeId: "painting:charcoal",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Charcoal",
   icon: "charcoal",
   category: "draw",

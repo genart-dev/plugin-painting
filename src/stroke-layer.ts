@@ -172,6 +172,8 @@ function isolate(
 
 export const strokeLayerType: LayerTypeDefinition = {
   typeId: "painting:stroke",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Brush Stroke",
   icon: "brush",
   category: "draw",

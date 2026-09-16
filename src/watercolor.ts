@@ -184,6 +184,8 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const watercolorLayerType: LayerTypeDefinition = {
   typeId: "painting:watercolor",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Watercolor",
   icon: "watercolor",
   category: "draw",

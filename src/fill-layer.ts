@@ -205,6 +205,8 @@ let _deprecationWarned = false;
 
 export const fillLayerType: LayerTypeDefinition = {
   typeId: "painting:fill",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Fill (deprecated)",
   icon: "bucket",
   category: "draw",

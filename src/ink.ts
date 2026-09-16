@@ -57,6 +57,8 @@ const INK_PROPERTIES: LayerPropertySchema[] = [
 
 export const inkLayerType: LayerTypeDefinition = {
   typeId: "painting:ink",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Ink",
   icon: "ink",
   category: "draw",

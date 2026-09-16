@@ -63,6 +63,8 @@ function clamp(v: number, lo: number, hi: number): number {
 
 export const pastelLayerType: LayerTypeDefinition = {
   typeId: "painting:pastel",
+  // Reads the pixels earlier layers drew (ADR 111).
+  reads: "composite",
   displayName: "Pastel",
   icon: "pastel",
   category: "draw",
