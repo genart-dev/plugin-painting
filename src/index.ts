@@ -18,7 +18,7 @@ import { paintingMcpTools } from "./painting-tools.js";
 const paintingPlugin: DesignPlugin = {
   id: "painting",
   name: "Painting",
-  version: "0.1.0",
+  version: "0.6.0",
   tier: "pro",
   description:
     "Vector-field-driven painting layer types: watercolor, oil, gouache, ink, pastel, charcoal, brush stroke, fill, mark field, flow lines.",
