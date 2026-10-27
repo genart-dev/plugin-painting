@@ -283,6 +283,37 @@ describe("renderStrokes", () => {
     });
   });
 
+  describe("device resolution (ADR 111)", () => {
+    type DrawCall = [{ width: number }, ...number[]];
+    const draws = (ctx: CanvasRenderingContext2D) =>
+      (ctx.drawImage as unknown as { mock: { calls: DrawCall[] } }).mock.calls;
+
+    /** Draw one hairline stroke at a canvas scale; layout geometry is the same. */
+    const hairline = (scale: number) => {
+      const ctx = createMockCtx(200 * scale, 200 * scale);
+      renderStrokes(
+        [makeStroke({ brushId: "round-hard", size: 0.2 })],
+        BRUSH_PRESETS,
+        ctx,
+        { x: 0, y: 0, width: 200 * scale, height: 200 * scale, scale },
+        0,
+      );
+      const calls = draws(ctx);
+      return { stamps: calls.length, tips: new Set(calls.map((c) => c[0].width)) };
+    };
+
+    it("floors a hairline tip at one layout pixel, not one device pixel", () => {
+      expect([...hairline(1).tips]).toEqual([1]);
+      expect([...hairline(2).tips]).toEqual([2]);
+    });
+
+    it("lays down the same number of hairline stamps at any scale", () => {
+      const one = hairline(1).stamps;
+      expect(one).toBeGreaterThan(100);
+      expect(hairline(2).stamps).toBe(one);
+    });
+  });
+
   describe("brush resolution", () => {
     it("falls back to round-hard for unknown brush ID", () => {
       const ctx = createMockCtx();

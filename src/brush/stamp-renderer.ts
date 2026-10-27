@@ -82,16 +82,31 @@ function renderSingleStroke(
     stroke.color,
     strokeSeed,
     interpolated,
+    sc,
   );
 
   if (stamps.length === 0) return;
 
   // Render stamps
+  const minTip = minTipSize(sc);
   if (brush.renderMode === "wash") {
-    renderWash(stamps, brush, ctx, bounds, strokeOpacity);
+    renderWash(stamps, brush, ctx, bounds, strokeOpacity, minTip);
   } else {
-    renderBuildup(stamps, brush, ctx, bounds);
+    renderBuildup(stamps, brush, ctx, bounds, minTip);
   }
+}
+
+/**
+ * The smallest tip a stamp is drawn with: one layout pixel, in device pixels.
+ *
+ * The floor has to scale with the canvas. Fixed at one device pixel, it let a
+ * brush finer than half a layout pixel draw at half the weight it had before
+ * ADR 111, when the same one-pixel floor applied at layout size and the frame
+ * was scaled up afterwards. Hairline-heavy work (a tree drawn from twenty
+ * thousand 0.2px twigs) thinned from a frosted mass to a bare wireframe.
+ */
+function minTipSize(scale: number): number {
+  return Math.max(1, Math.round(scale));
 }
 
 // ---------------------------------------------------------------------------
@@ -116,8 +131,12 @@ function computeStamps(
   color: string,
   seed: number,
   interpolated: readonly StrokePoint[],
+  scale: number,
 ): StampCommand[] {
   const rng = mulberry32(seed);
+  // Stamps at least one layout pixel apart, so a fine brush lays down the same
+  // number of stamps per stroke at any canvas resolution
+  const minStep = Math.max(1, scale);
   const stamps: StampCommand[] = [];
 
   // Walk the path at spacing intervals
@@ -171,7 +190,7 @@ function computeStamps(
     });
 
     // Advance by spacing * current effective size
-    const step = Math.max(1, brush.spacing * effSize);
+    const step = Math.max(minStep, brush.spacing * effSize);
     distance += step;
   }
 
@@ -216,12 +235,13 @@ function renderBuildup(
   brush: BrushDefinition,
   ctx: CanvasRenderingContext2D,
   bounds: LayerBounds,
+  minTip: number,
 ): void {
   ctx.save();
   ctx.globalCompositeOperation = brush.blendMode;
 
   for (const stamp of stamps) {
-    const tipSize = Math.max(1, Math.round(stamp.size));
+    const tipSize = Math.max(minTip, Math.round(stamp.size));
     const tip = getTip(brush, tipSize, stamp.angle);
 
     ctx.globalAlpha = stamp.flow * stamp.opacity;
@@ -246,6 +266,7 @@ function renderWash(
   ctx: CanvasRenderingContext2D,
   bounds: LayerBounds,
   maxOpacity: number,
+  minTip: number,
 ): void {
   const w = Math.ceil(bounds.width);
   const h = Math.ceil(bounds.height);
@@ -260,7 +281,7 @@ function renderWash(
 
   // Stamp onto offscreen canvas (without bounds offset — local coordinates)
   for (const stamp of stamps) {
-    const tipSize = Math.max(1, Math.round(stamp.size));
+    const tipSize = Math.max(minTip, Math.round(stamp.size));
     const tip = getTip(brush, tipSize, stamp.angle);
 
     offCtx.globalAlpha = stamp.flow;
